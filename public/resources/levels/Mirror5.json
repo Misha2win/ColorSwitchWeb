@@ -1,0 +1,111 @@
+{
+   "color": "blue",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 380,
+         "y": 300,
+         "width": 350,
+         "height": 280,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 20,
+         "width": 230,
+         "height": 210,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 320,
+         "width": 170,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 140,
+         "y": 300,
+         "width": 50,
+         "height": 20,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 480,
+         "y": 260,
+         "width": 130,
+         "height": 40,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 250,
+         "y": 20,
+         "width": 50,
+         "height": 250,
+         "color": "red"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 280,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 280,
+         "color": "green"
+      },
+      {
+         "type": "Mirror",
+         "x": 120,
+         "y": 240,
+         "color": "red",
+         "persistOnce": true
+      },
+      {
+         "type": "ColorChanger",
+         "x": 540,
+         "y": 170,
+         "color": "green"
+      }
+   ]
+}

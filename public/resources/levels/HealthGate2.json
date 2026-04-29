@@ -1,0 +1,94 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 190,
+         "y": 20,
+         "width": 60,
+         "height": 430,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 500,
+         "y": 20,
+         "width": 60,
+         "height": 430,
+         "color": "black"
+      },
+      {
+         "type": "HealthGate",
+         "greaterThan": false,
+         "health": 99,
+         "x": 190,
+         "y": 450,
+         "width": 60,
+         "height": 130
+      },
+      {
+         "type": "HealthGate",
+         "greaterThan": true,
+         "health": 99,
+         "x": 500,
+         "y": 450,
+         "width": 60,
+         "height": 130
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "DamagePack",
+         "x": 90,
+         "y": 520
+      },
+      {
+         "type": "HealthPack",
+         "x": 360,
+         "y": 520
+      }
+   ]
+}

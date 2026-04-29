@@ -1,0 +1,103 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "PhotonicPlatform",
+         "x": 150,
+         "y": 480,
+         "width": 430,
+         "height": 10
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 100,
+         "y": 210,
+         "startX": 100,
+         "startY": 210,
+         "endX": 590,
+         "endY": 210,
+         "width": 200,
+         "height": 20,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 360,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 400,
+         "y": 20,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 440,
+         "y": 20,
+         "color": "green",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 20,
+         "y": 210,
+         "color": "red",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 650,
+         "y": 520,
+         "color": "green"
+      }
+   ]
+}

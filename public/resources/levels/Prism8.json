@@ -1,0 +1,119 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 360,
+         "width": 230,
+         "height": 230,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 250,
+         "y": 360,
+         "width": 250,
+         "height": 30,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 500,
+         "y": 360,
+         "width": 230,
+         "height": 220,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 220,
+         "y": 20,
+         "width": 310,
+         "height": 270,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 100,
+         "y": 250,
+         "width": 40,
+         "height": 40,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 250,
+         "y": 290,
+         "width": 250,
+         "height": 70,
+         "color": "green"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 340,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 340,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 200,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 20,
+         "y": 260,
+         "color": "blue",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "Prism",
+         "x": 530,
+         "y": 20,
+         "color": "green",
+         "direction": "DOWN"
+      }
+   ]
+}

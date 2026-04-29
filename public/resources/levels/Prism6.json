@@ -1,0 +1,78 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 130,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 290,
+         "y": 20,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 450,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 610,
+         "y": 20,
+         "color": "green",
+         "direction": "DOWN"
+      }
+   ]
+}

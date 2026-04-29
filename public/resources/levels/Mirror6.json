@@ -1,0 +1,101 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 450,
+         "width": 710,
+         "height": 130,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 350,
+         "width": 230,
+         "height": 100,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 600,
+         "y": 250,
+         "width": 130,
+         "height": 200,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 500,
+         "y": 350,
+         "width": 100,
+         "height": 100,
+         "color": "gray"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 250,
+         "width": 130,
+         "height": 100,
+         "color": "gray"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 230,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 230,
+         "color": "green"
+      },
+      {
+         "type": "Mirror",
+         "x": 210,
+         "y": 290,
+         "color": "gray",
+         "persistOnce": false
+      }
+   ],
+   "texts": [
+      "Mirrors reflect you across the gray line! You also",
+      "collide with what the mirrored you collides with!"
+   ]
+}

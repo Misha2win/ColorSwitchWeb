@@ -1,0 +1,17 @@
+{
+  "name": "colorswitchweb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A browser-based Color Switch game served with Express.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check scripts/adapt-java-levels.mjs"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,118 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 270,
+         "y": 150,
+         "width": 210,
+         "height": 260,
+         "color": "blue"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 140,
+         "y": 180,
+         "startX": 140,
+         "startY": 180,
+         "endX": 140,
+         "endY": 270,
+         "width": 10,
+         "height": 90,
+         "color": "black"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 280,
+         "y": 100,
+         "startX": 280,
+         "startY": 100,
+         "endX": 360,
+         "endY": 100,
+         "width": 40,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 200,
+         "y": 460,
+         "width": 80,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 260,
+         "y": 350,
+         "width": 60,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 360,
+         "y": 20,
+         "color": "magenta",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 20,
+         "y": 290,
+         "color": "cyan",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 360,
+         "y": 520,
+         "color": "green"
+      }
+   ]
+}

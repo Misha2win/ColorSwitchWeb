@@ -1,0 +1,82 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 330,
+         "y": 20,
+         "width": 90,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Portal",
+         "x": 420,
+         "y": 560,
+         "id": 0
+      },
+      {
+         "type": "Portal",
+         "x": 310,
+         "y": 560,
+         "id": 0
+      },
+      {
+         "type": "ColorChanger",
+         "x": 570,
+         "y": 520,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 160,
+         "y": 520,
+         "color": "blue"
+      }
+   ]
+}

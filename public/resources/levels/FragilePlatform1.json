@@ -1,0 +1,154 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 320,
+         "width": 130,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 600,
+         "y": 320,
+         "width": 130,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 160,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 200,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 240,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 280,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 320,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 360,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 400,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 440,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 480,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 520,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "FragilePlatform",
+         "x": 560,
+         "y": 320,
+         "width": 30,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 300,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 300,
+         "color": "green"
+      }
+   ]
+}

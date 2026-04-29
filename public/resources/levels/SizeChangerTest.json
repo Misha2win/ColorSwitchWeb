@@ -1,0 +1,94 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 490,
+         "y": 330,
+         "width": 50,
+         "height": 240,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 540,
+         "y": 560,
+         "width": 110,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 370,
+         "y": 480,
+         "width": 30,
+         "height": 90,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 640,
+         "y": 460,
+         "width": 30,
+         "height": 120,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "SizeChanger",
+         "x": 425,
+         "y": 500,
+         "grow": true
+      },
+      {
+         "type": "SizeChanger",
+         "x": 325,
+         "y": 500,
+         "grow": false
+      }
+   ]
+}

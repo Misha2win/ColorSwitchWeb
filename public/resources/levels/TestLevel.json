@@ -1,0 +1,659 @@
+{
+   "color": "green",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 490,
+         "width": 640,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 400,
+         "width": 600,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 20,
+         "y": 90,
+         "startX": 20,
+         "startY": 90,
+         "endX": 20,
+         "endY": 400,
+         "width": 60,
+         "height": 10,
+         "color": "red"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 140,
+         "y": 90,
+         "startX": 140,
+         "startY": 90,
+         "endX": 140,
+         "endY": 400,
+         "width": 60,
+         "height": 10,
+         "color": "blue"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 80,
+         "y": 400,
+         "startX": 80,
+         "startY": 400,
+         "endX": 80,
+         "endY": 90,
+         "width": 60,
+         "height": 10,
+         "color": "green"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 200,
+         "y": 400,
+         "startX": 200,
+         "startY": 400,
+         "endX": 200,
+         "endY": 90,
+         "width": 60,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 610,
+         "y": 260,
+         "width": 60,
+         "height": 10,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 670,
+         "y": 340,
+         "width": 60,
+         "height": 10,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 260,
+         "y": 100,
+         "width": 10,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 670,
+         "y": 180,
+         "width": 60,
+         "height": 10,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 540,
+         "y": 260,
+         "width": 60,
+         "height": 10,
+         "color": "red"
+      },
+      {
+         "type": "Platform",
+         "x": 480,
+         "y": 340,
+         "width": 60,
+         "height": 10,
+         "color": "red"
+      },
+      {
+         "type": "Platform",
+         "x": 470,
+         "y": 100,
+         "width": 10,
+         "height": 250,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 480,
+         "y": 180,
+         "width": 60,
+         "height": 10,
+         "color": "red"
+      },
+      {
+         "type": "Platform",
+         "x": 540,
+         "y": 340,
+         "width": 130,
+         "height": 10,
+         "color": "green"
+      },
+      {
+         "type": "Platform",
+         "x": 600,
+         "y": 180,
+         "width": 10,
+         "height": 90,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 260,
+         "y": 90,
+         "width": 280,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "HealthGate",
+         "greaterThan": true,
+         "health": 50,
+         "x": 420,
+         "y": 20,
+         "width": 60,
+         "height": 70
+      },
+      {
+         "type": "HealthGate",
+         "greaterThan": false,
+         "health": 50,
+         "x": 260,
+         "y": 20,
+         "width": 60,
+         "height": 70
+      },
+      {
+         "type": "Platform",
+         "x": 670,
+         "y": 90,
+         "width": 60,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 380,
+         "y": 340,
+         "width": 10,
+         "height": 60,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 610,
+         "y": 410,
+         "width": 10,
+         "height": 50,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 650,
+         "y": 500,
+         "width": 10,
+         "height": 50,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 480,
+         "y": 260,
+         "width": 60,
+         "height": 10,
+         "color": "cyan"
+      },
+      {
+         "type": "Platform",
+         "x": 540,
+         "y": 180,
+         "width": 60,
+         "height": 10,
+         "color": "cyan"
+      },
+      {
+         "type": "Platform",
+         "x": 670,
+         "y": 260,
+         "width": 60,
+         "height": 10,
+         "color": "yellow"
+      },
+      {
+         "type": "Platform",
+         "x": 610,
+         "y": 180,
+         "width": 60,
+         "height": 10,
+         "color": "yellow"
+      },
+      {
+         "type": "Platform",
+         "x": 370,
+         "y": 280,
+         "width": 10,
+         "height": 60,
+         "color": "red"
+      },
+      {
+         "type": "Platform",
+         "x": 360,
+         "y": 220,
+         "width": 10,
+         "height": 60,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 350,
+         "y": 160,
+         "width": 10,
+         "height": 60,
+         "color": "green"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 270,
+         "y": 280,
+         "startX": 270,
+         "startY": 280,
+         "endX": 410,
+         "endY": 280,
+         "width": 60,
+         "height": 10,
+         "color": "red"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 270,
+         "y": 160,
+         "startX": 270,
+         "startY": 160,
+         "endX": 410,
+         "endY": 160,
+         "width": 60,
+         "height": 10,
+         "color": "green"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 410,
+         "y": 220,
+         "startX": 410,
+         "startY": 220,
+         "endX": 270,
+         "endY": 220,
+         "width": 60,
+         "height": 10,
+         "color": "blue"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 410,
+         "y": 340,
+         "startX": 410,
+         "startY": 340,
+         "endX": 270,
+         "endY": 340,
+         "width": 60,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 20,
+         "y": 400,
+         "startX": 20,
+         "startY": 400,
+         "endX": 200,
+         "endY": 90,
+         "width": 60,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 690,
+         "y": 400,
+         "width": 40,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 710,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Portal",
+         "x": 710,
+         "y": 380,
+         "id": 0
+      },
+      {
+         "type": "Portal",
+         "x": 400,
+         "y": 20,
+         "id": 0
+      },
+      {
+         "type": "Portal",
+         "x": 320,
+         "y": 20,
+         "id": 1
+      },
+      {
+         "type": "Portal",
+         "x": 20,
+         "y": 20,
+         "id": 1
+      },
+      {
+         "type": "Spawn",
+         "x": 340,
+         "y": 70,
+         "active": false,
+         "obtainable": true
+      },
+      {
+         "type": "Spawn",
+         "x": 380,
+         "y": 70,
+         "active": false,
+         "obtainable": true
+      },
+      {
+         "type": "Element",
+         "color": "green",
+         "health": 1,
+         "x": 670,
+         "y": 20,
+         "width": 60,
+         "height": 70
+      },
+      {
+         "type": "Element",
+         "color": "red",
+         "health": -1,
+         "x": 480,
+         "y": 100,
+         "width": 60,
+         "height": 240
+      },
+      {
+         "type": "Element",
+         "color": "blue",
+         "health": -1,
+         "x": 670,
+         "y": 100,
+         "width": 60,
+         "height": 240
+      },
+      {
+         "type": "Prism",
+         "x": 280,
+         "y": 100,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 320,
+         "y": 100,
+         "color": "green",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 400,
+         "y": 100,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 440,
+         "y": 100,
+         "color": "black",
+         "direction": "DOWN"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 40,
+         "y": 520,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 80,
+         "y": 520,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 120,
+         "y": 520,
+         "color": "blue"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 160,
+         "y": 520,
+         "color": "yellow"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 200,
+         "y": 520,
+         "color": "magenta"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 240,
+         "y": 520,
+         "color": "cyan"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 280,
+         "y": 520,
+         "color": "white"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 320,
+         "y": 520,
+         "color": "black"
+      },
+      {
+         "type": "ColorMixer",
+         "x": 40,
+         "y": 430,
+         "color": "red",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 80,
+         "y": 430,
+         "color": "green",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 120,
+         "y": 430,
+         "color": "blue",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 160,
+         "y": 430,
+         "color": "yellow",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 200,
+         "y": 430,
+         "color": "magenta",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 240,
+         "y": 430,
+         "color": "cyan",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 280,
+         "y": 430,
+         "color": "white",
+         "additive": true
+      },
+      {
+         "type": "ColorMixer",
+         "x": 320,
+         "y": 430,
+         "color": "red",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 360,
+         "y": 430,
+         "color": "green",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 400,
+         "y": 430,
+         "color": "blue",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 440,
+         "y": 430,
+         "color": "yellow",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 480,
+         "y": 430,
+         "color": "magenta",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 520,
+         "y": 430,
+         "color": "cyan",
+         "additive": false
+      },
+      {
+         "type": "ColorMixer",
+         "x": 560,
+         "y": 430,
+         "color": "white",
+         "additive": false
+      },
+      {
+         "type": "DamagePack",
+         "x": 360,
+         "y": 520
+      },
+      {
+         "type": "HealthPack",
+         "x": 400,
+         "y": 520
+      },
+      {
+         "type": "Mirror",
+         "x": 480,
+         "y": 520,
+         "color": "gray",
+         "persistOnce": false
+      },
+      {
+         "type": "Mirror",
+         "x": 520,
+         "y": 520,
+         "color": "gray",
+         "persistOnce": true
+      },
+      {
+         "type": "Teleporter",
+         "x": 560,
+         "y": 520,
+         "hasDestination": false,
+         "endX": -1,
+         "endY": -1
+      },
+      {
+         "type": "SuperJump",
+         "x": 440,
+         "y": 520
+      },
+      {
+         "type": "Painter",
+         "x": 600,
+         "y": 520,
+         "color": "gray",
+         "rotated": true
+      }
+   ],
+   "texts": [
+      ".",
+      ".",
+      "This level is the testing level.",
+      "There are no levels after this."
+   ]
+}

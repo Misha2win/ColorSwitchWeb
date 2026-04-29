@@ -1,0 +1,120 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 310,
+         "y": 20,
+         "width": 30,
+         "height": 540,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 380,
+         "width": 170,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 140,
+         "y": 220,
+         "width": 170,
+         "height": 30,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 530,
+         "y": 20,
+         "width": 30,
+         "height": 550,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 650,
+         "y": 490,
+         "width": 30,
+         "height": 90,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "SizeChanger",
+         "x": 130,
+         "y": 520,
+         "grow": true
+      },
+      {
+         "type": "ColorChanger",
+         "x": 50,
+         "y": 320,
+         "color": "green"
+      },
+      {
+         "type": "SizeChanger",
+         "x": 250,
+         "y": 160,
+         "grow": false
+      },
+      {
+         "type": "SizeChanger",
+         "x": 420,
+         "y": 520,
+         "grow": false
+      },
+      {
+         "type": "SizeChanger",
+         "x": 590,
+         "y": 520,
+         "grow": true
+      }
+   ]
+}

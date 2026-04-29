@@ -1,0 +1,87 @@
+{
+   "color": "blue",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 370,
+         "y": 300,
+         "width": 10,
+         "height": 280,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 300,
+         "width": 350,
+         "height": 280,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 380,
+         "y": 300,
+         "width": 350,
+         "height": 280,
+         "color": "red"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 280,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 280,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 410,
+         "y": 240,
+         "color": "green"
+      },
+      {
+         "type": "ColorMixer",
+         "x": 310,
+         "y": 240,
+         "color": "red",
+         "additive": true
+      }
+   ]
+}

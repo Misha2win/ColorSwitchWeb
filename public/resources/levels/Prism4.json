@@ -1,0 +1,112 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 190,
+         "y": 20,
+         "width": 90,
+         "height": 560,
+         "color": "red"
+      },
+      {
+         "type": "Platform",
+         "x": 470,
+         "y": 20,
+         "width": 90,
+         "height": 560,
+         "color": "blue"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 540,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 20,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 150,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 170,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 430,
+         "y": 20,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 450,
+         "y": 20,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 630,
+         "y": 520,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 90,
+         "y": 520,
+         "color": "blue"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 360,
+         "y": 520,
+         "color": "red"
+      }
+   ]
+}

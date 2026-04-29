@@ -1,0 +1,201 @@
+{
+   "color": "gray",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 240,
+         "y": 70,
+         "startX": 240,
+         "startY": 70,
+         "endX": 520,
+         "endY": 70,
+         "width": 110,
+         "height": 120,
+         "color": "red"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 250,
+         "y": 220,
+         "startX": 250,
+         "startY": 220,
+         "endX": 680,
+         "endY": 220,
+         "width": 70,
+         "height": 120,
+         "color": "blue"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 430,
+         "y": 250,
+         "startX": 430,
+         "startY": 250,
+         "endX": 190,
+         "endY": 250,
+         "width": 120,
+         "height": 100,
+         "color": "green"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 80,
+         "y": 360,
+         "startX": 80,
+         "startY": 360,
+         "endX": 80,
+         "endY": 220,
+         "width": 50,
+         "height": 120,
+         "color": "blue"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 160,
+         "y": 240,
+         "startX": 160,
+         "startY": 240,
+         "endX": 160,
+         "endY": 540,
+         "width": 50,
+         "height": 110,
+         "color": "red"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 560,
+         "y": 320,
+         "startX": 560,
+         "startY": 320,
+         "endX": 560,
+         "endY": 450,
+         "width": 60,
+         "height": 70,
+         "color": "green"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 640,
+         "y": 290,
+         "startX": 640,
+         "startY": 290,
+         "endX": 640,
+         "endY": 390,
+         "width": 20,
+         "height": 100,
+         "color": "red"
+      },
+      {
+         "type": "MovingPlatform",
+         "x": 410,
+         "y": 420,
+         "startX": 410,
+         "startY": 420,
+         "endX": 410,
+         "endY": 130,
+         "width": 30,
+         "height": 110,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 390,
+         "y": 430,
+         "width": 10,
+         "height": 20,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "Prism",
+         "x": 360,
+         "y": 20,
+         "color": "blue",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 370,
+         "y": 560,
+         "color": "green",
+         "direction": "UP"
+      },
+      {
+         "type": "Prism",
+         "x": 20,
+         "y": 400,
+         "color": "magenta",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "Prism",
+         "x": 710,
+         "y": 430,
+         "color": "white",
+         "direction": "LEFT"
+      },
+      {
+         "type": "Prism",
+         "x": 20,
+         "y": 190,
+         "color": "red",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 550,
+         "y": 520,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 120,
+         "y": 190,
+         "color": "gray"
+      }
+   ]
+}

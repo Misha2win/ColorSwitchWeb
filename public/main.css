@@ -1,0 +1,217 @@
+:root {
+    --radius: 10px;
+    --select-color: rgb(195, 195, 195);
+    --bar-background: rgb(164, 164, 164);
+}
+
+button {
+    cursor: pointer;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+.hidden {
+    display: none;
+}
+
+nav {
+    margin-bottom: 10px;
+    padding: 15px 0px 15px 0px;
+    width: 100%;
+    background-color:var(--bar-background);
+    align-content: right;
+}
+
+nav a {
+    padding: 10px;
+    margin: 5px;
+    background-color: gray;
+    border-radius: var(--radius);
+}
+
+canvas {
+    border: 1px solid #000000;
+    background-color: #ffffff;
+}
+
+button {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog {
+    border-radius: var(--radius);
+    max-width: 50%;
+    max-height: 80%;
+}
+
+.dialog .dialog-title {
+    font-weight: 700;
+}
+
+.dialog .form {
+    margin: 10px;
+}
+
+.dialog menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.dialog menu button {
+    border-radius: var(--radius);
+}
+
+/* Game styles */
+
+#game {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    margin: auto;
+}
+
+/* Editor styles */
+
+#editor {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto;
+    align-items: start;
+
+    margin: auto;
+    max-width: 1400px;
+}
+
+/* Toolbar styles */
+
+#level-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    gap: 1px;
+    justify-content: center;
+    background-color: var(--bar-background);
+    border-radius: var(--radius) var(--radius) 0px 0px;
+    padding: 10px 10px;
+}
+
+#level-toolbar button {
+    width: 100%;
+}
+
+/* Editor canvas styles */
+
+#editor-canvas {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center;
+    display: block;
+}
+
+/* Entity toolbar styles */
+
+#entity-toolbar {
+    width: 75%;
+    height: 100%;
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: end;
+    background-color: var(--bar-background);
+    border-radius: var(--radius) 0px 0px var(--radius);
+}
+
+#entity-toolbar #entity-toolbar-title {
+    margin: 1px 0px 5px 1px;
+    padding: 5px;
+    border-radius: var(--radius) 0px 0px var(--radius) ;
+    background-color: white;
+    text-align: center;
+}
+
+#entity-toolbar .button-group {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.button-entity {
+    margin: auto;
+    width: 90%;
+}
+
+#entity-toolbar button.selected {
+    background-color: var(--select-color);
+}
+
+/* Entity property menu styles */
+
+#entity-properties {
+    width: 75%;
+    height: 100%;
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: start;
+    background-color: var(--bar-background); 
+    border-radius: 0px var(--radius) var(--radius) 0px;
+}
+
+#property-editor-title {
+    margin: 1px 1px 5px 0px;
+    padding: 5px;
+    border-radius: 0px var(--radius) var(--radius) 0px;
+    background-color: white;
+    text-align: center;
+}
+
+#property-editor-form {
+    padding: 5px 0px;
+    background-color: white;
+    border-radius: var(--radius);
+    margin: 0px 5px;
+    padding: 5px;
+}
+
+.property-form-group {
+    margin-bottom: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.property-form-group input, .property-form-group select {
+    max-width: 80%;
+}
+
+.property-form-group input[type="number"] {
+    max-width: 40px;
+}
+
+/* Editor Info */
+
+#editor-info {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: center;
+    display: block;
+    background-color: var(--bar-background); 
+    border-radius: 0px 0px var(--radius) var(--radius);
+    width: 100%;
+}
+
+#editor-info #checkbox-debug-mode {
+    margin-left: 5px;
+}

@@ -1,0 +1,96 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 200,
+         "width": 280,
+         "height": 50,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 450,
+         "y": 200,
+         "width": 280,
+         "height": 50,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 250,
+         "width": 280,
+         "height": 330,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 450,
+         "y": 250,
+         "width": 280,
+         "height": 330,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 180,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 180,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 360,
+         "y": 540,
+         "color": "green"
+      },
+      {
+         "type": "Teleporter",
+         "x": 240,
+         "y": 140,
+         "hasDestination": false,
+         "endX": -1,
+         "endY": -1
+      }
+   ]
+}

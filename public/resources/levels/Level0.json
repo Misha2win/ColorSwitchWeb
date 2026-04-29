@@ -1,0 +1,63 @@
+{
+   "color": "blue",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 560,
+         "active": true,
+         "obtainable": false
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 360,
+         "y": 520,
+         "color": "green"
+      }
+   ],
+   "texts": [
+      "Use WASD to MOVE,",
+      "Use E to USE the item in your inventory,",
+      "Use R to RESTART the current level you are in,",
+      "Use DELETE to go to the PREVIOUS level.",
+      "Good luck ;)"
+   ]
+}
