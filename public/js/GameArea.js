@@ -25,7 +25,24 @@ export default class GameArea {
 
         this.context = this.canvas.getContext('2d')
 
+        let loadingStep = 0
+        const drawLoadingText = () => {
+            const periods = '.'.repeat(loadingStep % 4)
+            this.clear()
+            this.context.save()
+            this.context.font = '24px sans-serif'
+            this.context.fillStyle = 'black'
+            this.context.textAlign = 'center'
+            this.context.textBaseline = 'middle'
+            this.context.fillText(`loading levels${periods}`, this.width / 2, this.height / 2)
+            this.context.restore()
+            loadingStep++
+        }
+        drawLoadingText()
+        const loadingIntervalId = setInterval(drawLoadingText, 400)
+
         this.ensureLevelsLoaded().then(() => {
+            clearInterval(loadingIntervalId)
             this.allowedLevels = Array(this.levels.length).fill(false)
             this.allowedLevels[0] = true
             if (!this.levels[this.currentLevel]) return
