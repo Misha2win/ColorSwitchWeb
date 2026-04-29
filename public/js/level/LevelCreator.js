@@ -31,7 +31,7 @@ const loadedLevels = new Map() // Maps level name to level
 export async function loadLevel(name, options = { forceLoad: false }) {
     if (!options.forceLoad && loadedLevels.has(name)) return loadedLevels.get(name)
 
-    const resource = await fetch(`../../resources/levels/${name}.json`)
+    const resource = await fetch(`resources/levels/${name}.json`)
     if (!resource.ok) throw new Error(`Failed to load ${name}: ${resource.status}`)
 
     const level = loadLevelFromJSON(await resource.json(), name)
@@ -48,7 +48,7 @@ const levelOrder = []
 export async function getLevelOrderLevels(options = { forceLoad: false }) {
     if (!options.forceLoad && levelOrder.length) return levelOrder
 
-    const url = '../../resources/levelOrder.json'
+    const url = 'resources/levelOrder.json'
     const resource = await fetch(url)
     if (!resource.ok) throw new Error(`Failed to load ${url}: ${resource.status}`)
     const data = await resource.json()
