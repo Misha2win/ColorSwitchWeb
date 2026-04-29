@@ -51,13 +51,61 @@
          "x": 360,
          "y": 520,
          "color": "green"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 215,
+         "width": 690,
+         "height": 30,
+         "text": "Use WASD to MOVE,",
+         "fontSize": 30,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 250,
+         "width": 690,
+         "height": 30,
+         "text": "Use E to USE the item in your inventory,",
+         "fontSize": 30,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 285,
+         "width": 690,
+         "height": 30,
+         "text": "Use R to RESTART the current level you are in,",
+         "fontSize": 30,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 320,
+         "width": 690,
+         "height": 30,
+         "text": "Use DELETE to go to the PREVIOUS level.",
+         "fontSize": 30,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 355,
+         "width": 690,
+         "height": 30,
+         "text": "Good luck ;)",
+         "fontSize": 30,
+         "color": "black",
+         "background": "white"
       }
-   ],
-   "texts": [
-      "Use WASD to MOVE,",
-      "Use E to USE the item in your inventory,",
-      "Use R to RESTART the current level you are in,",
-      "Use DELETE to go to the PREVIOUS level.",
-      "Good luck ;)"
    ]
 }

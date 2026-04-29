@@ -1,6 +1,4 @@
-import { lightenHex } from "../../utility/Util.js";
 import Entity from "../Entity.js";
-import Player from "../Player.js";
 import Color from "../Color.js";
 
 export default class Platform extends Entity {
@@ -13,9 +11,23 @@ export default class Platform extends Entity {
    draw(context) {
       context.fillStyle = this.color.drawColor
 
-      if (this.level) {
-         const player = this.level.player
-         if (player && !this.canCollideWith(player)) {
+      const player = this.level?.player
+      if (player) {
+         const gameWidth = this.level.levelManager?.width
+         const middle = gameWidth / 2
+         const crossesMiddle = this.x < middle && this.x + this.width > middle
+
+         const realPlayerIsRight = player.x + player.width / 2 > middle
+
+         const platformIsRight = this.x + this.width / 2 > middle
+
+         const tester = player.mirror && gameWidth && realPlayerIsRight !== platformIsRight ? player.mirror : player
+
+         const collides = player.mirror && gameWidth && crossesMiddle
+            ? this.canCollideWith(player) || this.canCollideWith(player.mirror)
+            : this.canCollideWith(tester)
+
+         if (!collides) {
             context.fillStyle = `${this.color.drawColor}64`
          }
       }

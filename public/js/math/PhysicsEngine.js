@@ -17,9 +17,9 @@ export function calculatePhysics(delta, level) {
     if (player.requestLeft) playerVelocity.x -= player.speed
     if (player.requestRight) playerVelocity.x += player.speed
 
-    if (player.requestJump && player.onGround) { // Jump
+    if (player.requestJump && player.canJump()) { // Jump
         playerVelocity.y = -player.jumpSpeed
-        player.onGround = false
+        player.onJump()
     }
 
     // Apply gravity
@@ -36,29 +36,14 @@ export function calculatePhysics(delta, level) {
     }
 
     player.x += playerVelocity.x * delta
-    for (const blocker of collisionCandidates) {
-        if (!boxesIntersect(player, blocker) || !boxesOverlapVertically(player, blocker)) continue
-
-        if (playerVelocity.x > 0) {
-            player.x = blocker.x - player.width
-        } else if (playerVelocity.x < 0) {
-            player.x = blocker.x + blocker.width
-        }
-        playerVelocity.x = 0
-    }
-
+    for (const blocker of collisionCandidates)
+        if (resolveCollision(player, blocker)) playerVelocity.x = 0
     player.y += playerVelocity.y * delta
     player.onGround = false
     for (const blocker of collisionCandidates) {
-        if (blocker === player) continue
-        if (!boxesIntersect(player, blocker) || !boxesOverlapHorizontally(player, blocker)) continue
-
-        if (playerVelocity.y > 0) {
-            player.y = blocker.y - player.height
-            player.onGround = true
-        } else if (playerVelocity.y < 0) {
-            player.y = blocker.y + blocker.height
-        }
+        const y = player.y
+        if (!resolveCollision(player, blocker)) continue
+        if (player.y < y) player.onGround = true
         playerVelocity.y = 0
     }
     player.yVelocity = playerVelocity.y
@@ -83,6 +68,25 @@ export function calculatePhysics(delta, level) {
     }
 }
 
+export function resolveCollision(a, b) {
+    if (!boxesIntersect(a, b)) return false
+
+    const leftOverlap = a.x + a.width - b.x
+    const rightOverlap = b.x + b.width - a.x
+    const topOverlap = a.y + a.height - b.y
+    const bottomOverlap = b.y + b.height - a.y
+    const xOverlap = leftOverlap < rightOverlap ? -leftOverlap : rightOverlap
+    const yOverlap = topOverlap < bottomOverlap ? -topOverlap : bottomOverlap
+
+    if (Math.abs(xOverlap) < Math.abs(yOverlap)) {
+        a.x += xOverlap
+    } else {
+        a.y += yOverlap
+    }
+
+    return true
+}
+
 /**
  * returns a new box ensuring it keeps the same effective top-left position,
  * just with positive width and height values
@@ -98,16 +102,6 @@ export function getNormalizedBox(box) {
         width: right - left,
         height: bottom - top
     }
-}
-
-function boxesOverlapHorizontally(a, b) {
-    return a.x < b.x + b.width
-        && a.x + a.width > b.x
-}
-
-function boxesOverlapVertically(a, b) {
-    return a.y < b.y + b.height
-        && a.y + a.height > b.y
 }
 
 /**

@@ -17,7 +17,6 @@ export default class HealthGate extends Platform {
       context.fillStyle = 'rgba(0, 0, 0, 0.5)'
       context.fillRect(this.x, this.y, this.width, this.height)
 
-      context.save()
       context.font = `${Math.max(8, Math.min(this.height * 0.6, this.width * 0.18))}px sans-serif`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
@@ -33,7 +32,6 @@ export default class HealthGate extends Platform {
       context.strokeText(text, centerX, centerY, maxWidth)
       context.fillStyle = 'white'
       context.fillText(text, centerX, centerY, maxWidth)
-      context.restore()
    }
 
    canCollideWith(other) {

@@ -8,6 +8,7 @@ import Goal from "../entity/point/Goal.js"
 import Point from "../entity/point/Point.js"
 import Prism, { Beam } from "../entity/obstacle/Prism.js"
 import Element from "../entity/obstacle/Element.js"
+import Text from "../entity/Text.js"
 
 export default class Level {
 
@@ -23,6 +24,7 @@ export default class Level {
         this.triggers = []
         this.items = []
         this.spawns = []
+        this.texts = []
 
         this.ghosts = []
         this.ghostBlockers = []
@@ -48,8 +50,21 @@ export default class Level {
     }
 
     draw(context) {
-        for (const entity of this.entities) entity.draw(context)
-        this.player?.draw(context)
+        for (const entity of this.entities) {
+            context.save()
+            entity.draw(context)
+            context.restore()
+        }
+        for (const text of this.texts) {
+            context.save()
+            text.draw(context)
+            context.restore()
+        }
+        if (this.player) {
+            context.save()
+            this.player.draw(context)
+            context.restore()
+        }
     }
 
     setPlayer(player) {
@@ -131,6 +146,11 @@ export default class Level {
     }
 
     add(entity) {
+        if (entity instanceof Text) {
+            this.texts.push(entity)
+            return
+        }
+
         this.entities.push(entity)
         entity.level = this
 

@@ -83,8 +83,10 @@ export default class GameArea {
         level.update(delta)
 
         if (draw) {
+            this.context.save()
             this.clear()
             level.draw(this.context)
+            this.context.restore()
         }
 
         if (level.player?.requestRestart) {

@@ -31,7 +31,6 @@ export default class Mirror extends Item {
          const mirrorTop = this.y + 2
          const mirrorBottom = this.y + this.height - 2
 
-         context.save()
          context.strokeStyle = 'black'
          context.lineWidth = 0.5
          context.beginPath()
@@ -61,7 +60,6 @@ export default class Mirror extends Item {
          context.lineTo(mirrorRight - 9, mirrorTop + 2)
 
          context.stroke()
-         context.restore()
       }
    }
 

@@ -14,6 +14,7 @@ import Portal from '../entity/point/Portal.js'
 import HealthGate from '../entity/platform/HealthGate.js'
 import FragilePlatform from '../entity/platform/FragilePlatform.js'
 import PhotonicPlatform from '../entity/platform/PhotonicPlatform.js'
+import Text from '../entity/Text.js'
 
 export const registry = new Map()
 registry.set('Platform', (obj) => new Platform(obj.x, obj.y, obj.width, obj.height, Color.getColor(obj.color)))
@@ -31,3 +32,4 @@ registry.set('Portal', (obj) => new Portal(obj.x, obj.y, obj.id))
 registry.set('HealthGate', (obj) => new HealthGate(obj.x, obj.y, obj.width, obj.height, obj.greaterThan, obj.health))
 registry.set('FragilePlatform', (obj) => new FragilePlatform(obj.x, obj.y, obj.width, obj.height, Color.getColor(obj.color)))
 registry.set('PhotonicPlatform', (obj) => new PhotonicPlatform(obj.x, obj.y, obj.width, obj.height))
+registry.set('Text', (obj) => new Text(obj.x, obj.y, obj.width, obj.height, obj.text, obj.fontSize, obj.color, obj.background))

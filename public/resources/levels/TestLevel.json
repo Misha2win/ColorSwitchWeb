@@ -407,7 +407,7 @@
       {
          "type": "Element",
          "color": "green",
-         "health": 1,
+         "health": 1.1,
          "x": 670,
          "y": 20,
          "width": 60,
@@ -648,12 +648,28 @@
          "y": 520,
          "color": "gray",
          "rotated": true
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 410,
+         "width": 690,
+         "height": 20,
+         "text": "This level is the testing level.",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 465,
+         "width": 690,
+         "height": 20,
+         "text": "Play around if you'd like :)",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
       }
-   ],
-   "texts": [
-      ".",
-      ".",
-      "This level is the testing level.",
-      "There are no levels after this."
    ]
 }

@@ -218,7 +218,7 @@
       {
          "type": "Element",
          "color": "green",
-         "health": 1,
+         "health": 1.1,
          "x": 550,
          "y": 20,
          "width": 180,

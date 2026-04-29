@@ -92,10 +92,28 @@
          "y": 290,
          "color": "gray",
          "persistOnce": false
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 120,
+         "width": 690,
+         "height": 30,
+         "text": "Mirrors reflect you across the gray line. You",
+         "fontSize": 25,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 155,
+         "width": 690,
+         "height": 30,
+         "text": "collide with what the mirrored you collides with.",
+         "fontSize": 25,
+         "color": "black",
+         "background": "white"
       }
-   ],
-   "texts": [
-      "Mirrors reflect you across the gray line! You also",
-      "collide with what the mirrored you collides with!"
    ]
 }
