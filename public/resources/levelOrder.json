@@ -1,16 +1,5 @@
 {
    "levelOrder": [
-      "TestLevel"
-   ],
-   "NotUsed": [
-      "Painter1",
-      "SizeChanger1",
-      "SizeChangerTest",
-      "PhotonicPlatformTest2",
-
-
-
-
       "Level0",
       "ColorChanger1",
       "ColorChanger2",
@@ -47,6 +36,13 @@
       "PrismTestingLevel",
       "PrismCollisionTest",
       "ChatGPTLevel",
-      "Prism9"
+      "Prism9",
+      "TestLevel"
+   ],
+   "NotUsed": [
+      "Painter1",
+      "SizeChanger1",
+      "SizeChangerTest",
+      "PhotonicPlatformTest2"
    ]
 }
