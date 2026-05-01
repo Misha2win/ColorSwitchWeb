@@ -1,8 +1,10 @@
-import { boxesIntersect } from "../../math/PhysicsEngine.js"
+import { boxesIntersect, pointIntersectsBox } from "../../math/PhysicsEngine.js"
+import Vector from "../../math/Vector.js"
 import { lightenHex } from "../../utility/Util.js"
 import Color from "../Color.js"
 import Entity from "../Entity.js"
 import ColorChanger from "../item/ColorChanger.js"
+import ColorMixer from "../item/ColorMixer.js"
 import PhotonicPlatform from "../platform/PhotonicPlatform.js"
 import Platform from "../platform/Platform.js"
 import Player from "../Player.js"
@@ -18,6 +20,23 @@ export default class Prism extends Obstacle {
 
         this.direction = Direction.fromString(direction)
 
+        this.point = (() => {
+            switch (this.direction) {
+                case Direction.UP: {
+                    return new Vector(this.x + this.width / 2, this.y + this.height + 5)
+                }
+                case Direction.RIGHT: {
+                    return new Vector(this.x - 5, this.y + this.height / 2)
+                }
+                case Direction.DOWN: {
+                    return new Vector(this.x + this.width / 2, this.y - 5)
+                }
+                case Direction.LEFT: {
+                    return new Vector(this.x + this.width + 5, this.y + this.height / 2)
+                }
+            }
+        })()
+
         this.beams = []
     }
 
@@ -30,6 +49,19 @@ export default class Prism extends Obstacle {
     onCollide(other) {}
 
     resolvePhysics() {
+        if (this.point) {
+            for (const platform of this.level.blockers) {
+                if (!(platform instanceof PhotonicPlatform)) continue
+                if (!pointIntersectsBox(this.point, platform)) continue
+
+                if (platform.color === Color.GRAY) {
+                    this.color = Color.BLACK
+                } else {
+                    this.color = platform.color
+                }
+            }
+        }
+
         if (this.beams[0]) {
             this.beams[0].color = this.color
             this.beams.slice(1).forEach(beam => {
@@ -72,8 +104,9 @@ export default class Prism extends Obstacle {
 
         for (let i = 0; i < this.beams.length; i++) {
             const beam = this.beams[i]
-            if (!beam || beam.color === Color.BLACK) break
+            if (!beam) break
             beam.resetBeam()
+            if (beam.color === Color.BLACK) break
 
             const entities = [...this.level.entities]
             entities.splice(entities.indexOf(beam), 1)
@@ -251,6 +284,7 @@ export class Beam extends Entity {
     }
 
     onCollide(other) {
+        if (this.color === Color.GRAY || this.color === Color.BLACK) return
         if (!(other instanceof Player)) return
 
         other.color = this.color
@@ -266,8 +300,9 @@ export class Beam extends Entity {
     onPlayerUseItem(item) {
         const player = this.level?.player
         if (!player) return
+        if (!boxesIntersect(player, this)) return
 
-        if (item instanceof ColorChanger && boxesIntersect(player, this)) {
+        if (item instanceof ColorChanger || item instanceof ColorMixer) {
             this.prism.color = this.level.player.color
         }
     }

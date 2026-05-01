@@ -204,6 +204,12 @@ export default class Player extends Entity {
             this.requestUseItem = true
         } else if (event.key === 'r') {
             this.requestRestart = true
+        } else if (event.key === '1') {
+            this.requestOne = true
+        } else if (event.key === '2') {
+            this.requestTwo = true
+        } else if (event.key === '3') {
+            this.requestThree = true
         }
     }
 
@@ -218,6 +224,12 @@ export default class Player extends Entity {
             this.requestJump = false
         } else if (event.key === 'e') {
             this.requestUseItem = false
+        } else if (event.key === '1') {
+            this.requestOne = false
+        } else if (event.key === '2') {
+            this.requestTwo = false
+        } else if (event.key === '3') {
+            this.requestThree = false
         }
     }
 

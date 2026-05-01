@@ -25,6 +25,7 @@ export default class PhotonicPlatform extends Platform {
 
       for (const entity of this.level?.entities) {
          if (!(entity instanceof Beam)) continue
+         if (entity.color === Color.GRAY) continue
          if (!boxesIntersect(entity, this)) continue
 
          this.color = this.color.add(entity.color)

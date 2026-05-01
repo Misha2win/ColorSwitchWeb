@@ -50,7 +50,12 @@ export default class Level {
     }
 
     draw(context) {
-        for (const entity of this.entities) {
+        for (const entity of this.triggers) {
+            context.save()
+            entity.draw(context)
+            context.restore()
+        }
+        for (const entity of this.blockers) {
             context.save()
             entity.draw(context)
             context.restore()
@@ -63,6 +68,12 @@ export default class Level {
         if (this.player) {
             context.save()
             this.player.draw(context)
+
+            context.font = `10px sans-serif`
+            context.fillStyle = 'black'
+            context.textAlign = 'left'
+            context.textBaseline = 'bottom'
+            context.fillText(this.name, 0, this.levelManager.height)
             context.restore()
         }
     }

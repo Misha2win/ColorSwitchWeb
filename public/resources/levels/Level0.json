@@ -36,9 +36,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
@@ -59,7 +57,7 @@
          "width": 690,
          "height": 30,
          "text": "Use WASD to MOVE,",
-         "fontSize": 30,
+         "fontSize": 25,
          "color": "black",
          "background": "white"
       },
@@ -70,7 +68,7 @@
          "width": 690,
          "height": 30,
          "text": "Use E to USE the item in your inventory,",
-         "fontSize": 30,
+         "fontSize": 25,
          "color": "black",
          "background": "white"
       },
@@ -81,7 +79,7 @@
          "width": 690,
          "height": 30,
          "text": "Use R to RESTART the current level you are in,",
-         "fontSize": 30,
+         "fontSize": 25,
          "color": "black",
          "background": "white"
       },
@@ -91,8 +89,8 @@
          "y": 320,
          "width": 690,
          "height": 30,
-         "text": "Use DELETE to go to the PREVIOUS level.",
-         "fontSize": 30,
+         "text": "Your goal is to match the color of the goal and",
+         "fontSize": 25,
          "color": "black",
          "background": "white"
       },
@@ -102,10 +100,43 @@
          "y": 355,
          "width": 690,
          "height": 30,
-         "text": "Good luck ;)",
-         "fontSize": 30,
+         "text": "get to it using the items in each level.",
+         "fontSize": 25,
          "color": "black",
          "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 130,
+         "y": 10,
+         "width": 140,
+         "height": 21,
+         "text": "← Your health",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 40,
+         "y": 100,
+         "width": 160,
+         "height": 20,
+         "text": "   ↑ Your inventory",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 630,
+         "y": 540,
+         "width": 100,
+         "height": 20,
+         "text": "The goal ↓ ",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
       }
    ]
 }

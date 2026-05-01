@@ -6,29 +6,35 @@
       "Element1",
       "Element2",
       "Element3",
-      "SuperJump1",
-      "SuperJump2",
-      "Element4",
-      "Prism6",
       "Prism1",
       "Prism2",
       "Prism4",
+      "Prism5",
+      "Prism7",
+      "Prism8",
+      "PhotonicPlatform2",
+      "Prism10",
+      "Prism9",
       "Teleporter1",
       "Mirror6",
       "Mirror1",
       "Mirror2",
       "Mirror3",
       "Mirror4",
-      "Prism5",
       "Mirror7",
       "ColorMixer1",
       "ColorMixer2",
       "ColorChanger4",
-      "Prism7",
       "PortalPoint1",
       "PrismMirrorTest",
+      "TestLevel"
+   ],
+   "NotUsed": [
+      "SuperJump1",
+      "SuperJump2",
+      "Element4",
+
       "FragilePlatform1",
-      "Prism8",
       "PhotonicPlatformTest",
       "PhotonicPlatform1",
       "CodexBridge",
@@ -36,13 +42,10 @@
       "PrismTestingLevel",
       "PrismCollisionTest",
       "ChatGPTLevel",
-      "Prism9",
-      "TestLevel"
-   ],
-   "NotUsed": [
+
       "Painter1",
       "SizeChanger1",
       "SizeChangerTest",
-      "PhotonicPlatformTest2"
+      "Prism6"
    ]
 }

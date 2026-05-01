@@ -26,7 +26,22 @@
             <div id="entity-toolbar">
                 <div id="entity-toolbar-title">Entities</div>
                 <div class="button-group">
+                    <button class="button-entity" data-type="Platform">Platform</button>
+                    <button class="button-entity" data-type="MovingPlatform">Moving Platform</button>
+                    <button class="button-entity" data-type="FragilePlatform">Fragile Platform</button>
+                    <button class="button-entity" data-type="PhotonicPlatform">Photonic Platform</button>
+                    <button class="button-entity" data-type="HealthGate">Health Gate</button>
+                    <button class="button-entity" data-type="Element">Element</button>
+                    <button class="button-entity" data-type="Text">Text</button>
                     <button class="button-entity" data-type="Spawn">Spawn Point</button>
+                    <button class="button-entity" data-type="Goal">Goal</button>
+                    <button class="button-entity" data-type="Portal">Portal</button>
+                    <button class="button-entity" data-type="Prism">Prism</button>
+                    <button class="button-entity" data-type="ColorChanger">Color Changer</button>
+                    <button class="button-entity" data-type="ColorMixer">Color Mixer</button>
+                    <button class="button-entity" data-type="Mirror">Mirror</button>
+                    <button class="button-entity" data-type="SuperJump">Super Jump</button>
+                    <button class="button-entity" data-type="Teleporter">Teleporter</button>
                 </div>
             </div>
             <div id="entity-properties">
@@ -34,9 +49,28 @@
                 <form id="property-editor-form">Selected entity properties will go here.</form>
             </div>
             <div id="editor-info">
+                <div id="level-color-editor">
+                    <label for="select-level-color" class="label">Start Color</label>
+                    <select id="select-level-color">
+                        <option value="black">black</option>
+                        <option value="red">red</option>
+                        <option value="green">green</option>
+                        <option value="blue">blue</option>
+                        <option value="yellow">yellow</option>
+                        <option value="magenta">magenta</option>
+                        <option value="cyan">cyan</option>
+                        <option value="white">white</option>
+                        <option value="gray">gray</option>
+                    </select>
+                </div>
                 <div id="checkbox-debug-mode">
                     <input type="checkbox" id="checkbox-debug" class="checkbox">
                     <label for="checkbox-debug" class="label">Debug Mode</label>
+                </div>
+                <div id="level-navigation">
+                    <div id="current-level-label" aria-live="polite">Loading levels...</div>
+                    <button id="button-previous-level" disabled>←</button>
+                    <button id="button-next-level" disabled>→</button>
                 </div>
             </div>
         </div>

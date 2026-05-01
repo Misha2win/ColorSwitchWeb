@@ -33,12 +33,23 @@ export default class Point extends Entity {
    draw(context) {
       context.fillStyle = this.color.drawColor
       context.beginPath()
-      context.ellipse(
-         this.drawX + this.drawWidth / 2, this.drawY + this.drawHeight / 2,
-         this.drawWidth / 2, this.drawHeight / 2,
-         0,
-         0, Math.PI * 2
-      )
+
+      if (this.level?.levelManager) {
+         context.ellipse(
+            this.drawX + this.drawWidth / 2, this.drawY + this.drawHeight / 2,
+            this.drawWidth / 2, this.drawHeight / 2,
+            0,
+            0, Math.PI * 2
+         )
+      } else {
+         context.ellipse(
+            this.x + this.width / 2, this.y + this.height / 2,
+            this.width / 2, this.height / 2,
+            0,
+            0, Math.PI * 2
+         )
+      }
+
       context.fill()
    }
 

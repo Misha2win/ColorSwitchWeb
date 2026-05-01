@@ -23,9 +23,7 @@ export default class Text extends Entity {
         context.fillStyle = this.textColor
         context.textAlign = 'center'
         context.textBaseline = 'middle'
-        const cx = this.x + this.width / 2
-        const cy = this.y + this.height / 2
-        context.fillText(this.text, cx, cy)
+        context.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2)
     }
 
     canCollideWith(other) {

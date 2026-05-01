@@ -104,6 +104,13 @@ export function getNormalizedBox(box) {
     }
 }
 
+export function pointIntersectsBox(point, box) {
+    return point.x >= box.x
+        && point.x <= box.x + box.width
+        && point.y >= box.y
+        && point.y <= box.y + box.height
+}
+
 /**
  * returns true if two boxes intersect, otherwise false
  */

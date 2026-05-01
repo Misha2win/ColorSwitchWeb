@@ -44,9 +44,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
@@ -65,6 +63,50 @@
          "x": 160,
          "y": 520,
          "color": "blue"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 140,
+         "width": 290,
+         "height": 20,
+         "text": "You can't cross walls",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 160,
+         "width": 290,
+         "height": 20,
+         "text": "of the same color.",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 430,
+         "y": 140,
+         "width": 290,
+         "height": 20,
+         "text": "But you can change your",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 430,
+         "y": 160,
+         "width": 290,
+         "height": 20,
+         "text": "own color to cross it!",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

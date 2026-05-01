@@ -37,32 +37,30 @@
          "type": "MovingPlatform",
          "x": 20,
          "y": 290,
+         "width": 220,
+         "height": 10,
+         "color": "blue",
          "startX": 20,
          "startY": 290,
          "endX": 510,
-         "endY": 290,
-         "width": 220,
-         "height": 10,
-         "color": "blue"
+         "endY": 290
       },
       {
          "type": "MovingPlatform",
          "x": 460,
          "y": 160,
+         "width": 270,
+         "height": 10,
+         "color": "red",
          "startX": 460,
          "startY": 160,
          "endX": 20,
-         "endY": 160,
-         "width": 270,
-         "height": 10,
-         "color": "red"
+         "endY": 160
       },
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
@@ -88,7 +86,7 @@
          "type": "Prism",
          "x": 370,
          "y": 20,
-         "color": "red",
+         "color": "magenta",
          "direction": "DOWN"
       },
       {

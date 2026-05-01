@@ -1,0 +1,76 @@
+{
+   "color": "red",
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 580,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 10,
+         "width": 720,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 20,
+         "width": 10,
+         "height": 560,
+         "color": "black"
+      },
+      {
+         "type": "Spawn",
+         "x": 20,
+         "y": 280
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 280,
+         "color": "green"
+      },
+      {
+         "type": "PhotonicPlatform",
+         "x": 20,
+         "y": 300,
+         "width": 710,
+         "height": 30
+      },
+      {
+         "type": "Prism",
+         "x": 340,
+         "y": 20,
+         "color": "green",
+         "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 390,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
+      },
+      {
+         "type": "ColorMixer",
+         "x": 360,
+         "y": 240,
+         "color": "red",
+         "additive": false
+      }
+   ]
+}
