@@ -36,30 +36,98 @@ function setupMobileControls() {
     const mobileControls = document.getElementById('mobile-game-controls')
     if (!mobileControls) return
 
+    const activePointers = new Map()
+    const pressedButtons = new Set()
+    const getControlButton = (x, y) => document
+        .elementFromPoint(x, y)
+        ?.closest('.mobile-control-button')
+
+    const syncMobileInputs = () => {
+        const nextPressedButtons = new Set(activePointers.values())
+        for (const button of mobileControlButtons) {
+            const wasPressed = pressedButtons.has(button)
+            const isPressed = nextPressedButtons.has(button)
+            if (wasPressed === isPressed) continue
+
+            setMobileButtonPressed(button, isPressed)
+            if (isPressed) {
+                pressedButtons.add(button)
+            } else {
+                pressedButtons.delete(button)
+            }
+        }
+    }
+
+    const updatePointer = (id, x, y) => {
+        const button = getControlButton(x, y)
+        if (button && mobileControls.contains(button)) {
+            activePointers.set(id, button)
+        } else {
+            activePointers.delete(id)
+        }
+    }
+
+    const preventTouchDefaults = (event) => {
+        event.preventDefault()
+    }
+
     mobileControls.addEventListener('contextmenu', (event) => event.preventDefault())
 
-    for (const button of mobileControlButtons) {
-        const pointerIds = new Set()
-        const syncInputState = () => setMobileButtonPressed(button, pointerIds.size > 0)
-        const releasePointer = (event) => {
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        const updateTouches = (event) => {
             event.preventDefault()
-            pointerIds.delete(event.pointerId)
-            if (button.hasPointerCapture?.(event.pointerId)) button.releasePointerCapture(event.pointerId)
-            syncInputState()
+            for (const touch of event.changedTouches) {
+                updatePointer(touch.identifier, touch.clientX, touch.clientY)
+            }
+            syncMobileInputs()
+        }
+        const releaseTouches = (event) => {
+            event.preventDefault()
+            for (const touch of event.changedTouches) {
+                activePointers.delete(touch.identifier)
+            }
+            syncMobileInputs()
         }
 
-        button.addEventListener('pointerdown', (event) => {
+        mobileControls.addEventListener('touchstart', updateTouches, { passive: false })
+        mobileControls.addEventListener('touchmove', updateTouches, { passive: false })
+        mobileControls.addEventListener('touchend', releaseTouches, { passive: false })
+        mobileControls.addEventListener('touchcancel', releaseTouches, { passive: false })
+    } else {
+        const activePointerIds = new Set()
+        const handlePointerDown = (event) => {
             event.preventDefault()
-            pointerIds.add(event.pointerId)
-            button.setPointerCapture?.(event.pointerId)
-            syncInputState()
-        })
-        button.addEventListener('pointerup', releasePointer)
-        button.addEventListener('pointercancel', releasePointer)
-        button.addEventListener('lostpointercapture', (event) => {
-            pointerIds.delete(event.pointerId)
-            syncInputState()
-        })
+            activePointerIds.add(event.pointerId)
+            mobileControls.setPointerCapture?.(event.pointerId)
+            updatePointer(event.pointerId, event.clientX, event.clientY)
+            syncMobileInputs()
+        }
+        const handlePointerMove = (event) => {
+            if (!activePointerIds.has(event.pointerId)) return
+
+            event.preventDefault()
+            updatePointer(event.pointerId, event.clientX, event.clientY)
+            syncMobileInputs()
+        }
+        const releasePointerEvent = (event) => {
+            event.preventDefault()
+            activePointerIds.delete(event.pointerId)
+            activePointers.delete(event.pointerId)
+            if (mobileControls.hasPointerCapture?.(event.pointerId)) {
+                mobileControls.releasePointerCapture(event.pointerId)
+            }
+            syncMobileInputs()
+        }
+
+        mobileControls.addEventListener('pointerdown', handlePointerDown)
+        mobileControls.addEventListener('pointermove', handlePointerMove)
+        mobileControls.addEventListener('pointerup', releasePointerEvent)
+        mobileControls.addEventListener('pointercancel', releasePointerEvent)
+        mobileControls.addEventListener('lostpointercapture', releasePointerEvent)
+    }
+
+    for (const button of mobileControlButtons) {
+        button.addEventListener('touchstart', preventTouchDefaults, { passive: false })
         button.addEventListener('click', (event) => {
             event.preventDefault()
             button.blur()
