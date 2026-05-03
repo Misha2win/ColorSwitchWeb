@@ -191,46 +191,35 @@ export default class Player extends Entity {
         return {}
     }
 
+    setInputForKey(key, isPressed) {
+        if (key === 'a' || key === 'ArrowLeft') {
+            this.requestLeft = isPressed
+        } else if (key === 'd' || key === 'ArrowRight') {
+            this.requestRight = isPressed
+        } else if (key === 'w' || key === 'ArrowUp' || key === ' ') {
+            this.requestJump = isPressed
+        } else if (key === 'e') {
+            this.requestUseItem = isPressed
+        } else if (key === 'r' && isPressed) {
+            this.requestRestart = true
+        } else if (key === '1') {
+            this.requestOne = isPressed
+        } else if (key === '2') {
+            this.requestTwo = isPressed
+        } else if (key === '3') {
+            this.requestThree = isPressed
+        }
+    }
+
     onKeyDown(event) {
         if (this.ignoreInputs) return
 
-        if (event.key === 'a' || event.key === 'ArrowLeft') {
-            this.requestLeft = true
-        } else if (event.key === 'd' || event.key === 'ArrowRight') {
-            this.requestRight = true
-        } else if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') {
-            this.requestJump = true
-        } else if (event.key === 'e') {
-            this.requestUseItem = true
-        } else if (event.key === 'r') {
-            this.requestRestart = true
-        } else if (event.key === '1') {
-            this.requestOne = true
-        } else if (event.key === '2') {
-            this.requestTwo = true
-        } else if (event.key === '3') {
-            this.requestThree = true
-        }
+        this.setInputForKey(event.key, true)
     }
 
     onKeyUp(event) {
         this.ignoreInputs = false
-
-        if (event.key === 'a' || event.key === 'ArrowLeft') {
-            this.requestLeft = false
-        } else if (event.key === 'd' || event.key === 'ArrowRight') {
-            this.requestRight = false
-        } else if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') {
-            this.requestJump = false
-        } else if (event.key === 'e') {
-            this.requestUseItem = false
-        } else if (event.key === '1') {
-            this.requestOne = false
-        } else if (event.key === '2') {
-            this.requestTwo = false
-        } else if (event.key === '3') {
-            this.requestThree = false
-        }
+        this.setInputForKey(event.key, false)
     }
 
 }

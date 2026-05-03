@@ -11,7 +11,7 @@ export default class GameArea {
         this.height = null
         this.canvas = null
         this.context = null
-        this.intervalId = null
+        this.animationFrameId = null
         this.lastTime = 0
         this.levels = levels
         this.currentLevel = 0
@@ -53,14 +53,16 @@ export default class GameArea {
             currentLevel.respawnPlayer()
 
             this.lastTime = performance.now()
-            if (this.intervalId) clearInterval(this.intervalId)
-            this.intervalId = setInterval(() => {
-                const now = performance.now()
+            if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId)
+
+            const updateGame = (now) => {
                 const delta = (now - this.lastTime) / 1000
                 this.lastTime = now
 
                 this.updateLevel(this.levels[this.currentLevel], true, delta)
-            }, 0)
+                this.animationFrameId = requestAnimationFrame(updateGame)
+            }
+            this.animationFrameId = requestAnimationFrame(updateGame)
         })
     }
 
@@ -76,6 +78,8 @@ export default class GameArea {
     }
 
     updateLevel(level, draw, delta) {
+        if (!level) return
+
         level.preparePhysics(delta)
 
         Physics.calculatePhysics(delta, level)
@@ -93,6 +97,18 @@ export default class GameArea {
             this.restartLevel()
             level.player.requestRestart = false
         }
+    }
+
+    getCurrentLevel() {
+        return this.levels[this.currentLevel] ?? null
+    }
+
+    getCurrentPlayer() {
+        return this.getCurrentLevel()?.player ?? null
+    }
+
+    resetFrameClock() {
+        this.lastTime = performance.now()
     }
 
     restartLevel() {
@@ -125,9 +141,9 @@ export default class GameArea {
     }
 
     stop() {
-        if (!this.intervalId) return
-        clearInterval(this.intervalId)
-        this.intervalId = null
+        if (!this.animationFrameId) return
+        cancelAnimationFrame(this.animationFrameId)
+        this.animationFrameId = null
     }
 
 }

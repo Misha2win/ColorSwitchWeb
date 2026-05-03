@@ -129,6 +129,89 @@ button {
     margin: auto;
 }
 
+.mobile-game-controls {
+    display: none;
+}
+
+body.game-page.mobile-game-layout {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: 50dvh 50dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+body.game-page.mobile-game-layout nav {
+    display: none;
+}
+
+body.game-page.mobile-game-layout #game {
+    position: static;
+    align-self: center;
+    justify-self: center;
+    width: min(calc(100vw - 20px), calc((50dvh - 18px) * 1.25));
+    height: auto;
+    margin: 0px;
+    display: block;
+    box-sizing: border-box;
+}
+
+body.game-page.mobile-game-layout .mobile-game-controls {
+    align-self: stretch;
+    justify-self: center;
+    width: min(100%, 520px);
+    display: grid;
+    align-content: center;
+    gap: clamp(8px, 2dvh, 14px);
+    padding: clamp(10px, 3dvh, 20px);
+    box-sizing: border-box;
+    background-color: #e8edf3;
+    border-top: 1px solid var(--border-color);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body.game-page.mobile-game-layout .mobile-control-row {
+    display: grid;
+    gap: clamp(8px, 2dvh, 12px);
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement {
+    grid-template-columns: repeat(3, minmax(0px, 1fr));
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-restart {
+    margin-top: clamp(18px, 5dvh, 34px);
+}
+
+body.game-page.mobile-game-layout .mobile-control-button {
+    width: 100%;
+    height: clamp(46px, 10dvh, 72px);
+    min-height: 0px;
+    border-radius: var(--radius);
+    font-size: clamp(18px, 6vw, 28px);
+    font-weight: 700;
+    letter-spacing: 0px;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.game-page.mobile-game-layout .mobile-control-button-primary {
+    color: #0f3b73;
+    border-color: #7bb7ff;
+    background: linear-gradient(#fafdff, #d8ebff);
+}
+
+body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
+    color: #0b3a77;
+    border-color: var(--accent-color);
+    background: #d8ebff;
+    box-shadow: inset 0px 2px 5px rgba(23, 32, 42, 0.18);
+    transform: translateY(1px);
+}
+
 /* Editor styles */
 
 #editor {
