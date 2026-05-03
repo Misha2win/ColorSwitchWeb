@@ -3,30 +3,22 @@
       "Level0",
       "ColorChanger1",
       "ColorChanger2",
-      "Element1",
-      "Element2",
-      "Element3",
       "Prism1",
       "Prism2",
       "Prism4",
       "Prism5",
-      "Prism7",
       "Prism8",
       "PhotonicPlatform2",
       "Prism10",
       "Prism9",
       "Teleporter1",
       "Mirror6",
-      "Mirror1",
       "Mirror2",
-      "Mirror3",
       "Mirror4",
       "Mirror7",
-      "ColorMixer1",
-      "ColorMixer2",
       "ColorChanger4",
-      "PortalPoint1",
       "PrismMirrorTest",
+      "OrGateTest",
       "TestLevel"
    ],
    "NotUsed": [
@@ -46,6 +38,10 @@
       "Painter1",
       "SizeChanger1",
       "SizeChangerTest",
-      "Prism6"
+      "Prism6",
+
+      "Element1",
+      "Element2",
+      "Element3"
    ]
 }

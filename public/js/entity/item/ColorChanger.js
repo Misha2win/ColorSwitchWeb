@@ -21,9 +21,15 @@ export default class ColorChanger extends Item {
       context.fillRect(this.x + 5, this.y + 5, this.width - 10, this.height - 10)
    }
 
-   onUse(user) {
-      user.color = this.color
-      user.removeItem()
+   onCollect() {
+      if (!this.level) return
+
+      const player = this.level.player
+      if (!player) return
+
+      this.collected = true
+
+      player.addUses(this.color)
    }
 
 }

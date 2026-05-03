@@ -297,14 +297,16 @@ export class Beam extends Entity {
         beamNext.color = color
     }
 
-    onPlayerUseItem(item) {
+    onPlayerColorChange() {
         const player = this.level?.player
         if (!player) return
         if (!boxesIntersect(player, this)) return
 
-        if (item instanceof ColorChanger || item instanceof ColorMixer) {
-            this.prism.color = this.level.player.color
-        }
+        const added = player.color.subtract(this.color)
+        const removed = this.color.subtract(player.color)
+
+        const newColor = this.prism.color.add(added).subtract(removed)
+        this.prism.color = newColor
     }
 
     update(delta) {}

@@ -1,5 +1,5 @@
 {
-   "color": "blue",
+   "color": "black",
    "entities": [
       {
          "type": "Platform",
@@ -107,22 +107,11 @@
       },
       {
          "type": "Text",
-         "x": 130,
-         "y": 10,
-         "width": 140,
-         "height": 21,
-         "text": "← Your health",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 40,
-         "y": 100,
+         "x": 140,
+         "y": 15,
          "width": 160,
-         "height": 20,
-         "text": "   ↑ Your inventory",
+         "height": 21,
+         "text": "← Your inventory",
          "fontSize": 20,
          "color": "black",
          "background": "white"

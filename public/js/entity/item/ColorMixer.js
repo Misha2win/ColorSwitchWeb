@@ -49,6 +49,8 @@ export default class ColorMixer extends Item {
          user.color = user.color.subtract(this.color)
       }
       user.removeItem()
+
+      this.level?.onPlayerColorChange()
    }
 
 }

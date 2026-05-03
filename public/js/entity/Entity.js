@@ -24,7 +24,7 @@ export default class Entity {
     update(delta) { abstractError('Entity.update', this.#type) }
     canCollideWith(other) { abstractError('Entity.canCollideWith', this.#type) }
     onCollide(other) { abstractError('Entity.onCollide', this.#type) }
-    onPlayerUseItem(item) {}
+    onPlayerColorChange() {}
     toJSON() { abstractError('Entity.toJSON', this.#type) } // Used in editor/level saving
 
     get type() { return this.#type }

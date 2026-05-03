@@ -42,6 +42,12 @@ export default class Color {
       return Color.#BY_VALUE[subtracted]
    }
 
+   complement(other) {
+      const added = this.add(other)
+      const complemented = (~added.#color) & Color.#RGB_MASK
+      return Color.#BY_VALUE[complemented]
+   }
+
    collidesWith(other) {
       Color.#assertColor(other)
 
@@ -50,6 +56,10 @@ export default class Color {
       if (this.#color === Color.BLACK.#color || other.#color === Color.BLACK.#color) return true
       if (this.#color === Color.WHITE.#color || other.#color === Color.WHITE.#color) return true
 
+      return ((this.#color & Color.#RGB_MASK) & (other.#color & Color.#RGB_MASK)) !== 0
+   }
+
+   intersects(other) {
       return ((this.#color & Color.#RGB_MASK) & (other.#color & Color.#RGB_MASK)) !== 0
    }
 

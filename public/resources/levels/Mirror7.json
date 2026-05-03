@@ -76,21 +76,19 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
          "x": 710,
          "y": 100,
-         "color": "green"
+         "color": "gray"
       },
       {
          "type": "ColorChanger",
          "x": 570,
          "y": 150,
-         "color": "green"
+         "color": "red"
       },
       {
          "type": "Mirror",

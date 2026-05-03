@@ -47,7 +47,7 @@
          "y": 360,
          "width": 250,
          "height": 30,
-         "color": "blue"
+         "color": "green"
       },
       {
          "type": "Platform",
@@ -79,26 +79,24 @@
          "y": 290,
          "width": 250,
          "height": 70,
-         "color": "green"
+         "color": "red"
       },
       {
          "type": "Spawn",
          "x": 20,
-         "y": 340,
-         "active": true,
-         "obtainable": false
+         "y": 340
       },
       {
          "type": "Goal",
          "x": 710,
          "y": 340,
-         "color": "green"
+         "color": "blue"
       },
       {
          "type": "Prism",
          "x": 200,
          "y": 20,
-         "color": "red",
+         "color": "green",
          "direction": "DOWN"
       },
       {
@@ -112,7 +110,7 @@
          "type": "Prism",
          "x": 530,
          "y": 20,
-         "color": "green",
+         "color": "blue",
          "direction": "DOWN"
       }
    ]

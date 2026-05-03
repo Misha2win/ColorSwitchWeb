@@ -8,9 +8,7 @@ export default class Platform extends Entity {
       super.color = color
    }
 
-   draw(context) {
-      context.fillStyle = this.color.drawColor
-
+   getDrawColor() {
       const player = this.level?.player
       if (player) {
          const gameWidth = this.level.levelManager?.width
@@ -28,10 +26,15 @@ export default class Platform extends Entity {
             : this.canCollideWith(tester)
 
          if (!collides) {
-            context.fillStyle = `${this.color.drawColor}64`
+            return `${this.color.drawColor}64`
          }
       }
 
+      return this.color.drawColor
+   }
+
+   draw(context) {
+      context.fillStyle = this.getDrawColor()
       context.fillRect(this.x, this.y, this.width, this.height)
    }
 

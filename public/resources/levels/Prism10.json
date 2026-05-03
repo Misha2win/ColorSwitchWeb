@@ -66,11 +66,10 @@
          "direction": "DOWN"
       },
       {
-         "type": "ColorMixer",
+         "type": "ColorChanger",
          "x": 360,
          "y": 240,
-         "color": "red",
-         "additive": false
+         "color": "red"
       }
    ]
 }

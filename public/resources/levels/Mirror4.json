@@ -68,9 +68,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 280,
-         "active": true,
-         "obtainable": false
+         "y": 280
       },
       {
          "type": "Goal",
@@ -89,7 +87,7 @@
          "type": "ColorChanger",
          "x": 540,
          "y": 170,
-         "color": "green"
+         "color": "cyan"
       }
    ]
 }

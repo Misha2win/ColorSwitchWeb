@@ -51,33 +51,11 @@
       },
       {
          "type": "Platform",
-         "x": 490,
-         "y": 280,
-         "width": 240,
-         "height": 30,
-         "color": "cyan"
-      },
-      {
-         "type": "Platform",
-         "x": 260,
-         "y": 280,
-         "width": 230,
-         "height": 30,
-         "color": "cyan"
-      },
-      {
-         "type": "PhotonicPlatform",
          "x": 360,
-         "y": 340,
-         "width": 20,
-         "height": 20
-      },
-      {
-         "type": "PhotonicPlatform",
-         "x": 20,
          "y": 280,
-         "width": 240,
-         "height": 30
+         "width": 370,
+         "height": 30,
+         "color": "cyan"
       },
       {
          "type": "Spawn",
@@ -98,59 +76,22 @@
          "direction": "DOWN"
       },
       {
-         "type": "Prism",
-         "x": 340,
-         "y": 340,
-         "color": "red",
-         "direction": "LEFT"
-      },
-      {
-         "type": "Platform",
-         "x": 20,
-         "y": 20,
-         "width": 240,
-         "height": 260,
-         "color": "gray"
-      },
-      {
-         "type": "ColorChanger",
-         "x": 50,
-         "y": 220,
-         "color": "green"
-      },
-      {
-         "type": "ColorChanger",
-         "x": 360,
-         "y": 480,
-         "color": "yellow"
-      },
-      {
          "type": "ColorChanger",
          "x": 670,
          "y": 430,
          "color": "blue"
       },
       {
-         "type": "PhotonicPlatform",
-         "x": 230,
-         "y": 340,
-         "width": 20,
-         "height": 20
+         "type": "ColorChanger",
+         "x": 320,
+         "y": 520,
+         "color": "green"
       },
       {
-         "type": "Prism",
-         "x": 230,
-         "y": 320,
-         "color": "red",
-         "direction": "UP"
-      },
-      {
-         "type": "Platform",
-         "x": 200,
-         "y": 340,
-         "width": 20,
-         "height": 20,
-         "color": "gray"
+         "type": "ColorChanger",
+         "x": 670,
+         "y": 130,
+         "color": "red"
       }
    ]
 }

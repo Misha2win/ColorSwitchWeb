@@ -87,8 +87,8 @@ export default class Level {
         for (const entity of this.entities) entity.preparePhysics(delta)
     }
 
-    onPlayerUseItem(item) {
-        for (const entity of this.entities) entity.onPlayerUseItem(item)
+    onPlayerColorChange() {
+        for (const entity of this.entities) entity.onPlayerColorChange()
     }
 
     update(delta) {

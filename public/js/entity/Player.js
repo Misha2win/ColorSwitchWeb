@@ -1,4 +1,5 @@
 import { boxesIntersect } from '../math/PhysicsEngine.js'
+import { darkenHex } from '../utility/Util.js'
 import Color from './Color.js'
 import Entity from './Entity.js'
 
@@ -18,6 +19,11 @@ export default class Player extends Entity {
         this.requestJump = false
         this.requestRestart = false
         this.requestUseItem = false
+
+        this.redUses = 0
+        this.greenUses = 0
+        this.blueUses = 0
+
         this.ignoreInputs = false
 
         this.onGround = false
@@ -27,7 +33,6 @@ export default class Player extends Entity {
         this.canCoyoteJump = false
 
         this.heldItem = null
-        this.health = 1
 
         this.mirror = null
 
@@ -48,7 +53,6 @@ export default class Player extends Entity {
 
     createMirror(color) {
         this.mirror = new Player(0, 0, false)
-        this.mirror.addHealth = (health) => this.addHealth(health)
         Object.defineProperty(this.mirror, 'color', {
             get: () => color,
             set: (newValue) => {
@@ -70,13 +74,18 @@ export default class Player extends Entity {
         this.heldItem = null
         this.yVelocity = 0
         this.onGround = false
-        this.health = 1
-        // this.ignoreInputs = this.requestRestart
+
+        this.redUses = 0
+        this.greenUses = 0
+        this.blueUses = 0
+
         this.requestLeft = false
         this.requestRight = false
         this.requestJump = false
         this.requestRestart = false
+        this.requestShift = false
         this.requestUseItem = false
+
         this.coyoteTimeSeconds = Player.coyoteTimeSeconds
         this.timeSinceGrounded = 0
         this.canCoyoteJump = false
@@ -87,7 +96,6 @@ export default class Player extends Entity {
         if (!item) return
 
         item.onUse(this)
-        this.level?.onPlayerUseItem(item)
     }
 
     removeItem() {
@@ -99,16 +107,26 @@ export default class Player extends Entity {
     }
 
     addHealth(health) {
+        this.health ??= 0
         this.health += health
     }
 
     draw(context) {
-        context.fillStyle = this.color.drawColor
-        context.fillRect(this.x, this.y, this.width, this.height)
-
         if (this.color === Color.WHITE) {
-            context.strokeStyle = 'black'
-            context.strokeRect(this.x, this.y, this.width, this.height)
+            context.fillStyle = 'black'
+            context.fillRect(this.x, this.y, this.width, this.height)
+
+            context.fillStyle = this.color.drawColor
+            context.fillRect(this.x + 1, this.y + 1, this.width - 2, this.height - 2)
+        } else if (this.color === Color.GRAY) {
+            context.fillStyle = 'black'
+            context.fillRect(this.x, this.y, this.width, this.height)
+
+            context.fillStyle = this.color.drawColor
+            context.fillRect(this.x + 1, this.y + 1, this.width - 2, this.height - 2)
+        } else {
+            context.fillStyle = this.color.drawColor
+            context.fillRect(this.x, this.y, this.width, this.height)
         }
 
         const gameWidth = this.level?.levelManager?.width
@@ -135,23 +153,68 @@ export default class Player extends Entity {
             context.stroke()
         }
 
-        // Draw inventory
-        context.fillStyle = 'rgba(255, 255, 255, 0.7)'
-        context.fillRect(0, 0, 120, 95)
-        context.font = '30px sans-serif'
-        context.textAlign = 'center'
-        context.textBaseline = 'top'
-        context.fillStyle = 'black'
-        context.fillText(`${Math.round(this.health)}/100`, 60, 10)
+        const invTop = 0
+
+        const drawColor = (x, y, color, count) => {
+            context.save()
+
+            context.fillStyle = darkenHex(color.drawColor)
+            context.fillRect(x, y , 30, 30)
+            context.fillStyle = color.drawColor
+            context.fillRect(x + 5, y + 5, 20, 20)
+
+            const centerX = x + 15
+            const centerY = y + 15
+            const armLength = 15
+
+            context.lineCap = 'round'
+            context.lineWidth = 8
+            context.strokeStyle = 'black'
+            context.beginPath()
+            context.moveTo(centerX - armLength / 2, centerY)
+            context.lineTo(centerX + armLength / 2, centerY)
+            if (!this.requestShift) {
+                context.moveTo(centerX, centerY - armLength / 2)
+                context.lineTo(centerX, centerY + armLength / 2)
+            }
+            context.stroke()
+
+            context.lineWidth = 4
+            context.strokeStyle = 'white'
+            context.stroke()
+
+            context.font = '20px sans-serif'
+            context.textAlign = 'center'
+            context.textBaseline = 'middle'
+            context.fillStyle = 'white'
+            context.lineWidth = 3
+            context.strokeStyle = 'black'
+            context.strokeText(count, x + 25, y + 25)
+            context.fillText(count, x + 25, y + 25)
+
+            context.restore()
+        }
+
+        context.strokeStyle = 'black'
 
         context.fillStyle = 'white'
-        context.strokeStyle = 'black'
-        context.fillRect(40, 45, 40, 40)
-        context.strokeRect(40, 45, 40, 40)
+        context.fillRect(5, invTop + 5, 40, 40)
+        context.strokeRect(5, invTop + 5, 40, 40)
+        drawColor(10, invTop + 10, Color.RED, this.redUses)
+
+        context.fillStyle = 'white'
+        context.fillRect(50, invTop + 5, 40, 40)
+        context.strokeRect(50, invTop + 5, 40, 40)
+        drawColor(55, invTop + 10, Color.GREEN, this.greenUses)
+
+        context.fillStyle = 'white'
+        context.fillRect(95, invTop + 5, 40, 40)
+        context.strokeRect(95, invTop + 5, 40, 40)
+        drawColor(100, invTop + 10, Color.BLUE, this.blueUses)
 
         const item = this.heldItem
         if (item) {
-            item.x = 45
+            item.x = invTop + 5
             item.y = 50
             context.save()
             item.draw(context)
@@ -164,10 +227,8 @@ export default class Player extends Entity {
         const height = this.level?.levelManager?.height
         const gameBox = { x: 0, y: 0, width, height }
 
-        if (this.health <= 0 || !boxesIntersect(this, gameBox)) {
+        if (!boxesIntersect(this, gameBox)) {
             this.requestRestart = true
-        } else if (this.health > 100) {
-            this.health = 100
         }
 
         if (this.requestUseItem) {
@@ -180,6 +241,46 @@ export default class Player extends Entity {
         } else {
             this.canCoyoteJump = true
             this.timeSinceGrounded = 0
+        }
+
+        const change = (color) => !this.requestShift
+            ? this.color.add(color)
+            : this.color.subtract(color)
+
+        const willCauseChange = (color) => !this.requestShift
+            ? !this.color.intersects(color)
+            : this.color.intersects(color)
+
+        if (this.requestOne && this.redUses > 0 && willCauseChange(Color.RED)) {
+            this.color = change(Color.RED)
+            this.level.onPlayerColorChange()
+            this.redUses--
+        } else if (this.requestTwo && this.greenUses > 0 && willCauseChange(Color.GREEN)) {
+            this.color = change(Color.GREEN)
+            this.level.onPlayerColorChange()
+            this.greenUses--
+        } else if (this.requestThree && this.blueUses > 0 && willCauseChange(Color.BLUE)) {
+            this.color = change(Color.BLUE)
+            this.level.onPlayerColorChange()
+            this.blueUses--
+        }
+
+        if (this.color === Color.BLACK) {
+            this.color = Color.GRAY
+        }
+    }
+
+    addUses(color) {
+        if (color.collidesWith(Color.RED)) {
+            this.redUses++
+        }
+
+        if (color.collidesWith(Color.GREEN)) {
+            this.greenUses++
+        }
+
+        if (color.collidesWith(Color.BLUE)) {
+            this.blueUses++
         }
     }
 
@@ -194,42 +295,46 @@ export default class Player extends Entity {
     onKeyDown(event) {
         if (this.ignoreInputs) return
 
-        if (event.key === 'a' || event.key === 'ArrowLeft') {
+        if (event.code === 'KeyA' || event.key === 'ArrowLeft') {
             this.requestLeft = true
-        } else if (event.key === 'd' || event.key === 'ArrowRight') {
+        } else if (event.code === 'KeyD' || event.key === 'ArrowRight') {
             this.requestRight = true
-        } else if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') {
+        } else if (event.code === 'KeyW' || event.key === 'ArrowUp' || event.key === ' ') {
             this.requestJump = true
-        } else if (event.key === 'e') {
+        } else if (event.code === 'KeyE') {
             this.requestUseItem = true
-        } else if (event.key === 'r') {
+        } else if (event.code === 'KeyR') {
             this.requestRestart = true
-        } else if (event.key === '1') {
+        } else if (event.code === 'Digit1') {
             this.requestOne = true
-        } else if (event.key === '2') {
+        } else if (event.code === 'Digit2') {
             this.requestTwo = true
-        } else if (event.key === '3') {
+        } else if (event.code === 'Digit3') {
             this.requestThree = true
+        } else if (event.key === 'Shift') {
+            this.requestShift = true
         }
     }
 
     onKeyUp(event) {
         this.ignoreInputs = false
 
-        if (event.key === 'a' || event.key === 'ArrowLeft') {
+        if (event.code === 'KeyA' || event.key === 'ArrowLeft') {
             this.requestLeft = false
-        } else if (event.key === 'd' || event.key === 'ArrowRight') {
+        } else if (event.code === 'KeyD' || event.key === 'ArrowRight') {
             this.requestRight = false
-        } else if (event.key === 'w' || event.key === 'ArrowUp' || event.key === ' ') {
+        } else if (event.code === 'KeyW' || event.key === 'ArrowUp' || event.key === ' ') {
             this.requestJump = false
-        } else if (event.key === 'e') {
+        } else if (event.code === 'KeyE') {
             this.requestUseItem = false
-        } else if (event.key === '1') {
+        } else if (event.code === 'Digit1') {
             this.requestOne = false
-        } else if (event.key === '2') {
+        } else if (event.code === 'Digit2') {
             this.requestTwo = false
-        } else if (event.key === '3') {
+        } else if (event.code === 'Digit3') {
             this.requestThree = false
+        } else if (event.key === 'Shift') {
+            this.requestShift = false
         }
     }
 

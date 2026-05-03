@@ -52,15 +52,13 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 540,
-         "active": true,
-         "obtainable": false
+         "y": 540
       },
       {
          "type": "Goal",
          "x": 20,
          "y": 560,
-         "color": "green"
+         "color": "cyan"
       },
       {
          "type": "Prism",
@@ -100,13 +98,13 @@
          "type": "ColorChanger",
          "x": 90,
          "y": 520,
-         "color": "blue"
+         "color": "magenta"
       },
       {
          "type": "ColorChanger",
          "x": 360,
          "y": 520,
-         "color": "red"
+         "color": "magenta"
       }
    ]
 }

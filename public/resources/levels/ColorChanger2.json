@@ -1,5 +1,5 @@
 {
-   "color": "red",
+   "color": "white",
    "entities": [
       {
          "type": "Platform",
@@ -52,9 +52,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
@@ -64,21 +62,15 @@
       },
       {
          "type": "ColorChanger",
-         "x": 630,
-         "y": 520,
-         "color": "green"
-      },
-      {
-         "type": "ColorChanger",
          "x": 90,
          "y": 520,
-         "color": "blue"
+         "color": "red"
       },
       {
          "type": "ColorChanger",
          "x": 360,
          "y": 520,
-         "color": "red"
+         "color": "blue"
       }
    ]
 }

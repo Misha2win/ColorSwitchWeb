@@ -54,15 +54,9 @@
       },
       {
          "type": "ColorChanger",
-         "x": 560,
-         "y": 520,
-         "color": "green"
-      },
-      {
-         "type": "ColorChanger",
          "x": 160,
          "y": 520,
-         "color": "blue"
+         "color": "yellow"
       },
       {
          "type": "Text",

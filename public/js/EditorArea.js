@@ -375,6 +375,41 @@ function downloadFile(name, contents, mime = 'text/plain') {
     URL.revokeObjectURL(url)
 }
 
+function getLevelFileBaseName(name) {
+    const trimmedName = name.trim().replace(/\.json$/i, '')
+    const pathParts = trimmedName.split(/[\\/]/)
+    return pathParts[pathParts.length - 1]
+}
+
+async function overwriteLevelFile(name, levelJSON) {
+    const response = await fetch(`api/levels/${encodeURIComponent(name)}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(levelJSON)
+    })
+
+    if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message || `Failed to save ${name}.json`)
+    }
+
+    return response.json()
+}
+
+async function fetchCanOverwriteLevelFiles() {
+    try {
+        const response = await fetch('api/levels', { cache: 'no-store' })
+        if (!response.ok) return false
+
+        const capabilities = await response.json()
+        return capabilities.canOverwriteLevels === true
+    } catch (err) {
+        return false
+    }
+}
+
 export default class EditorArea {
 
     constructor(canvasId = 'editor-canvas') {
@@ -400,6 +435,7 @@ export default class EditorArea {
         this.levelLoadingPromise = null
         this.currentLevelIndex = -1
         this.currentLevelName = null
+        this.canOverwriteLevelFiles = false
 
         this.playingLevel = false
         this.playSnapshot = null
@@ -417,6 +453,7 @@ export default class EditorArea {
         this.mouseInfo = { held: false, previous: { x: 0, y: 0 }, position: { x: 0, y: 0 } }
         this.syncLevelColorControl()
         this.syncLevelNavigationControls('Loading levels...')
+        this.checkOverwriteSupport()
 
         this.lastTime = performance.now()
         if (this.intervalId) clearInterval(this.intervalId)
@@ -722,6 +759,11 @@ export default class EditorArea {
         return this.handleLevelNavigation(1)
     }
 
+    async checkOverwriteSupport() {
+        this.canOverwriteLevelFiles = await fetchCanOverwriteLevelFiles()
+        this.syncSaveControls()
+    }
+
     async handleLoadClick() {
         if (this.playingLevel) return
 
@@ -763,17 +805,51 @@ export default class EditorArea {
     async handleSaveClick() {
         if (this.playingLevel) return
 
-        const name = await promptInput('Save level', 'Level Name:')
+        if (!this.canOverwriteLevelFiles) {
+            dialog(
+                'Cannot save level:',
+                'Save Level is only available when running the local editor server. Use Save As New to download a JSON file.'
+            )
+            return
+        }
+
+        const name = this.currentLevelIndex !== -1 ? this.currentLevelName : null
+        if (!name) {
+            dialog(
+                'Cannot save level:',
+                'Load an existing level before using Save Level. Use Save As New to download a new JSON file.'
+            )
+            return
+        }
+
+        try {
+            const levelJSON = this.getLevelJSON()
+            const result = await overwriteLevelFile(name, levelJSON)
+            const savedPath = result.path ?? `resources/levels/${name}.json`
+            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+            dialog('Level saved:', `Overwrote ${savedPath}.`)
+        } catch (err) {
+            dialog('There was an error saving your level:', err.message)
+        }
+    }
+
+    async handleSaveAsNewClick() {
+        if (this.playingLevel) return
+
+        const name = await promptInput('Save as new level', 'Level Name or JSON Path:')
         if (!name) return
 
+        const fileBaseName = getLevelFileBaseName(name)
+        if (!fileBaseName) return
+
         const levelString = JSON.stringify(this.getLevelJSON(), null, 3)
-        downloadFile(`${name}.json`, levelString, 'application/json')
+        downloadFile(`${fileBaseName}.json`, levelString, 'application/json')
     }
 
     handleHelpClick() {
         const helpString =
             `This is the Level Editor. Here you can create your own level
-            then either save it or play it.<br><br>
+            then either save it, save a new JSON file, or play it.<br><br>
 
             On top of the level display, there is a toolbar with
             options related to your created level.<br><br>
@@ -869,6 +945,25 @@ export default class EditorArea {
         if (label) label.textContent = statusText ?? this.getLevelNavigationLabel()
         if (previousButton) previousButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex <= 0
         if (nextButton) nextButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex >= this.levelNames.length - 1
+        this.syncSaveControls()
+    }
+
+    syncSaveControls() {
+        const saveButton = document.getElementById('button-save')
+        if (!saveButton) return
+
+        const hasCurrentLevel = this.currentLevelIndex !== -1 && !!this.currentLevelName
+        saveButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles || !hasCurrentLevel
+
+        if (!this.canOverwriteLevelFiles) {
+            saveButton.title = 'Save Level is only available when running the local editor server.'
+        } else if (!hasCurrentLevel) {
+            saveButton.title = 'Load an existing level before saving over it.'
+        } else if (this.playingLevel) {
+            saveButton.title = 'Stop playing before saving.'
+        } else {
+            saveButton.title = 'Overwrite the currently loaded level JSON file.'
+        }
     }
 
     getLevelJSON() {
