@@ -35,17 +35,19 @@ export function calculatePhysics(delta, level) {
         }
     }
 
-    player.x += playerVelocity.x * delta
-    for (const blocker of collisionCandidates)
-        if (resolveCollision(player, blocker)) playerVelocity.x = 0
-    player.y += playerVelocity.y * delta
+    if (moveWithSweptCollision(player, collisionCandidates, playerVelocity.x * delta, 'x')) {
+        playerVelocity.x = 0
+    }
+
     player.onGround = false
-    for (const blocker of collisionCandidates) {
-        const y = player.y
-        if (!resolveCollision(player, blocker)) continue
-        if (player.y < y) player.onGround = true
+
+    const y = player.y
+    const yCollision = moveWithSweptCollision(player, collisionCandidates, playerVelocity.y * delta, 'y')
+    if (yCollision) {
+        if (playerVelocity.y > 0 && (yCollision.swept || player.y < y)) player.onGround = true
         playerVelocity.y = 0
     }
+
     player.yVelocity = playerVelocity.y
 
     for (const entity1 of entities) {
@@ -66,6 +68,69 @@ export function calculatePhysics(delta, level) {
 
         trigger.onCollide(player)
     }
+}
+
+function moveWithSweptCollision(entity, blockers, distance, axis) {
+    const hit = getSweptAxisHit(entity, blockers, distance, axis)
+    if (hit) {
+        const collisionStep = Math.sign(distance) * 1e-7
+        entity[axis] += distance * hit.time + collisionStep
+        resolveCollisions(entity, blockers)
+        return { swept: true }
+    }
+
+    entity[axis] += distance
+    return resolveCollisions(entity, blockers)
+}
+
+function getSweptAxisHit(entity, blockers, distance, axis) {
+    if (distance === 0) return null
+
+    const size = axis === 'x' ? 'width' : 'height'
+    const otherAxis = axis === 'x' ? 'y' : 'x'
+    const otherSize = axis === 'x' ? 'height' : 'width'
+    const direction = Math.sign(distance)
+    const maxDistance = Math.abs(distance)
+
+    let firstHit = null
+    for (const blocker of blockers) {
+        if (boxesIntersect(entity, blocker)) continue
+        if (!rangesOverlap(
+            entity[otherAxis],
+            entity[otherAxis] + entity[otherSize],
+            blocker[otherAxis],
+            blocker[otherAxis] + blocker[otherSize]
+        )) continue
+
+        const entityMin = entity[axis]
+        const entityMax = entity[axis] + entity[size]
+        const blockerMin = blocker[axis]
+        const blockerMax = blocker[axis] + blocker[size]
+        const startsBeforeBlocker = entityMax <= blockerMin
+        const startsAfterBlocker = entityMin >= blockerMax
+
+        if (direction > 0 && startsAfterBlocker) continue
+        if (direction < 0 && startsBeforeBlocker) continue
+
+        const gap = direction > 0
+            ? blockerMin - entityMax
+            : entityMin - blockerMax
+        const time = Math.max(0, gap) / maxDistance
+
+        if (time > 1) continue
+        if (!firstHit || time < firstHit.time) firstHit = { blocker, time }
+    }
+
+    return firstHit
+}
+
+function resolveCollisions(entity, blockers) {
+    let collided = false
+    for (const blocker of blockers) {
+        if (resolveCollision(entity, blocker)) collided = true
+    }
+
+    return collided ? { swept: false } : null
 }
 
 export function resolveCollision(a, b) {
@@ -109,6 +174,10 @@ export function pointIntersectsBox(point, box) {
         && point.x <= box.x + box.width
         && point.y >= box.y
         && point.y <= box.y + box.height
+}
+
+function rangesOverlap(aMin, aMax, bMin, bMax) {
+    return aMin < bMax && aMax > bMin
 }
 
 /**
