@@ -9,10 +9,23 @@
         <link rel="stylesheet" href="./main.css" />
         <script type="module" src="./js/Game.js" defer></script>
     </head>
-    <body>
+    <body class="game-page">
         <nav>
             <a href="editor.html">Editor</a>
         </nav>
         <canvas id="game" width="750" height="600"></canvas>
+        <div id="mobile-game-controls" class="mobile-game-controls" aria-label="Touch game controls">
+            <div class="mobile-control-row mobile-control-row-movement">
+                <button type="button" class="mobile-control-button" data-key="ArrowLeft" aria-label="Move left">←</button>
+                <button type="button" class="mobile-control-button mobile-control-button-primary" data-key="ArrowUp" aria-label="Jump">↑</button>
+                <button type="button" class="mobile-control-button" data-key="ArrowRight" aria-label="Move right">→</button>
+            </div>
+            <div class="mobile-control-row mobile-control-row-use">
+                <button type="button" class="mobile-control-button" data-key="e" aria-label="Use item">Use</button>
+            </div>
+            <div class="mobile-control-row mobile-control-row-restart">
+                <button type="button" class="mobile-control-button" data-key="r" aria-label="Restart level">Restart</button>
+            </div>
+        </div>
     </body>
 </html>

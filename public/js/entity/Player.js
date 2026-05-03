@@ -292,50 +292,38 @@ export default class Player extends Entity {
         return {}
     }
 
+    setInputForKey(code, isPressed) {
+        if (code === 'KeyA' || code === 'ArrowLeft') {
+            this.requestLeft = isPressed
+        } else if (code === 'KeyD' || code === 'ArrowRight') {
+            this.requestRight = isPressed
+        } else if (code === 'KeyW' || code === 'ArrowUp' || code === 'Space') {
+            this.requestJump = isPressed
+        } else if (code === 'KeyE') {
+            this.requestUseItem = isPressed
+        } else if (code === 'KeyR') {
+            this.requestRestart = isPressed
+        } else if (code === 'Digit1') {
+            this.requestOne = isPressed
+        } else if (code === 'Digit2') {
+            this.requestTwo = isPressed
+        } else if (code === 'Digit3') {
+            this.requestThree = isPressed
+        } else if (code === 'ShiftLeft') {
+            this.requestShift = isPressed
+        }
+    }
+
     onKeyDown(event) {
         if (this.ignoreInputs) return
 
-        if (event.code === 'KeyA' || event.key === 'ArrowLeft') {
-            this.requestLeft = true
-        } else if (event.code === 'KeyD' || event.key === 'ArrowRight') {
-            this.requestRight = true
-        } else if (event.code === 'KeyW' || event.key === 'ArrowUp' || event.key === ' ') {
-            this.requestJump = true
-        } else if (event.code === 'KeyE') {
-            this.requestUseItem = true
-        } else if (event.code === 'KeyR') {
-            this.requestRestart = true
-        } else if (event.code === 'Digit1') {
-            this.requestOne = true
-        } else if (event.code === 'Digit2') {
-            this.requestTwo = true
-        } else if (event.code === 'Digit3') {
-            this.requestThree = true
-        } else if (event.key === 'Shift') {
-            this.requestShift = true
-        }
+        this.setInputForKey(event, true)
     }
 
     onKeyUp(event) {
         this.ignoreInputs = false
 
-        if (event.code === 'KeyA' || event.key === 'ArrowLeft') {
-            this.requestLeft = false
-        } else if (event.code === 'KeyD' || event.key === 'ArrowRight') {
-            this.requestRight = false
-        } else if (event.code === 'KeyW' || event.key === 'ArrowUp' || event.key === ' ') {
-            this.requestJump = false
-        } else if (event.code === 'KeyE') {
-            this.requestUseItem = false
-        } else if (event.code === 'Digit1') {
-            this.requestOne = false
-        } else if (event.code === 'Digit2') {
-            this.requestTwo = false
-        } else if (event.code === 'Digit3') {
-            this.requestThree = false
-        } else if (event.key === 'Shift') {
-            this.requestShift = false
-        }
+        this.setInputForKey(event, false)
     }
 
 }
