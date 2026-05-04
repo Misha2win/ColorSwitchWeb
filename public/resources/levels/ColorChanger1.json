@@ -82,11 +82,33 @@
       },
       {
          "type": "Text",
+         "x": 30,
+         "y": 180,
+         "width": 290,
+         "height": 20,
+         "text": "But you can change your",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 200,
+         "width": 290,
+         "height": 20,
+         "text": "own color to cross it!",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
          "x": 430,
          "y": 140,
          "width": 290,
          "height": 20,
-         "text": "But you can change your",
+         "text": "Press 2 to add green to your",
          "fontSize": 20,
          "color": "black",
          "background": "white"
@@ -97,7 +119,29 @@
          "y": 160,
          "width": 290,
          "height": 20,
-         "text": "own color to cross it!",
+         "text": "current color. Then press",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 430,
+         "y": 180,
+         "width": 290,
+         "height": 20,
+         "text": "shift + 1 to remove red from",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 430,
+         "y": 200,
+         "width": 290,
+         "height": 20,
+         "text": "your current color.",
          "fontSize": 20,
          "color": "black",
          "background": "white"

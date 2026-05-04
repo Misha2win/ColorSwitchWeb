@@ -141,6 +141,72 @@
          "width": 40,
          "height": 10,
          "color": "black"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 120,
+         "width": 330,
+         "height": 20,
+         "text": "← This is a Photonic Platform.",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 150,
+         "width": 330,
+         "height": 20,
+         "text": "They change color when a",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 180,
+         "width": 330,
+         "height": 20,
+         "text": "prism beam collides with",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 210,
+         "width": 330,
+         "height": 20,
+         "text": "them. Try disabling it by",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 240,
+         "width": 330,
+         "height": 20,
+         "text": "removing red from the",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 400,
+         "y": 270,
+         "width": 330,
+         "height": 20,
+         "text": "top prism.",
+         "fontSize": 24,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

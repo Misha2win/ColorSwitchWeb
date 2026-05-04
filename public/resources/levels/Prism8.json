@@ -112,6 +112,28 @@
          "y": 20,
          "color": "blue",
          "direction": "DOWN"
+      },
+      {
+         "type": "Text",
+         "x": 230,
+         "y": 220,
+         "width": 290,
+         "height": 20,
+         "text": "Prisms can mix colors when ",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 230,
+         "y": 240,
+         "width": 290,
+         "height": 20,
+         "text": "they collide with each other. ",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

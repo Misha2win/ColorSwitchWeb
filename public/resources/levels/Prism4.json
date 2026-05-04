@@ -105,6 +105,72 @@
          "x": 360,
          "y": 520,
          "color": "magenta"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 50,
+         "width": 170,
+         "height": 20,
+         "text": "If you change your",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 70,
+         "width": 170,
+         "height": 20,
+         "text": "color while inside",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 90,
+         "width": 170,
+         "height": 20,
+         "text": "a prism's beam",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 110,
+         "width": 170,
+         "height": 20,
+         "text": "you will also",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 130,
+         "width": 170,
+         "height": 20,
+         "text": "change the color",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 290,
+         "y": 150,
+         "width": 170,
+         "height": 20,
+         "text": "of the beam",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

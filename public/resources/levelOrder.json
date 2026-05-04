@@ -7,6 +7,7 @@
       "Prism2",
       "Prism4",
       "Prism5",
+      "FragilePlatform1",
       "Prism8",
       "PhotonicPlatform2",
       "Prism10",
@@ -16,12 +17,12 @@
       "Mirror2",
       "Mirror4",
       "Mirror7",
-      "ColorChanger4",
       "PrismMirrorTest",
-      "OrGateTest",
       "TestLevel"
    ],
    "NotUsed": [
+      "OrGateTest",
+
       "SuperJump1",
       "SuperJump2",
       "Element4",

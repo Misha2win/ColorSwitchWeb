@@ -76,9 +76,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 230,
-         "active": true,
-         "obtainable": false
+         "y": 230
       },
       {
          "type": "Goal",
@@ -88,7 +86,7 @@
       },
       {
          "type": "Mirror",
-         "x": 210,
+         "x": 540,
          "y": 290,
          "color": "gray",
          "persistOnce": false
