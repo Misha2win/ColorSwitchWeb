@@ -47,7 +47,7 @@
          "y": 360,
          "width": 250,
          "height": 30,
-         "color": "green"
+         "color": "blue"
       },
       {
          "type": "Platform",
@@ -79,7 +79,7 @@
          "y": 290,
          "width": 250,
          "height": 70,
-         "color": "red"
+         "color": "green"
       },
       {
          "type": "Spawn",
@@ -90,13 +90,13 @@
          "type": "Goal",
          "x": 710,
          "y": 340,
-         "color": "blue"
+         "color": "green"
       },
       {
          "type": "Prism",
          "x": 200,
          "y": 20,
-         "color": "green",
+         "color": "red",
          "direction": "DOWN"
       },
       {
@@ -110,7 +110,7 @@
          "type": "Prism",
          "x": 530,
          "y": 20,
-         "color": "blue",
+         "color": "green",
          "direction": "DOWN"
       },
       {

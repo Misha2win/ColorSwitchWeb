@@ -35,19 +35,19 @@
       },
       {
          "type": "MovingPlatform",
-         "x": 20,
+         "x": 260,
          "y": 290,
          "width": 220,
          "height": 10,
          "color": "blue",
-         "startX": 20,
+         "startX": 510,
          "startY": 290,
-         "endX": 510,
+         "endX": 20,
          "endY": 290
       },
       {
          "type": "MovingPlatform",
-         "x": 460,
+         "x": 390,
          "y": 160,
          "width": 270,
          "height": 10,
@@ -130,6 +130,17 @@
          "y": 20,
          "color": "blue",
          "direction": "DOWN"
+      },
+      {
+         "type": "Text",
+         "x": 160,
+         "y": 100,
+         "width": 430,
+         "height": 20,
+         "text": "Colored platforms act as color filters for beams.",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

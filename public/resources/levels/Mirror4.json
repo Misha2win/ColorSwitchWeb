@@ -88,6 +88,50 @@
          "x": 540,
          "y": 170,
          "color": "cyan"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 130,
+         "width": 210,
+         "height": 20,
+         "text": "Mirrors can be used",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 150,
+         "width": 210,
+         "height": 20,
+         "text": "multiple times. Mirrors",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 170,
+         "width": 210,
+         "height": 20,
+         "text": "only break after use if",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 190,
+         "width": 210,
+         "height": 20,
+         "text": "there are cracks on it.",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
       }
    ]
 }

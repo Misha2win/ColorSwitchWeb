@@ -53,49 +53,49 @@
          "type": "MovingPlatform",
          "x": 20,
          "y": 90,
+         "width": 60,
+         "height": 10,
+         "color": "red",
          "startX": 20,
          "startY": 90,
          "endX": 20,
-         "endY": 400,
-         "width": 60,
-         "height": 10,
-         "color": "red"
+         "endY": 400
       },
       {
          "type": "MovingPlatform",
          "x": 140,
          "y": 90,
+         "width": 60,
+         "height": 10,
+         "color": "blue",
          "startX": 140,
          "startY": 90,
          "endX": 140,
-         "endY": 400,
-         "width": 60,
-         "height": 10,
-         "color": "blue"
+         "endY": 400
       },
       {
          "type": "MovingPlatform",
          "x": 80,
          "y": 400,
+         "width": 60,
+         "height": 10,
+         "color": "green",
          "startX": 80,
          "startY": 400,
          "endX": 80,
-         "endY": 90,
-         "width": 60,
-         "height": 10,
-         "color": "green"
+         "endY": 90
       },
       {
          "type": "MovingPlatform",
          "x": 200,
          "y": 400,
+         "width": 60,
+         "height": 10,
+         "color": "black",
          "startX": 200,
          "startY": 400,
          "endX": 200,
-         "endY": 90,
-         "width": 60,
-         "height": 10,
-         "color": "black"
+         "endY": 90
       },
       {
          "type": "Platform",
@@ -187,21 +187,21 @@
       },
       {
          "type": "HealthGate",
-         "greaterThan": true,
-         "health": 50,
          "x": 420,
          "y": 20,
          "width": 60,
-         "height": 70
+         "height": 70,
+         "greaterThan": true,
+         "health": 50
       },
       {
          "type": "HealthGate",
-         "greaterThan": false,
-         "health": 50,
          "x": 260,
          "y": 20,
          "width": 60,
-         "height": 70
+         "height": 70,
+         "greaterThan": false,
+         "health": 50
       },
       {
          "type": "Platform",
@@ -295,61 +295,61 @@
          "type": "MovingPlatform",
          "x": 270,
          "y": 280,
+         "width": 60,
+         "height": 10,
+         "color": "red",
          "startX": 270,
          "startY": 280,
          "endX": 410,
-         "endY": 280,
-         "width": 60,
-         "height": 10,
-         "color": "red"
+         "endY": 280
       },
       {
          "type": "MovingPlatform",
          "x": 270,
          "y": 160,
+         "width": 60,
+         "height": 10,
+         "color": "green",
          "startX": 270,
          "startY": 160,
          "endX": 410,
-         "endY": 160,
-         "width": 60,
-         "height": 10,
-         "color": "green"
+         "endY": 160
       },
       {
          "type": "MovingPlatform",
          "x": 410,
          "y": 220,
+         "width": 60,
+         "height": 10,
+         "color": "blue",
          "startX": 410,
          "startY": 220,
          "endX": 270,
-         "endY": 220,
-         "width": 60,
-         "height": 10,
-         "color": "blue"
+         "endY": 220
       },
       {
          "type": "MovingPlatform",
          "x": 410,
          "y": 340,
+         "width": 60,
+         "height": 10,
+         "color": "black",
          "startX": 410,
          "startY": 340,
          "endX": 270,
-         "endY": 340,
-         "width": 60,
-         "height": 10,
-         "color": "black"
+         "endY": 340
       },
       {
          "type": "MovingPlatform",
          "x": 20,
          "y": 400,
+         "width": 60,
+         "height": 10,
+         "color": "black",
          "startX": 20,
          "startY": 400,
          "endX": 200,
-         "endY": 90,
-         "width": 60,
-         "height": 10,
-         "color": "black"
+         "endY": 90
       },
       {
          "type": "Platform",
@@ -362,9 +362,7 @@
       {
          "type": "Spawn",
          "x": 710,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Portal",
@@ -393,43 +391,39 @@
       {
          "type": "Spawn",
          "x": 340,
-         "y": 70,
-         "active": false,
-         "obtainable": true
+         "y": 70
       },
       {
          "type": "Spawn",
          "x": 380,
-         "y": 70,
-         "active": false,
-         "obtainable": true
+         "y": 70
       },
       {
          "type": "Element",
-         "color": "green",
-         "health": 1.1,
          "x": 670,
          "y": 20,
          "width": 60,
-         "height": 70
+         "height": 70,
+         "color": "green",
+         "health": 1.1
       },
       {
          "type": "Element",
-         "color": "red",
-         "health": -1,
          "x": 480,
          "y": 100,
          "width": 60,
-         "height": 240
+         "height": 240,
+         "color": "red",
+         "health": -1
       },
       {
          "type": "Element",
-         "color": "blue",
-         "health": -1,
          "x": 670,
          "y": 100,
          "width": 60,
-         "height": 240
+         "height": 240,
+         "color": "blue",
+         "health": -1
       },
       {
          "type": "Prism",
@@ -462,176 +456,68 @@
       {
          "type": "ColorChanger",
          "x": 40,
-         "y": 520,
+         "y": 430,
          "color": "red"
       },
       {
          "type": "ColorChanger",
          "x": 80,
-         "y": 520,
+         "y": 430,
          "color": "green"
       },
       {
          "type": "ColorChanger",
          "x": 120,
-         "y": 520,
+         "y": 430,
          "color": "blue"
       },
       {
          "type": "ColorChanger",
          "x": 160,
-         "y": 520,
+         "y": 430,
          "color": "yellow"
       },
       {
          "type": "ColorChanger",
          "x": 200,
-         "y": 520,
+         "y": 430,
          "color": "magenta"
       },
       {
          "type": "ColorChanger",
          "x": 240,
-         "y": 520,
+         "y": 430,
          "color": "cyan"
       },
       {
          "type": "ColorChanger",
          "x": 280,
-         "y": 520,
+         "y": 430,
          "color": "white"
       },
       {
          "type": "ColorChanger",
          "x": 320,
-         "y": 520,
+         "y": 430,
          "color": "black"
       },
       {
-         "type": "ColorMixer",
-         "x": 40,
-         "y": 430,
-         "color": "red",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 80,
-         "y": 430,
-         "color": "green",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 120,
-         "y": 430,
-         "color": "blue",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 160,
-         "y": 430,
-         "color": "yellow",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 200,
-         "y": 430,
-         "color": "magenta",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 240,
-         "y": 430,
-         "color": "cyan",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 280,
-         "y": 430,
-         "color": "white",
-         "additive": true
-      },
-      {
-         "type": "ColorMixer",
-         "x": 320,
-         "y": 430,
-         "color": "red",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 360,
-         "y": 430,
-         "color": "green",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 400,
-         "y": 430,
-         "color": "blue",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 440,
-         "y": 430,
-         "color": "yellow",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 480,
-         "y": 430,
-         "color": "magenta",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 520,
-         "y": 430,
-         "color": "cyan",
-         "additive": false
-      },
-      {
-         "type": "ColorMixer",
-         "x": 560,
-         "y": 430,
-         "color": "white",
-         "additive": false
-      },
-      {
-         "type": "DamagePack",
-         "x": 360,
-         "y": 520
-      },
-      {
-         "type": "HealthPack",
-         "x": 400,
-         "y": 520
-      },
-      {
          "type": "Mirror",
-         "x": 480,
+         "x": 40,
          "y": 520,
          "color": "gray",
          "persistOnce": false
       },
       {
          "type": "Mirror",
-         "x": 520,
+         "x": 80,
          "y": 520,
          "color": "gray",
          "persistOnce": true
       },
       {
          "type": "Teleporter",
-         "x": 560,
+         "x": 120,
          "y": 520,
          "hasDestination": false,
          "endX": -1,
@@ -639,26 +525,8 @@
       },
       {
          "type": "SuperJump",
-         "x": 440,
+         "x": 160,
          "y": 520
-      },
-      {
-         "type": "Painter",
-         "x": 600,
-         "y": 520,
-         "color": "gray",
-         "rotated": true
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 410,
-         "width": 690,
-         "height": 20,
-         "text": "This level is the testing level.",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
       },
       {
          "type": "Text",
@@ -666,7 +534,18 @@
          "y": 465,
          "width": 690,
          "height": 20,
-         "text": "Play around if you'd like :)",
+         "text": "This is the testing level and there is no way to finish this level.",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 555,
+         "width": 690,
+         "height": 20,
+         "text": "But you can play around if you'd like :)",
          "fontSize": 20,
          "color": "black",
          "background": null

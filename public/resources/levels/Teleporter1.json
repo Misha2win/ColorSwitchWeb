@@ -44,9 +44,7 @@
       {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
@@ -61,6 +59,50 @@
          "hasDestination": true,
          "endX": 420,
          "endY": 20
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 490,
+         "width": 290,
+         "height": 20,
+         "text": "↓",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 470,
+         "width": 290,
+         "height": 20,
+         "text": "This is a teleporter",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 420,
+         "y": 50,
+         "width": 260,
+         "height": 20,
+         "text": " ↑ The teleporter will take you",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 420,
+         "y": 70,
+         "width": 260,
+         "height": 20,
+         "text": " to the purple circle",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
       }
    ]
 }

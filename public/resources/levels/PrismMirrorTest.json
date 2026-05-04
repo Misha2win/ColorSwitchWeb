@@ -186,7 +186,7 @@
          "type": "Mirror",
          "x": 100,
          "y": 90,
-         "color": "red",
+         "color": "blue",
          "persistOnce": false
       },
       {
@@ -210,6 +210,43 @@
          "width": 170,
          "height": 100,
          "color": "red"
+      },
+      {
+         "type": "Text",
+         "x": 150,
+         "y": 150,
+         "width": 450,
+         "height": 30,
+         "text": "Your mirror cannot be used to get to a goal",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 200,
+         "y": 480,
+         "width": 350,
+         "height": 30,
+         "text": "It must be YOU (the one with the arrow)",
+         "fontSize": 20,
+         "color": "white",
+         "background": null
+      },
+      {
+         "type": "Platform",
+         "x": 610,
+         "y": 150,
+         "width": 120,
+         "height": 30,
+         "color": "blue"
+      },
+      {
+         "type": "Prism",
+         "x": 590,
+         "y": 20,
+         "color": "red",
+         "direction": "DOWN"
       }
    ]
 }

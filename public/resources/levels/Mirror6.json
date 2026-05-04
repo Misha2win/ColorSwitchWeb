@@ -35,34 +35,10 @@
       },
       {
          "type": "Platform",
-         "x": 20,
-         "y": 450,
-         "width": 710,
-         "height": 130,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
-         "x": 20,
-         "y": 350,
-         "width": 230,
-         "height": 100,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
-         "x": 600,
-         "y": 250,
-         "width": 130,
-         "height": 200,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
          "x": 500,
          "y": 350,
-         "width": 100,
-         "height": 100,
+         "width": 230,
+         "height": 230,
          "color": "gray"
       },
       {
@@ -70,7 +46,7 @@
          "x": 20,
          "y": 250,
          "width": 130,
-         "height": 100,
+         "height": 330,
          "color": "gray"
       },
       {
@@ -97,21 +73,56 @@
          "y": 120,
          "width": 690,
          "height": 30,
-         "text": "Mirrors reflect you across the gray line. You",
-         "fontSize": 25,
+         "text": "Mirrors will reflect you across the center of the level. When you are",
+         "fontSize": 20,
          "color": "black",
          "background": "white"
       },
       {
          "type": "Text",
          "x": 30,
-         "y": 155,
+         "y": 150,
          "width": 690,
          "height": 30,
-         "text": "collide with what the mirrored you collides with.",
-         "fontSize": 25,
+         "text": "mirrored, you will have two hitboxes and will collide with anything",
+         "fontSize": 20,
          "color": "black",
          "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 180,
+         "width": 690,
+         "height": 30,
+         "text": "mirror you collides with.",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 450,
+         "width": 710,
+         "height": 130,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 350,
+         "width": 230,
+         "height": 230,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 600,
+         "y": 250,
+         "width": 130,
+         "height": 330,
+         "color": "black"
       }
    ]
 }

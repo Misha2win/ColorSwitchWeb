@@ -106,19 +106,9 @@
          "color": "gray"
       },
       {
-         "type": "Platform",
-         "x": 100,
-         "y": 290,
-         "width": 230,
-         "height": 20,
-         "color": "gray"
-      },
-      {
          "type": "Spawn",
          "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
+         "y": 560
       },
       {
          "type": "Goal",
