@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - experimental
   workflow_dispatch:
 
 permissions:
@@ -24,16 +25,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository
+      - name: Check out main
         uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-source
+
+      - name: Check out experimental
+        uses: actions/checkout@v4
+        with:
+          ref: experimental
+          path: experimental-source
 
       - name: Set up Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload public folder
+      - name: Assemble branch sites
+        run: |
+          mkdir -p site/main site/experimental
+          cp -R main-source/public/. site/
+          cp -R main-source/public/. site/main/
+          cp -R experimental-source/public/. site/experimental/
+          touch site/.nojekyll
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
