@@ -193,7 +193,7 @@ export default class Player extends Entity {
             context.fillText(count, x + 25, y + 25)
 
             context.restore()
-        } // updatw
+        }
 
         context.strokeStyle = 'black'
 
