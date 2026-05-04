@@ -317,13 +317,13 @@ export default class Player extends Entity {
     onKeyDown(event) {
         if (this.ignoreInputs) return
 
-        this.setInputForKey(event, true)
+        this.setInputForKey(event.code, true)
     }
 
     onKeyUp(event) {
         this.ignoreInputs = false
 
-        this.setInputForKey(event, false)
+        this.setInputForKey(event.code, false)
     }
 
 }
