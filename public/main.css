@@ -182,6 +182,10 @@ body.game-page.mobile-game-layout .mobile-control-row-movement {
     grid-template-columns: repeat(3, minmax(0px, 1fr));
 }
 
+body.game-page.mobile-game-layout .mobile-control-row-use {
+    grid-template-columns: repeat(5, minmax(0px, 1fr));
+}
+
 body.game-page.mobile-game-layout .mobile-control-row-restart {
     margin-top: clamp(18px, 5dvh, 34px);
 }
