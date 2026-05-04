@@ -112,7 +112,7 @@ export default class Player extends Entity {
     }
 
     draw(context) {
-        if (this.color === Color.WHITE) {
+        if (this.color === Color.WHITE || this.color === Color.YELLOW) {
             context.fillStyle = 'black'
             context.fillRect(this.x, this.y, this.width, this.height)
 
