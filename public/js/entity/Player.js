@@ -133,6 +133,7 @@ export default class Player extends Entity {
         const gameHeight = this.level?.levelManager?.height
         const mirror = this.mirror
         if (mirror && gameWidth && gameWidth) {
+            context.save()
             context.strokeStyle = 'black'
             context.lineWidth = 3
             context.lineCap = 'round'
@@ -151,9 +152,10 @@ export default class Player extends Entity {
             context.moveTo(gameWidth / 2, 0)
             context.lineTo(gameWidth / 2, gameHeight)
             context.stroke()
+            context.restore()
         }
 
-        const invTop = 0
+        const invTop = this.level?.levelManager?.height
 
         const drawColor = (x, y, color, count) => {
             context.save()
@@ -212,14 +214,56 @@ export default class Player extends Entity {
         context.strokeRect(95, invTop + 5, 40, 40)
         drawColor(100, invTop + 10, Color.BLUE, this.blueUses)
 
+        context.fillStyle = 'white'
+        context.fillRect(5, invTop + 50, 40, 40)
+        context.strokeRect(5, invTop + 50, 40, 40)
+
         const item = this.heldItem
         if (item) {
-            item.x = invTop + 5
-            item.y = 50
+            item.x = 10
+            item.y = invTop + 55
             context.save()
             item.draw(context)
             context.restore()
         }
+
+        const vennWidth = 85
+        const vennHeight = 85
+        const vennX = gameWidth - vennWidth - 5
+        const vennY = invTop + 5
+        const vennSize = Math.min(vennWidth, vennHeight)
+        const vennRadius = vennSize * 0.3
+        const vennCenterX = vennX + vennWidth / 2
+        const vennRedX = vennCenterX - vennRadius * 0.4
+        const vennGreenX = vennCenterX + vennRadius * 0.4
+        const vennBlueX = vennCenterX
+        const vennTopY = vennY + vennHeight * 0.42
+        const vennBottomY = vennTopY + vennRadius * 0.6
+
+        context.save()
+        context.fillStyle = 'black'
+        context.fillRect(vennX, vennY, vennWidth, vennHeight)
+
+        context.globalCompositeOperation = 'lighter'
+        context.fillStyle = Color.RED.drawColor
+        context.beginPath()
+        context.arc(vennRedX, vennTopY, vennRadius, 0, Math.PI * 2)
+        context.fill()
+
+        context.fillStyle = Color.GREEN.drawColor
+        context.beginPath()
+        context.arc(vennGreenX, vennTopY, vennRadius, 0, Math.PI * 2)
+        context.fill()
+
+        context.fillStyle = Color.BLUE.drawColor
+        context.beginPath()
+        context.arc(vennBlueX, vennBottomY, vennRadius, 0, Math.PI * 2)
+        context.fill()
+
+        context.globalCompositeOperation = 'source-over'
+        context.strokeStyle = 'white'
+        context.strokeRect(vennX, vennY, vennWidth, vennHeight)
+        context.restore()
     }
 
     update(delta) {

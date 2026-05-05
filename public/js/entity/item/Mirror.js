@@ -8,7 +8,7 @@ import Color from "../Color.js";
 
 export default class Mirror extends Item {
 
-   constructor(x, y, color, persistOnce) {
+   constructor(x, y, color = Color.GRAY, persistOnce = false) {
       super(x, y)
 
       this.color = color
@@ -78,6 +78,25 @@ export default class Mirror extends Item {
       } else {
          user.removeItem()
       }
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         color: this.color.name,
+         persistOnce: this.persistOnce
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'color', type: 'color' },
+         { name: 'persistOnce', type: 'boolean' }
+      ]
    }
 
 }

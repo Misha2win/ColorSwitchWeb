@@ -17,8 +17,9 @@ function createEntity(obj) {
 export async function loadLevelFromJSON(levelJSON, name = 'noname') {
     if (!Array.isArray(levelJSON.entities)) throw new Error('Level missing entities[]')
     if (!levelJSON.color) throw new Error('Level missing starting color')
+    if (!levelJSON.spawn) throw new Error('Level missing spawn location')
 
-    return new Level(name, Color.getColor(levelJSON.color), levelJSON.entities.map(createEntity).filter(Boolean))
+    return new Level(name, levelJSON.spawn, Color.getColor(levelJSON.color), levelJSON.entities.map(createEntity).filter(Boolean))
 }
 
 const loadedLevels = new Map() // Maps level name to level

@@ -1,5 +1,9 @@
 {
    "color": "green",
+   "spawn": {
+      "x": 710,
+      "y": 560
+   },
    "entities": [
       {
          "type": "Platform",
@@ -358,45 +362,6 @@
          "width": 40,
          "height": 10,
          "color": "black"
-      },
-      {
-         "type": "Spawn",
-         "x": 710,
-         "y": 560
-      },
-      {
-         "type": "Portal",
-         "x": 710,
-         "y": 380,
-         "id": 0
-      },
-      {
-         "type": "Portal",
-         "x": 400,
-         "y": 20,
-         "id": 0
-      },
-      {
-         "type": "Portal",
-         "x": 320,
-         "y": 20,
-         "id": 1
-      },
-      {
-         "type": "Portal",
-         "x": 20,
-         "y": 20,
-         "id": 1
-      },
-      {
-         "type": "Spawn",
-         "x": 340,
-         "y": 70
-      },
-      {
-         "type": "Spawn",
-         "x": 380,
-         "y": 70
       },
       {
          "type": "Element",

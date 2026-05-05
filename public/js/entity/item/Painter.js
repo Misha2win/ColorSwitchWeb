@@ -5,6 +5,7 @@ import Entity from "../Entity.js";
 import Player from "../Player.js";
 import Item from "./Item.js";
 import Color from "../Color.js";
+import { boxesIntersect } from "../../math/PhysicsEngine.js";
 
 export default class Painter extends Item {
 
@@ -31,6 +32,35 @@ export default class Painter extends Item {
 
    onUse(user) {
       if (!(user instanceof Player)) return
+
+      const auraHitbox = {
+         x: this.x - 10,
+         y: this.y - 10,
+         width: this.width + 20,
+         height: this.height + 20
+      }
+
+      for (const platform of this.level?.blockers) {
+         if (!boxesIntersect(platform, auraHitbox)) continue
+         platform.color = user.color
+      }
+
+      user.removeItem()
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 }
+      ]
    }
 
 }

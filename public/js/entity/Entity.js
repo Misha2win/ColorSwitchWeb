@@ -18,6 +18,7 @@ export default class Entity {
         this.level = null
     }
 
+    // Main game methods
     draw(context) { abstractError('Entity.draw', this.#type) }
     preparePhysics(delta) {}
     resolvePhysics() {}
@@ -25,7 +26,10 @@ export default class Entity {
     canCollideWith(other) { abstractError('Entity.canCollideWith', this.#type) }
     onCollide(other) { abstractError('Entity.onCollide', this.#type) }
     onPlayerColorChange() {}
-    toJSON() { abstractError('Entity.toJSON', this.#type) } // Used in editor/level saving
+
+    // Editor methods
+    toJSON() { abstractError('Entity.toJSON', this.#type) }
+    getProperties() { abstractError('Entity.getProperties ', this.#type) }
 
     get type() { return this.#type }
 

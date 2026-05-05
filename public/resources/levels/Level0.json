@@ -1,5 +1,9 @@
 {
-   "color": "black",
+   "color": "gray",
+   "spawn": {
+      "x": 20,
+      "y": 560
+   },
    "entities": [
       {
          "type": "Platform",
@@ -32,11 +36,6 @@
          "width": 730,
          "height": 10,
          "color": "black"
-      },
-      {
-         "type": "Spawn",
-         "x": 20,
-         "y": 560
       },
       {
          "type": "Goal",
@@ -97,10 +96,10 @@
       {
          "type": "Text",
          "x": 140,
-         "y": 15,
-         "width": 310,
+         "y": 615,
+         "width": 360,
          "height": 21,
-         "text": "← Your inventory (1, 2 or 3 to use)",
+         "text": "← Your color inventory (1, 2 or 3 to USE)",
          "fontSize": 20,
          "color": "black",
          "background": "white"
@@ -118,23 +117,34 @@
       },
       {
          "type": "Text",
-         "x": 60,
-         "y": 60,
-         "width": 360,
-         "height": 21,
-         "text": "← Other items will appear here (E to use)",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
          "x": 30,
          "y": 270,
          "width": 690,
          "height": 30,
          "text": "Press SHIFT to SUBTRACT a color instead of adding it.",
          "fontSize": 25,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 50,
+         "y": 660,
+         "width": 300,
+         "height": 21,
+         "text": "← Your item inventory (E to USE)",
+         "fontSize": 20,
+         "color": "black",
+         "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 440,
+         "y": 660,
+         "width": 220,
+         "height": 21,
+         "text": "Color mixing diagram →",
+         "fontSize": 20,
          "color": "black",
          "background": "white"
       }

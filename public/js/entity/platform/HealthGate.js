@@ -6,7 +6,7 @@ import Platform from "./Platform.js";
 
 export default class HealthGate extends Platform {
 
-   constructor(x, y, width, height, greaterThan, requirement) {
+   constructor(x, y, width, height, greaterThan = true, requirement = 50) {
       super(x, y, width, height)
       this.color = Color.BLACK
       this.greaterThan = !greaterThan
@@ -38,6 +38,29 @@ export default class HealthGate extends Platform {
       return this.greaterThan
          ? other.health > this.requirement
          : other.health < this.requirement
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         width: this.width,
+         height: this.height,
+         greaterThan: !this.greaterThan,
+         health: this.requirement
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'greaterThan', type: 'boolean', get: entity => !entity.greaterThan, set: (entity, value) => { entity.greaterThan = !value } },
+         { name: 'health', label: 'Health', type: 'number', min: 0, step: 1, get: entity => entity.requirement, set: (entity, value) => { entity.requirement = value } }
+      ]
    }
 
 }

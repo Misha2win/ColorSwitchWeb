@@ -53,4 +53,19 @@ export default class Point extends Entity {
       context.fill()
    }
 
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 }
+      ]
+   }
+
 }

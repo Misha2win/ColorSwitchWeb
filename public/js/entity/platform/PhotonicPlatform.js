@@ -34,17 +34,23 @@ export default class PhotonicPlatform extends Platform {
          context.rect(this.x + 1, this.y + 1, this.width - 2, this.height - 2)
          context.clip()
 
-         const width = this.level?.levelManager?.width
-         const height = this.level?.levelManager?.height
+         const lineWidth = Math.min(this.width, this.height)
+         const lineSpeed = 350
+         const travelDistance = this.width + this.height + lineWidth * 2
+         const travelDuration = travelDistance / lineSpeed
+         const cycleTime = this.totalDelta % (travelDuration + 1)
 
-         const percent = (Math.tan(this.totalDelta / 2) + 1) / 2
+         if (cycleTime < travelDuration) {
+            const linePosition = this.x + this.y - lineWidth + cycleTime * lineSpeed
+            const lineLength = this.width + this.height + lineWidth * 2
 
-         context.lineWidth = Math.min(this.width, this.height)
-         context.strokeStyle = 'rgba(255, 255, 255, 1)'
-         context.beginPath()
-         context.moveTo(width * percent, (this.height - width) / 2)
-         context.lineTo(width * percent - width, (this.height + width) / 2)
-         context.stroke()
+            context.lineWidth = lineWidth
+            context.strokeStyle = 'rgba(255, 255, 255, 1)'
+            context.beginPath()
+            context.moveTo(linePosition - (this.y - lineLength), this.y - lineLength)
+            context.lineTo(linePosition - (this.y + this.height + lineLength), this.y + this.height + lineLength)
+            context.stroke()
+         }
       }
    }
 
@@ -84,6 +90,25 @@ export default class PhotonicPlatform extends Platform {
       }
 
 
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         width: this.width,
+         height: this.height
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 }
+      ]
    }
 
 }

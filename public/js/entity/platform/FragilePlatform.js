@@ -7,8 +7,7 @@ import Platform from "./Platform.js";
 export default class FragilePlatform extends Platform {
 
    constructor(x, y, width, height, color) {
-      super(x, y, width, height)
-      super.color = color
+      super(x, y, width, height, color)
 
       this.broken = false
       this.stoodOn = false

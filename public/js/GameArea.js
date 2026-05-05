@@ -22,6 +22,7 @@ export default class GameArea {
         this.canvas = document.getElementById(this.canvasId)
         this.width = this.canvas.width
         this.height = this.canvas.height
+        this.canvas.height += 95
 
         this.context = this.canvas.getContext('2d')
 
@@ -91,6 +92,12 @@ export default class GameArea {
             this.clear()
             level.draw(this.context)
             this.context.restore()
+
+            this.context.strokeStyle = 'black'
+            this.context.beginPath()
+            this.context.moveTo(0, this.height)
+            this.context.lineTo(this.width, this.height)
+            this.context.stroke()
         }
 
         if (level.player?.requestRestart) {

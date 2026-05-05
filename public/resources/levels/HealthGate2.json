@@ -1,5 +1,9 @@
 {
    "color": "green",
+   "spawn": {
+      "x": 20,
+      "y": 560
+   },
    "entities": [
       {
          "type": "Platform",
@@ -66,13 +70,6 @@
          "y": 450,
          "width": 60,
          "height": 130
-      },
-      {
-         "type": "Spawn",
-         "x": 20,
-         "y": 560,
-         "active": true,
-         "obtainable": false
       },
       {
          "type": "Goal",

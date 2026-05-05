@@ -15,7 +15,7 @@ export default class Prism extends Obstacle {
 
     static MAX_BEAMS = 10
 
-    constructor(x, y, color, direction) {
+    constructor(x, y, color = Color.RED, direction = 'RIGHT') {
         super(x, y, 20, 20, color)
 
         this.direction = Direction.fromString(direction)
@@ -189,6 +189,25 @@ export default class Prism extends Obstacle {
             context.strokeStyle = 'black'
             context.stroke()
         }
+    }
+
+    toJSON() {
+        return {
+            type: this.type,
+            x: this.x,
+            y: this.y,
+            color: this.color.name,
+            direction: Direction.toString(this.direction)
+        }
+    }
+
+    getProperties() {
+        return [
+            { name: 'x', type: 'number', step: 10 },
+            { name: 'y', type: 'number', step: 10 },
+            { name: 'color', type: 'color' },
+            { name: 'direction', type: 'select', options: ['UP', 'RIGHT', 'DOWN', 'LEFT'], get: entity => Direction.toString(entity.direction), set: (entity, value) => { entity.direction = Direction.fromString(value) } }
+        ]
     }
 
 }

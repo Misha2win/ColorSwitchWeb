@@ -1,12 +1,13 @@
 import abstractError from "../../Abstract.js"
 import { lightenHex } from "../../utility/Util.js"
+import Color from "../Color.js"
 import Entity from "../Entity.js"
 import Player from "../Player.js"
 import Obstacle from "./Obstacle.js"
 
 export default class Element extends Obstacle {
 
-    constructor(x, y, width, height, color, health) {
+    constructor(x, y, width, height, color = Color.RED, health = -1) {
         super(x, y, width, height, color)
 
         this.totalDelta = 0
@@ -57,6 +58,20 @@ export default class Element extends Obstacle {
         if (!(other instanceof Player)) return
 
         other.addHealth(this.collisionHealth)
+    }
+
+    toJSON() {
+        return {
+            ...super.toJSON(),
+            health: this.collisionHealth
+        }
+    }
+
+    getProperties() {
+        return [
+            ...super.getProperties(),
+            { name: 'health', label: 'Health Change', type: 'number', step: 0.1, get: entity => entity.collisionHealth, set: (entity, value) => { entity.collisionHealth = value } }
+        ]
     }
 
 }

@@ -34,4 +34,19 @@ export default class SuperJump extends Item {
       user.removeItem()
    }
 
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 }
+      ]
+   }
+
 }

@@ -8,7 +8,7 @@ import Color from "../Color.js";
 
 export default class ColorChanger extends Item {
 
-   constructor(x, y, color) {
+   constructor(x, y, color = Color.RED) {
       super(x, y)
 
       this.color = color
@@ -35,6 +35,23 @@ export default class ColorChanger extends Item {
       this.collected = true
 
       player.addUses(this.color)
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         color: this.color.name
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'color', type: 'color' }
+      ]
    }
 
 }

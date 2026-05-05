@@ -1,5 +1,9 @@
 {
    "color": "blue",
+   "spawn": {
+      "x": 20,
+      "y": 560
+   },
    "entities": [
       {
          "type": "Platform",
@@ -126,11 +130,6 @@
          "x": 710,
          "y": 560,
          "color": "yellow"
-      },
-      {
-         "type": "Spawn",
-         "x": 20,
-         "y": 560
       },
       {
          "type": "Prism",

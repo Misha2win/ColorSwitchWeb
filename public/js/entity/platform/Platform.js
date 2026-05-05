@@ -3,7 +3,7 @@ import Color from "../Color.js";
 
 export default class Platform extends Entity {
 
-   constructor(x, y, width, height, color) {
+   constructor(x, y, width, height, color = Color.BLACK) {
       super(x, y, width, height)
       super.color = color
    }
@@ -48,6 +48,27 @@ export default class Platform extends Entity {
 
    onCollide(other) {
       // Do nothing
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         width: this.width,
+         height: this.height,
+         color: this.color.name
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'color', type: 'color' }
+      ]
    }
 
 }

@@ -8,7 +8,7 @@ import Color from "../Color.js";
 
 export default class Teleporter extends Item {
 
-   constructor(x, y, hasDestination, endX, endY) {
+   constructor(x, y, hasDestination = false, endX = -1, endY = -1) {
       super(x, y)
 
       this.hasDestination = hasDestination
@@ -64,6 +64,27 @@ export default class Teleporter extends Item {
          this.endX = user.x
          this.endY = user.y
       }
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         hasDestination: this.hasDestination,
+         endX: this.endX,
+         endY: this.endY
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'hasDestination', type: 'boolean' },
+         { name: 'endX', type: 'number', step: 10 },
+         { name: 'endY', type: 'number', step: 10 }
+      ]
    }
 
 }

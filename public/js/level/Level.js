@@ -1,7 +1,6 @@
 import Platform from "../entity/platform/Platform.js"
 import MovingPlatform from "../entity/platform/MovingPlatform.js"
 import Item from "../entity/item/Item.js"
-import Spawn from "../entity/point/Spawn.js"
 import Color from "../entity/Color.js"
 import Ghost from "../entity/Ghost.js"
 import Goal from "../entity/point/Goal.js"
@@ -12,8 +11,9 @@ import Text from "../entity/Text.js"
 
 export default class Level {
 
-    constructor(name, color, entities) {
+    constructor(name, spawn, color, entities) {
         this.name = name
+        this.spawn = spawn
         this.color = color
         this.levelManager = null
 
@@ -23,7 +23,6 @@ export default class Level {
         this.blockers = []
         this.triggers = []
         this.items = []
-        this.spawns = []
         this.texts = []
 
         this.ghosts = []
@@ -40,13 +39,10 @@ export default class Level {
     respawnPlayer() {
         if (!this.player) return
 
-        const spawn = this.spawns[0]
-        if (!this.spawns[0]) return
-
         this.player.restart()
         this.player.color = this.color
-        this.player.x = spawn.x
-        this.player.y = spawn.y
+        this.player.x = this.spawn.x
+        this.player.y = this.spawn.y
     }
 
     draw(context) {
@@ -173,8 +169,6 @@ export default class Level {
 
         if (entity instanceof Item) {
             this.items.push(entity)
-        } else if (entity instanceof Spawn) {
-            this.spawns.push(entity)
         }
     }
 

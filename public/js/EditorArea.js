@@ -1,6 +1,5 @@
 import Color from './entity/Color.js'
 import Player from './entity/Player.js'
-import { Direction } from './entity/obstacle/Prism.js'
 import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
@@ -19,142 +18,10 @@ const colorChoices = [
     'gray'
 ]
 
-const directionChoices = [
-    'UP',
-    'RIGHT',
-    'DOWN',
-    'LEFT'
-]
-
-const entityDefinitions = {
-    Platform: { placement: 'box' },
-    MovingPlatform: { placement: 'box' },
-    FragilePlatform: { placement: 'box' },
-    PhotonicPlatform: { placement: 'box' },
-    HealthGate: { placement: 'box' },
-    Element: { placement: 'box' },
-    Text: { placement: 'box' },
-    Spawn: { placement: 'fixed', width: 20, height: 20 },
-    Goal: { placement: 'fixed', width: 20, height: 20 },
-    Portal: { placement: 'fixed', width: 20, height: 20 },
-    Prism: { placement: 'fixed', width: 20, height: 20 },
-    ColorChanger: { placement: 'fixed', width: 30, height: 30 },
-    ColorMixer: { placement: 'fixed', width: 30, height: 30 },
-    Mirror: { placement: 'fixed', width: 30, height: 30 },
-    SuperJump: { placement: 'fixed', width: 30, height: 30 },
-    Teleporter: { placement: 'fixed', width: 30, height: 30 }
-}
-
-const positionProperties = [
-    { name: 'x', type: 'number', step: 10, default: rect => rect.x },
-    { name: 'y', type: 'number', step: 10, default: rect => rect.y }
-]
-
-const sizeProperties = [
-    { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10, default: rect => rect.width },
-    { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10, default: rect => rect.height }
-]
-
-const boxProperties = [
-    ...positionProperties,
-    ...sizeProperties
-]
-
-const colorProperty = (defaultValue = 'black') => ({
-    name: 'color',
-    type: 'color',
-    default: defaultValue
-})
-
-const entityProperties = {
-    Platform: [
-        ...boxProperties,
-        colorProperty('black')
-    ],
-    MovingPlatform: [
-        ...boxProperties,
-        colorProperty('black'),
-        { name: 'startX', type: 'number', step: 10, default: rect => rect.x, get: entity => entity.x1, set: (entity, value) => { entity.x1 = value } },
-        { name: 'startY', type: 'number', step: 10, default: rect => rect.y, get: entity => entity.y1, set: (entity, value) => { entity.y1 = value } },
-        { name: 'endX', type: 'number', step: 10, default: rect => rect.x + 100, get: entity => entity.x2, set: (entity, value) => { entity.x2 = value } },
-        { name: 'endY', type: 'number', step: 10, default: rect => rect.y, get: entity => entity.y2, set: (entity, value) => { entity.y2 = value } }
-    ],
-    FragilePlatform: [
-        ...boxProperties,
-        colorProperty('black')
-    ],
-    PhotonicPlatform: [
-        ...boxProperties
-    ],
-    HealthGate: [
-        ...boxProperties,
-        { name: 'greaterThan', type: 'boolean', default: true, get: entity => !entity.greaterThan, set: (entity, value) => { entity.greaterThan = !value } },
-        { name: 'health', label: 'Health', type: 'number', min: 0, step: 1, default: 50, get: entity => entity.requirement, set: (entity, value) => { entity.requirement = value } }
-    ],
-    Element: [
-        ...boxProperties,
-        colorProperty('red'),
-        { name: 'health', label: 'Health Change', type: 'number', step: 0.1, default: -1, get: entity => entity.collisionHealth, set: (entity, value) => { entity.collisionHealth = value } }
-    ],
-    Text: [
-        ...boxProperties,
-        { name: 'text', type: 'textarea', default: 'Text' },
-        { name: 'fontSize', type: 'number', min: 1, step: 1, default: 24 },
-        { name: 'color', label: 'Text Color', type: 'text', default: 'black', get: entity => entity.textColor, set: (entity, value) => { entity.textColor = value } },
-        { name: 'background', label: 'Background', type: 'text', nullable: true, default: 'white', get: entity => entity.backgroundColor, set: (entity, value) => { entity.backgroundColor = value } }
-    ],
-    Spawn: [
-        ...positionProperties
-    ],
-    Goal: [
-        ...positionProperties,
-        colorProperty('green')
-    ],
-    Portal: [
-        ...positionProperties,
-        { name: 'id', type: 'number', min: 1, step: 1, default: 1 }
-    ],
-    Prism: [
-        ...positionProperties,
-        colorProperty('red'),
-        { name: 'direction', type: 'select', options: directionChoices, default: 'RIGHT', get: entity => Direction.toString(entity.direction), set: (entity, value) => { entity.direction = Direction.fromString(value) } }
-    ],
-    ColorChanger: [
-        ...positionProperties,
-        colorProperty('red')
-    ],
-    ColorMixer: [
-        ...positionProperties,
-        colorProperty('red'),
-        { name: 'additive', type: 'boolean', default: true }
-    ],
-    Mirror: [
-        ...positionProperties,
-        colorProperty('gray'),
-        { name: 'persistOnce', type: 'boolean', default: false }
-    ],
-    SuperJump: [
-        ...positionProperties
-    ],
-    Teleporter: [
-        ...positionProperties,
-        { name: 'hasDestination', type: 'boolean', default: false },
-        { name: 'endX', type: 'number', step: 10, default: -1 },
-        { name: 'endY', type: 'number', step: 10, default: -1 }
-    ]
-}
-
 function camelToTitle(input) {
     return input
         .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
         .replace(/^./, c => c.toUpperCase())
-}
-
-function pointIntersectsBox(point, box) {
-    return point.x >= box.x
-        && point.x <= box.x + box.width
-        && point.y >= box.y
-        && point.y <= box.y + box.height
 }
 
 function getPropertyValue(entity, property) {
@@ -172,28 +39,11 @@ function setPropertyValue(entity, property, value) {
     entity[property.name] = value
 }
 
-function hasDefault(property) {
-    return Object.prototype.hasOwnProperty.call(property, 'default')
-}
-
-function getDefaultValue(property, rect) {
-    if (!hasDefault(property)) return undefined
-    if (typeof property.default === 'function') return property.default(rect)
-
-    return property.default
-}
-
 function valueToFormValue(value) {
-    if (value instanceof Color) return value.toString()
+    if (value instanceof Color) return value.name
     if (value == null) return ''
 
     return String(value)
-}
-
-function valueToJSONValue(value) {
-    if (value instanceof Color) return value.toString()
-
-    return value
 }
 
 function normalizeNumberValue(value, property) {
@@ -233,6 +83,79 @@ function createSelect(options, value) {
     return select
 }
 
+function isAbstractEditorMethodError(err, methodName) {
+    return err instanceof Error && err.message.startsWith(methodName)
+}
+
+function isSpawnTool(type) {
+    return type === 'Spawn'
+}
+
+function copySpawn(spawn) {
+    return {
+        x: spawn.x,
+        y: spawn.y
+    }
+}
+
+function drawSpawnMarker(context, spawn, color) {
+    if (color === Color.WHITE || color === Color.YELLOW) {
+        context.beginPath()
+        context.ellipse(
+            spawn.x + 10,
+            spawn.y + 10,
+            5,
+            5,
+            0,
+            0,
+            Math.PI * 2
+        )
+        context.fillStyle = Color.BLACK
+        context.fill()
+        context.beginPath()
+        context.ellipse(
+            spawn.x + 10,
+            spawn.y + 10,
+            4,
+            4,
+            0,
+            0,
+            Math.PI * 2
+        )
+        context.fillStyle = color.drawColor
+        context.fill()
+    } else {
+        context.beginPath()
+        context.ellipse(
+            spawn.x + 10,
+            spawn.y + 10,
+            5,
+            5,
+            0,
+            0,
+            Math.PI * 2
+        )
+        context.fillStyle = color.drawColor
+        context.fill()
+    }
+}
+
+function getEditableProperties(entity) {
+    if (!entity || typeof entity.getProperties !== 'function') return []
+
+    try {
+        return entity.getProperties() ?? []
+    } catch (err) {
+        if (isAbstractEditorMethodError(err, 'Entity.getProperties')) return []
+
+        throw err
+    }
+}
+
+function canResizeEntity(entity) {
+    return getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
+}
+
 function populatePropertyEditor(entity) {
     const form = document.getElementById('property-editor-form')
     form.innerHTML = ''
@@ -242,7 +165,7 @@ function populatePropertyEditor(entity) {
         return
     }
 
-    const editableProperties = entityProperties[entity.type] ?? []
+    const editableProperties = getEditableProperties(entity)
     if (!editableProperties.length) {
         form.textContent = 'This entity does not have editable properties.'
         return
@@ -318,16 +241,15 @@ function createEntityFromJSON(entityJSON) {
 }
 
 function entityToJSON(entity) {
-    const properties = entityProperties[entity.type]
-    if (!properties) return null
+    if (!entity || typeof entity.toJSON !== 'function') return null
 
-    const json = { type: entity.type }
-    for (const property of properties) {
-        const key = property.jsonName ?? property.name
-        json[key] = valueToJSONValue(getPropertyValue(entity, property))
+    try {
+        return entity.toJSON()
+    } catch (err) {
+        if (isAbstractEditorMethodError(err, 'Entity.toJSON')) return null
+
+        throw err
     }
-
-    return json
 }
 
 function offsetEntityJSON(entityJSON, dx, dy) {
@@ -427,6 +349,7 @@ export default class EditorArea {
         this.selectedEntity = null
         this.selectedEntityMoved = false
         this.entities = []
+        this.spawn = { x: 30, y: 30 }
 
         this.type = 'Spawn'
         this.levelColor = 'red'
@@ -446,10 +369,12 @@ export default class EditorArea {
         this.canvas = document.getElementById(this.canvasId)
         this.width = this.canvas.width
         this.height = this.canvas.height
+        this.canvas.height += 95
 
         this.context = this.canvas.getContext('2d')
 
-        this.entities = [createEntityFromJSON({ type: 'Spawn', x: 30, y: 30 })].filter(Boolean)
+        this.spawn = { x: 30, y: 30 }
+        this.entities = []
         this.mouseInfo = { held: false, previous: { x: 0, y: 0 }, position: { x: 0, y: 0 } }
         this.syncLevelColorControl()
         this.syncLevelNavigationControls('Loading levels...')
@@ -493,6 +418,10 @@ export default class EditorArea {
         }
 
         this.drawGrid(context)
+
+        context.save()
+        drawSpawnMarker(context, this.spawn, Color.getColor(this.levelColor))
+        context.restore()
 
         for (const entity of this.entities) {
             context.save()
@@ -571,27 +500,38 @@ export default class EditorArea {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             const entity = this.entities[i]
             const boundingBox = Physics.boundingBox(entity, entity)
-            if (pointIntersectsBox(point, boundingBox)) return entity
+            if (Physics.pointIntersectsBox(point, boundingBox)) return entity
         }
 
         return null
     }
 
     getPlacementRect() {
-        const definition = entityDefinitions[this.type] ?? { placement: 'box' }
-        if (definition.placement === 'fixed') {
+        const position = {
+            x: this.round(this.mouseInfo.position.x),
+            y: this.round(this.mouseInfo.position.y)
+        }
+        if (isSpawnTool(this.type)) {
             return {
-                x: this.round(this.mouseInfo.position.x),
-                y: this.round(this.mouseInfo.position.y),
-                width: definition.width,
-                height: definition.height,
+                ...position,
+                width: 20, // PLAYER SIZE
+                height: 20,
+                fixed: true
+            }
+        }
+
+        const entity = createEntityFromJSON({ type: this.type, ...position, width: 0, height: 0 })
+        if (entity && !canResizeEntity(entity)) {
+            return {
+                ...position,
+                width: entity.width,
+                height: entity.height,
                 fixed: true
             }
         }
 
         return {
-            x: this.round(this.mouseInfo.position.x),
-            y: this.round(this.mouseInfo.position.y),
+            ...position,
             width: 0,
             height: 0
         }
@@ -670,18 +610,17 @@ export default class EditorArea {
     }
 
     createEntity() {
-        const maker = EntityCreator.registry.get(this.type)
-        const properties = entityProperties[this.type]
-        if (!maker || !properties) return
-
         const normRect = Physics.getNormalizedBox(this.rect)
-        const entityProps = {}
-        for (const property of properties) {
-            const key = property.jsonName ?? property.name
-            entityProps[key] = getDefaultValue(property, normRect)
+        if (isSpawnTool(this.type)) {
+            this.spawn = copySpawn(normRect)
+            this.selectedEntity = null
+            populatePropertyEditor(null)
+            return
         }
 
-        const entity = maker(entityProps)
+        const entity = createEntityFromJSON({ type: this.type, ...normRect })
+        if (!entity) return
+
         this.entities.push(entity)
         this.selectedEntity = entity
         populatePropertyEditor(entity)
@@ -969,6 +908,7 @@ export default class EditorArea {
     getLevelJSON() {
         return {
             color: this.levelColor,
+            spawn: copySpawn(this.spawn),
             entities: this.entities.map(entityToJSON).filter(Boolean)
         }
     }
@@ -980,6 +920,7 @@ export default class EditorArea {
 
         this.levelColor = level.color.toString()
         this.syncLevelColorControl()
+        this.spawn = copySpawn(level.spawn)
         this.entities = [...level.entities, ...level.texts]
         this.selectedEntity = null
         this.rect = false
@@ -1004,12 +945,12 @@ export default class EditorArea {
     }
 
     createPlayableLevel(levelJSON) {
-        if (!levelJSON.entities.some(entityJSON => entityJSON.type === 'Spawn')) {
+        if (!levelJSON.spawn) {
             throw new Error('Add a Spawn before playing the level.')
         }
 
         const entities = levelJSON.entities.map(createEntityFromJSON).filter(Boolean)
-        const level = new Level('editor-preview', Color.getColor(levelJSON.color), entities)
+        const level = new Level('editor-preview', levelJSON.spawn, Color.getColor(levelJSON.color), entities)
         level.levelManager = this
         level.setPlayer(this.getPreviewPlayer())
         level.respawnPlayer()

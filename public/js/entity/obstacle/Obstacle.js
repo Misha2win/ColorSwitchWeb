@@ -11,4 +11,25 @@ export default class Obstacle extends Entity {
         this.color = color
     }
 
+    toJSON() {
+        return {
+            type: this.type,
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height,
+            color: this.color.name
+        }
+    }
+
+    getProperties() {
+        return [
+            { name: 'x', type: 'number', step: 10 },
+            { name: 'y', type: 'number', step: 10 },
+            { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
+            { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 },
+            { name: 'color', type: 'color' }
+        ]
+    }
+
 }

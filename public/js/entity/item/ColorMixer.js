@@ -1,13 +1,14 @@
 import Vector from "../../math/Vector.js";
 import { darkenHex } from "../../utility/Util.js";
 import abstractError from "../../Abstract.js"
+import Color from "../Color.js";
 import Entity from "../Entity.js";
 import Player from "../Player.js";
 import Item from "./Item.js";
 
 export default class ColorMixer extends Item {
 
-   constructor(x, y, color, additive) {
+   constructor(x, y, color = Color.RED, additive = true) {
       super(x, y)
 
       this.color = color
@@ -51,6 +52,25 @@ export default class ColorMixer extends Item {
       user.removeItem()
 
       this.level?.onPlayerColorChange()
+   }
+
+   toJSON() {
+      return {
+         type: this.type,
+         x: this.x,
+         y: this.y,
+         color: this.color.name,
+         additive: this.additive
+      }
+   }
+
+   getProperties() {
+      return [
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
+         { name: 'color', type: 'color' },
+         { name: 'additive', type: 'boolean' }
+      ]
    }
 
 }
