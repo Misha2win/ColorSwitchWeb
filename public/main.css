@@ -389,6 +389,7 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
 
 #entity-toolbar {
     width: 75%;
+    height: 600px;
     max-height: 600px;
     grid-column: 1;
     grid-row: 2;
@@ -441,6 +442,7 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
 
 #entity-properties {
     width: 75%;
+    height: 600px;
     max-height: 600px;
     grid-column: 3;
     grid-row: 2;
@@ -656,6 +658,7 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
         order: 5;
         grid-row: 5;
         justify-self: stretch;
+        height: auto;
         max-height: none;
         margin-top: 12px;
         border: 1px solid var(--border-color);
@@ -682,6 +685,7 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
         order: 6;
         grid-row: 6;
         justify-self: stretch;
+        height: auto;
         max-height: none;
         margin-top: 12px;
         border: 1px solid var(--border-color);
