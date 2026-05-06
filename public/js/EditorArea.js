@@ -1077,13 +1077,14 @@ export default class EditorArea {
 
     handleKeyPress(event) {
         if (this.playingLevel) return
+        const key = event.key.toLowerCase()
 
         if (event.key === 'Backspace' || event.key === 'Delete') {
             event.preventDefault()
             this.deleteSelectedEntity()
         }
 
-        if (event.key === 'd' && (event.metaKey || event.ctrlKey)) {
+        if (key === 'd' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
             this.duplicateSelectedEntity()
         }
@@ -1292,7 +1293,7 @@ export default class EditorArea {
         document.body.classList.remove('editor-playing')
         document.querySelectorAll('#editor-play-controls .mobile-control-button.is-pressed')
             .forEach(button => button.classList.remove('is-pressed'))
-        document.getElementById('button-play').textContent = 'Play Level'
+        document.getElementById('button-play').textContent = 'Play'
         this.syncLevelNavigationControls()
     }
 

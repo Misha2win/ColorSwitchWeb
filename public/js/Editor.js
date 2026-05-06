@@ -23,10 +23,10 @@ editor.canvas.addEventListener('pointerup', (event) => editor.onPointerUp(event)
 editor.canvas.addEventListener('pointercancel', (event) => editor.onPointerCancel(event))
 editor.canvas.addEventListener('lostpointercapture', (event) => editor.onPointerCancel(event))
 window.addEventListener('keydown', (event) => {
-    const tag = (event.target.tagName || '').toLowerCase()
-    if (tag === 'input' || tag === 'textarea' || event.target.isContentEditable) return
+    if (!shouldHandleEditorKeyEvent(event)) return
+
     editor.handleKeyPress(event)
-})
+}, { capture: true })
 document.getElementById('checkbox-debug').addEventListener('change', event => {
     globalThis.debug = event.target.checked
 })
@@ -37,6 +37,14 @@ function isEditableInteractionTarget(target) {
         : null
 
     return !!editable
+}
+
+function shouldHandleEditorKeyEvent(event) {
+    const key = event.key.toLowerCase()
+    if ((event.metaKey || event.ctrlKey) && key === 'd') return true
+    if (isEditableInteractionTarget(event.target)) return false
+
+    return event.key === 'Backspace' || event.key === 'Delete'
 }
 
 function preventDefaultInteraction(event) {
