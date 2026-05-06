@@ -62,11 +62,31 @@ export default class Player extends Entity {
             configurable: true,
             enumerable: true
         })
+
+        let currentColor = this.color
+        Object.defineProperty(this, 'color', {
+            get: () => currentColor,
+            set: (newValue) => {
+                if (newValue === currentColor) return
+                currentColor = newValue
+                this.level?.createGhosts(color)
+            },
+            configurable: true,
+            enumerable: true
+        })
+
         this.level?.createGhosts(color)
     }
 
     removeMirror() {
         this.mirror = null
+
+        Object.defineProperty(this, 'color', {
+            value: this.color,
+            writable: true,
+            configurable: true,
+            enumerable: true
+        })
     }
 
     restart() {

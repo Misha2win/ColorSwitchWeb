@@ -69,6 +69,38 @@ export function copyableDialog(title, text) {
 }
 
 /**
+ * Helper function for confirming an action before continuing.
+ */
+export function confirmDialog(title, text, confirmLabel = 'OK') {
+    return new Promise(resolve => {
+        const dialog = document.createElement('dialog')
+        dialog.classList.add('dialog')
+        dialog.innerHTML = `
+            <div class="dialog-title"></div>
+            <form method="dialog" class="form">
+                <div class="dialog-description"></div>
+                <menu>
+                    <button value="cancel">Cancel</button>
+                    <button value="confirm"></button>
+                </menu>
+            </form>`
+        document.body.appendChild(dialog)
+
+        dialog.querySelector('.dialog-title').textContent = title
+        dialog.querySelector('.dialog-description').textContent = text
+        dialog.querySelector('button[value="confirm"]').textContent = confirmLabel
+
+        dialog.showModal()
+
+        dialog.addEventListener('close', () => {
+            const confirmed = dialog.returnValue === 'confirm'
+            dialog.remove()
+            resolve(confirmed)
+        })
+    })
+}
+
+/**
  * Helper function to make dialogs were the user picks one from a list of options
  */
 export function promptChoices(title, label, options, defaultValue) {

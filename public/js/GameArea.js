@@ -92,12 +92,6 @@ export default class GameArea {
             this.clear()
             level.draw(this.context)
             this.context.restore()
-
-            this.context.strokeStyle = 'black'
-            this.context.beginPath()
-            this.context.moveTo(0, this.height)
-            this.context.lineTo(this.width, this.height)
-            this.context.stroke()
         }
 
         if (level.player?.requestRestart) {

@@ -5,7 +5,7 @@ editor.start()
 
 document.querySelectorAll('.button-entity')
     .forEach((button) => button.addEventListener('click', event => editor.handleEntityClick(event)))
-document.querySelector(`.button-entity[data-type="${editor.type}"]`).classList.add('selected')
+editor.setActiveEntityType(editor.type)
 document.getElementById('button-load').addEventListener('click', (event) => editor.handleLoadClick())
 document.getElementById('button-previous-level').addEventListener('click', () => editor.handlePreviousLevelClick())
 document.getElementById('button-next-level').addEventListener('click', () => editor.handleNextLevelClick())
@@ -16,7 +16,6 @@ document.getElementById('button-save').addEventListener('click', (event) => edit
 document.getElementById('button-save-as-new').addEventListener('click', (event) => editor.handleSaveAsNewClick())
 document.getElementById('button-duplicate-selected').addEventListener('click', () => editor.duplicateSelectedEntity())
 document.getElementById('button-delete-selected').addEventListener('click', () => editor.deleteSelectedEntity())
-document.getElementById('button-help').addEventListener('click', (event) => editor.handleHelpClick())
 editor.canvas.addEventListener('pointerdown', (event) => editor.onPointerDown(event))
 editor.canvas.addEventListener('pointermove', (event) => editor.onPointerMove(event))
 editor.canvas.addEventListener('pointerup', (event) => editor.onPointerUp(event))
@@ -27,12 +26,45 @@ window.addEventListener('keydown', (event) => {
     if (tag === 'input' || tag === 'textarea' || event.target.isContentEditable) return
     editor.handleKeyPress(event)
 })
-document.getElementById('select-level-color').addEventListener('change', event => {
-    editor.setLevelColor(event.target.value)
-})
 document.getElementById('checkbox-debug').addEventListener('change', event => {
     globalThis.debug = event.target.checked
 })
+
+function isEditableInteractionTarget(target) {
+    const editable = typeof target?.closest === 'function'
+        ? target.closest('input, textarea, select, [contenteditable], .dialog-copy-text')
+        : null
+
+    return !!editable
+}
+
+function preventDefaultInteraction(event) {
+    event.preventDefault()
+}
+
+function preventDefaultOutsideEditable(event) {
+    if (!isEditableInteractionTarget(event.target)) event.preventDefault()
+}
+
+function setupEditorInteractionGuards() {
+    const editorElement = document.getElementById('editor')
+    let lastTouchEndTime = 0
+
+    editor.canvas.addEventListener('contextmenu', preventDefaultInteraction)
+    editor.canvas.addEventListener('dblclick', preventDefaultInteraction)
+    editorElement.addEventListener('contextmenu', preventDefaultOutsideEditable)
+    editorElement.addEventListener('dblclick', preventDefaultOutsideEditable)
+    editorElement.addEventListener('touchend', (event) => {
+        if (isEditableInteractionTarget(event.target) || event.touches.length || event.changedTouches.length !== 1) {
+            lastTouchEndTime = 0
+            return
+        }
+
+        const now = performance.now()
+        if (now - lastTouchEndTime < 350) event.preventDefault()
+        lastTouchEndTime = now
+    }, { passive: false })
+}
 
 function setupEditorPlayControls() {
     const controls = document.getElementById('editor-play-controls')
@@ -86,6 +118,7 @@ function setupEditorPlayControls() {
     }
 }
 
+setupEditorInteractionGuards()
 setupEditorPlayControls()
 
 globalThis.editor = editor

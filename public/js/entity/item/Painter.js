@@ -14,30 +14,29 @@ export default class Painter extends Item {
    }
 
    draw(context) {
-      const gold = '#cfb000'
 
-      context.fillStyle = darkenHex(gold)
+      context.fillStyle = darkenHex(Color.WHITE.drawColor)
       context.fillRect(this.x, this.y, this.width, this.height)
 
-      context.fillStyle = gold
+      context.fillStyle = Color.WHITE.drawColor
       context.fillRect(this.x + 5, this.y + 5, this.width - 10, this.height - 10)
 
       context.fillStyle = '#ffffaf'
-      context.fillRect(this.x + 7, this.y + 7, this.width - 14, 7)
+      context.fillRect(this.x + 5, this.y + 3, 20, 8)
 
       context.fillStyle = '#774714'
-      context.fillRect(this.x + 7, this.y + 14, this.width - 14, 3)
-      context.fillRect(this.x + 12, this.y + 15, 6, 8)
+      context.fillRect(this.x + 5, this.y + 10, 20, 5)
+      context.fillRect(this.x + 12, this.y + 15, 6, 12)
    }
 
    onUse(user) {
       if (!(user instanceof Player)) return
 
       const auraHitbox = {
-         x: this.x - 10,
-         y: this.y - 10,
-         width: this.width + 20,
-         height: this.height + 20
+         x: user.x - 10,
+         y: user.y - 10,
+         width: user.width + 20,
+         height: user.height + 20
       }
 
       for (const platform of this.level?.blockers) {

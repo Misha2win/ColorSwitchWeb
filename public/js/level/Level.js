@@ -61,6 +61,17 @@ export default class Level {
             text.draw(context)
             context.restore()
         }
+
+        if (globalThis.debug) {
+            context.globalAlpha = 0.2
+            for (const ghost of this.ghosts) {
+                context.save()
+                ghost.draw(context)
+                context.restore()
+            }
+            context.globalAlpha = 1
+        }
+
         if (this.player) {
             context.save()
             this.player.draw(context)
@@ -71,6 +82,9 @@ export default class Level {
             context.textBaseline = 'bottom'
             context.fillText(this.name, 0, this.levelManager.height)
             context.restore()
+
+            context.fillStyle = 'black'
+            context.fillRect(0, this.levelManager.height, this.levelManager.width, 1)
         }
     }
 

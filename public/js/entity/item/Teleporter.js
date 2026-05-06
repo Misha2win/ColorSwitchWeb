@@ -34,10 +34,12 @@ export default class Teleporter extends Item {
       this.drawSplitOval(context, centerX, centerY, radiusX, radiusY, angle, colorA, colorB)
       this.drawSplitOval(context, centerX, centerY, radiusX - 3, radiusY - 3, angle, lightenHex(colorA), lightenHex(colorB))
 
-      context.fillStyle = 'purple'
-      context.beginPath()
-      context.ellipse(this.endX + 10, this.endY + 10, 10, 10, 0, 0, Math.PI * 2)
-      context.fill()
+      if (this.hasDestination) {
+         context.fillStyle = 'purple'
+         context.beginPath()
+         context.ellipse(this.endX + 10, this.endY + 10, 10, 10, 0, 0, Math.PI * 2)
+         context.fill()
+      }
    }
 
    drawSplitOval(context, centerX, centerY, radiusX, radiusY, splitAngle, colorA, colorB) {

@@ -4,7 +4,7 @@ import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
 import * as Physics from './math/PhysicsEngine.js'
-import { promptChoices, promptInput, dialog, copyableDialog } from './utility/Prompt.js'
+import { promptChoices, promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
 
 const colorChoices = [
     'black',
@@ -17,6 +17,11 @@ const colorChoices = [
     'white',
     'gray'
 ]
+const editorCurrentLevelStorageKey = 'colorswitch.editor.currentLevelName'
+const touchDragLiftOffset = { x: 0, y: -55 }
+const noDragLiftOffset = { x: 0, y: 0 }
+const minimumVisibleDraggedPixels = 10
+const levelUiHeight = 95
 
 function camelToTitle(input) {
     return input
@@ -91,10 +96,38 @@ function isSpawnTool(type) {
     return type === 'Spawn'
 }
 
+function getDragLiftOffset(event) {
+    return event.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max)
+}
+
 function copySpawn(spawn) {
     return {
         x: spawn.x,
         y: spawn.y
+    }
+}
+
+function readStoredCurrentLevelName() {
+    try {
+        return localStorage.getItem(editorCurrentLevelStorageKey)
+    } catch {
+        return null
+    }
+}
+
+function storeCurrentLevelName(name) {
+    try {
+        if (name) {
+            localStorage.setItem(editorCurrentLevelStorageKey, name)
+        } else {
+            localStorage.removeItem(editorCurrentLevelStorageKey)
+        }
+    } catch {
+        // Ignore storage errors so the editor still works in private or restricted contexts.
     }
 }
 
@@ -206,6 +239,26 @@ function populatePropertyEditor(entity) {
             })
         }
     }
+}
+
+function populateSpawnPropertyEditor(editor) {
+    const form = document.getElementById('property-editor-form')
+    form.innerHTML = ''
+
+    const div = document.createElement('div')
+    div.setAttribute('class', 'property-form-group')
+    form.appendChild(div)
+
+    const label = document.createElement('label')
+    label.setAttribute('for', 'property-level-color')
+    label.textContent = 'Start Color'
+    div.appendChild(label)
+
+    const select = createSelect(colorChoices, editor.levelColor)
+    select.setAttribute('id', 'property-level-color')
+    select.setAttribute('name', 'property-level-color')
+    select.addEventListener('change', event => editor.setLevelColor(event.target.value))
+    div.appendChild(select)
 }
 
 function createPropertyInput(property, value) {
@@ -345,6 +398,7 @@ export default class EditorArea {
         this.lastTime = 0
         this.mouseInfo = null
         this.activePointerId = null
+        this.dragInfo = null
 
         this.rect = false
         this.selectedEntity = null
@@ -370,7 +424,7 @@ export default class EditorArea {
         this.canvas = document.getElementById(this.canvasId)
         this.width = this.canvas.width
         this.height = this.canvas.height
-        this.canvas.height += 95
+        this.setLevelUIVisible(false)
 
         this.context = this.canvas.getContext('2d')
 
@@ -378,7 +432,7 @@ export default class EditorArea {
         this.entities = []
         this.mouseInfo = { held: false, previous: { x: 0, y: 0 }, position: { x: 0, y: 0 } }
         this.activePointerId = null
-        this.syncLevelColorControl()
+        this.dragInfo = null
         this.syncLevelNavigationControls('Loading levels...')
         this.checkOverwriteSupport()
 
@@ -488,6 +542,26 @@ export default class EditorArea {
         return Math.round(value / 10) * 10
     }
 
+    setLevelUIVisible(showingLevelUI) {
+        this.canvas.height = this.height + (showingLevelUI ? levelUiHeight : 0)
+    }
+
+    getVisiblePosition(box) {
+        const width = Math.max(0, box.width ?? 0)
+        const height = Math.max(0, box.height ?? 0)
+        const visibleWidth = Math.min(minimumVisibleDraggedPixels, width)
+        const visibleHeight = Math.min(minimumVisibleDraggedPixels, height)
+
+        return {
+            x: clamp(box.x, visibleWidth - width, this.width - visibleWidth),
+            y: clamp(box.y, visibleHeight - height, this.height - visibleHeight)
+        }
+    }
+
+    keepBoxVisible(box) {
+        Object.assign(box, this.getVisiblePosition(box))
+    }
+
     getPointerId(event) {
         return event.pointerId ?? 'mouse'
     }
@@ -569,6 +643,61 @@ export default class EditorArea {
         }
     }
 
+    createDragInfo(target, pointerPosition, event) {
+        return {
+            target,
+            liftOffset: getDragLiftOffset(event),
+            grabOffset: {
+                x: pointerPosition.x - target.x,
+                y: pointerPosition.y - target.y
+            }
+        }
+    }
+
+    getDragTarget(target, pointerPosition) {
+        const dragInfo = this.dragInfo
+        if (!dragInfo || dragInfo.target !== target) return null
+
+        return {
+            x: pointerPosition.x + dragInfo.liftOffset.x - dragInfo.grabOffset.x,
+            y: pointerPosition.y + dragInfo.liftOffset.y - dragInfo.grabOffset.y
+        }
+    }
+
+    getSelectedEntityDragTarget(pointerPosition) {
+        return this.getDragTarget(this.selectedEntity, pointerPosition)
+    }
+
+    moveSelectedEntity(mouse) {
+        const dragTarget = this.getSelectedEntityDragTarget(mouse.position)
+        if (dragTarget) {
+            const moved = this.selectedEntity.x !== dragTarget.x || this.selectedEntity.y !== dragTarget.y
+            if (moved) {
+                this.selectedEntityMoved = true
+                Object.assign(this.selectedEntity, dragTarget)
+            }
+            return
+        }
+
+        const dx = mouse.position.x - mouse.previous.x
+        const dy = mouse.position.y - mouse.previous.y
+        if (dx || dy) {
+            this.selectedEntityMoved = true
+            Object.assign(this.selectedEntity, {
+                x: this.selectedEntity.x + dx,
+                y: this.selectedEntity.y + dy
+            })
+        }
+    }
+
+    moveFixedPlacementRect(mouse) {
+        const dragTarget = this.getDragTarget(this.rect, mouse.position) ?? mouse.position
+        Object.assign(this.rect, {
+            x: this.round(dragTarget.x),
+            y: this.round(dragTarget.y)
+        })
+    }
+
     onPointerDown(event) {
         if (this.playingLevel) return
         if (event.button != null && event.button !== 0) return
@@ -585,9 +714,19 @@ export default class EditorArea {
 
         this.selectedEntity = entity
         this.selectedEntityMoved = false
-        populatePropertyEditor(entity)
+        if (entity?.type) this.setActiveEntityType(entity.type)
+        if (entity) {
+            populatePropertyEditor(entity)
+        } else {
+            this.syncPropertyEditor()
+        }
         this.syncSelectionControls()
-        if (!entity) this.rect = this.getPlacementRect()
+        if (entity) {
+            this.dragInfo = this.createDragInfo(entity, mouse.position, event)
+        } else {
+            this.rect = this.getPlacementRect()
+            this.dragInfo = this.rect.fixed ? this.createDragInfo(this.rect, mouse.position, event) : null
+        }
     }
 
     onPointerMove(event) {
@@ -601,20 +740,9 @@ export default class EditorArea {
 
         if (mouse.held) {
             if (this.selectedEntity) {
-                const dx = mouse.position.x - mouse.previous.x
-                const dy = mouse.position.y - mouse.previous.y
-                if (dx || dy) {
-                    this.selectedEntityMoved = true
-                    Object.assign(this.selectedEntity, {
-                        x: this.selectedEntity.x + dx,
-                        y: this.selectedEntity.y + dy
-                    })
-                }
+                this.moveSelectedEntity(mouse)
             } else if (this.rect?.fixed) {
-                Object.assign(this.rect, {
-                    x: this.round(mouse.position.x),
-                    y: this.round(mouse.position.y)
-                })
+                this.moveFixedPlacementRect(mouse)
             } else if (this.rect) {
                 Object.assign(this.rect, {
                     width: this.round(mouse.position.x - this.rect.x),
@@ -631,6 +759,8 @@ export default class EditorArea {
         this.updatePointerPosition(event)
         this.releasePointer(this.activePointerId)
         this.activePointerId = null
+        if (this.selectedEntity && this.selectedEntityMoved) this.moveSelectedEntity(this.mouseInfo)
+        if (!this.selectedEntity && this.rect?.fixed) this.moveFixedPlacementRect(this.mouseInfo)
         Object.assign(this.mouseInfo, {
             held: false
         })
@@ -643,14 +773,17 @@ export default class EditorArea {
                     x: this.round(this.selectedEntity.x),
                     y: this.round(this.selectedEntity.y)
                 })
+                this.keepBoxVisible(this.selectedEntity)
                 populatePropertyEditor(this.selectedEntity)
             }
         } else if (this.rect) {
+            if (this.rect.fixed) this.keepBoxVisible(this.rect)
             const shouldCreate = this.rect.fixed || (this.rect.width && this.rect.height)
             if (shouldCreate) this.createEntity()
         }
 
         this.rect = false
+        this.dragInfo = null
         this.selectedEntityMoved = false
         this.syncSelectionControls()
     }
@@ -669,9 +802,11 @@ export default class EditorArea {
                 x: this.round(this.selectedEntity.x),
                 y: this.round(this.selectedEntity.y)
             })
+            this.keepBoxVisible(this.selectedEntity)
             populatePropertyEditor(this.selectedEntity)
         }
         this.rect = false
+        this.dragInfo = null
         this.selectedEntityMoved = false
         this.syncSelectionControls()
     }
@@ -681,7 +816,7 @@ export default class EditorArea {
         if (isSpawnTool(this.type)) {
             this.spawn = copySpawn(normRect)
             this.selectedEntity = null
-            populatePropertyEditor(null)
+            this.syncPropertyEditor()
             this.syncSelectionControls()
             return
         }
@@ -697,10 +832,35 @@ export default class EditorArea {
 
     handleEntityClick(event) {
         if (this.playingLevel) return
-        document.querySelectorAll('.button-entity.selected')
-            .forEach(el => el.classList.remove('selected'))
-        event.currentTarget.classList.add('selected')
-        this.type = event.currentTarget.dataset.type
+        this.selectedEntity = null
+        this.selectedEntityMoved = false
+        this.rect = false
+        this.dragInfo = null
+        this.setActiveEntityType(event.currentTarget.dataset.type)
+        this.syncSelectionControls()
+    }
+
+    setActiveEntityType(type) {
+        this.type = type
+        const buttons = document.querySelectorAll('.button-entity')
+        for (const button of buttons) {
+            button.classList.toggle('selected', button.dataset.type === type)
+        }
+        if (!this.selectedEntity) this.syncPropertyEditor()
+    }
+
+    syncPropertyEditor() {
+        if (this.selectedEntity) {
+            populatePropertyEditor(this.selectedEntity)
+            return
+        }
+
+        if (isSpawnTool(this.type)) {
+            populateSpawnPropertyEditor(this)
+            return
+        }
+
+        populatePropertyEditor(null)
     }
 
     syncSelectionControls() {
@@ -736,7 +896,11 @@ export default class EditorArea {
             return
         }
 
-        await this.loadCachedLevelAt(0, false)
+        const storedLevelName = readStoredCurrentLevelName()
+        const storedLevelIndex = storedLevelName ? this.levelNames.indexOf(storedLevelName) : -1
+        const initialLevelIndex = storedLevelIndex === -1 ? 0 : storedLevelIndex
+
+        await this.loadCachedLevelAt(initialLevelIndex, false)
     }
 
     storeCurrentLevelJSON() {
@@ -812,6 +976,7 @@ export default class EditorArea {
         try {
             this.playSnapshot = this.getLevelJSON()
             this.playingLevel = this.createPlayableLevel(this.playSnapshot)
+            this.setLevelUIVisible(true)
             event.currentTarget.textContent = 'Stop Playing'
             document.body.classList.add('editor-playing')
             this.syncLevelNavigationControls()
@@ -840,6 +1005,13 @@ export default class EditorArea {
             return
         }
 
+        const confirmed = await confirmDialog(
+            `Save ${name}?`,
+            `This will overwrite ${name}.json with the current editor state.`,
+            'Save Level'
+        )
+        if (!confirmed) return
+
         try {
             const levelJSON = this.getLevelJSON()
             const result = await overwriteLevelFile(name, levelJSON)
@@ -864,36 +1036,6 @@ export default class EditorArea {
         downloadFile(`${fileBaseName}.json`, levelString, 'application/json')
     }
 
-    handleHelpClick() {
-        const helpString =
-            `This is the Level Editor. Here you can create your own level
-            then either save it, save a new JSON file, or play it.<br><br>
-
-            On top of the level display, there is a toolbar with
-            options related to your created level.<br><br>
-
-            On the left of the level display, there are buttons which will
-            allow you to change what level object type you want to place in
-            the level editor. Box-like objects are placed by dragging a box.
-            Point and item objects are placed by clicking or dragging to the
-            target position.<br><br>
-
-            In the middle is the level editor itself. To select a level
-            object, click on it. To move a level object, drag a selected
-            level object. You may also remove a level object from the level
-            by selecting it and pressing the delete/backspace key on your
-            keyboard.<br><br>
-
-            On the right side of the level display, you will see the
-            property editor. Whenever you create or click on an entity in
-            the level, its properties will be displayed there.<br><br>
-
-            On the bottom of the level editor, you can change the starting
-            player color and toggle debug mode.`
-
-        dialog('How to use the level editor:', helpString)
-    }
-
     handleKeyPress(event) {
         if (this.playingLevel) return
 
@@ -916,7 +1058,7 @@ export default class EditorArea {
 
         this.entities.splice(index, 1)
         this.selectedEntity = null
-        populatePropertyEditor(null)
+        this.syncPropertyEditor()
         this.syncSelectionControls()
     }
 
@@ -951,10 +1093,7 @@ export default class EditorArea {
     setLevelColor(color) {
         Color.getColor(color)
         this.levelColor = color
-    }
-
-    syncLevelColorControl() {
-        const select = document.getElementById('select-level-color')
+        const select = document.getElementById('property-level-color')
         if (select) select.value = this.levelColor
     }
 
@@ -1012,16 +1151,20 @@ export default class EditorArea {
         const levelIndex = this.levelNames.indexOf(name)
 
         this.levelColor = level.color.toString()
-        this.syncLevelColorControl()
         this.spawn = copySpawn(level.spawn)
         this.entities = [...level.entities, ...level.texts]
         this.selectedEntity = null
         this.rect = false
         this.currentLevelName = name
         this.currentLevelIndex = levelIndex
-        if (levelIndex !== -1) this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+        if (levelIndex !== -1) {
+            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+            storeCurrentLevelName(name)
+        } else {
+            storeCurrentLevelName(null)
+        }
         this.syncLevelNavigationControls()
-        populatePropertyEditor(null)
+        this.syncPropertyEditor()
         this.syncSelectionControls()
 
         if (unsupportedTypes.length) {
@@ -1063,6 +1206,7 @@ export default class EditorArea {
     restartPlayingLevel() {
         if (!this.playSnapshot) return
         this.playingLevel = this.createPlayableLevel(this.playSnapshot)
+        this.setLevelUIVisible(true)
         this.syncLevelNavigationControls()
     }
 
@@ -1070,6 +1214,7 @@ export default class EditorArea {
         if (this.playingLevel) this.playingLevel.setPlayer(null)
         this.playingLevel = false
         this.playSnapshot = null
+        this.setLevelUIVisible(false)
         document.body.classList.remove('editor-playing')
         document.querySelectorAll('#editor-play-controls .mobile-control-button.is-pressed')
             .forEach(button => button.classList.remove('is-pressed'))

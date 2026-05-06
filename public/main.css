@@ -19,6 +19,11 @@ button {
     background: linear-gradient(#ffffff, #edf2f7);
     box-shadow: 0px 1px 1px rgba(23, 32, 42, 0.08);
     transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 button:hover:not(:disabled) {
@@ -47,6 +52,27 @@ html, body {
     background-color: var(--page-background);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 14px;
+}
+
+body.editor-page,
+body.editor-page #editor,
+body.editor-page #level-toolbar,
+body.editor-page #entity-toolbar,
+body.editor-page #entity-properties,
+body.editor-page #editor-info,
+body.editor-page #editor-play-controls {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+body.editor-page input,
+body.editor-page textarea,
+body.editor-page select,
+body.editor-page .dialog-copy-text {
+    user-select: text;
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
 }
 
 .hidden {
@@ -383,6 +409,8 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Entity toolbar styles */
@@ -532,21 +560,13 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     box-shadow: 0px 8px 18px rgba(23, 32, 42, 0.08);
 }
 
-#editor-info #checkbox-debug-mode, #editor-info #level-color-editor {
+#editor-info #checkbox-debug-mode {
     margin-left: 0px;
     display: flex;
     align-items: center;
     gap: 6px;
     color: var(--muted-text-color);
     font-weight: 600;
-}
-
-#editor-info select {
-    min-height: 30px;
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background-color: var(--surface);
 }
 
 #checkbox-debug {
