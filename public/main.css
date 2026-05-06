@@ -151,8 +151,8 @@ body.game-page.mobile-game-layout #game {
     align-self: center;
     justify-self: center;
     width: auto;
-    max-width: calc(100vw - 20px);
-    height: min(calc((100vw - 20px) * 0.8), calc(100% - 18px));
+    max-width: calc(100vw - 10px);
+    height: min(calc((100vw - 10px) * 0.8), calc(100% - 10px));
     margin: 0px;
     display: block;
     box-sizing: border-box;
