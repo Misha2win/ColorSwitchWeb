@@ -134,9 +134,9 @@ button {
 }
 
 body.game-page.mobile-game-layout {
-    min-height: 100dvh;
+    height: 100dvh;
     display: grid;
-    grid-template-rows: 50dvh 50dvh;
+    grid-template-rows: minmax(0px, 1fr) auto;
     overflow: hidden;
     overscroll-behavior: none;
     touch-action: none;
@@ -150,21 +150,22 @@ body.game-page.mobile-game-layout #game {
     position: static;
     align-self: center;
     justify-self: center;
-    width: min(calc(100vw - 20px), calc((50dvh - 18px) * 1.25));
-    height: auto;
+    width: auto;
+    max-width: calc(100vw - 20px);
+    height: min(calc((100vw - 20px) * 0.8), calc(100% - 18px));
     margin: 0px;
     display: block;
     box-sizing: border-box;
 }
 
 body.game-page.mobile-game-layout .mobile-game-controls {
-    align-self: stretch;
+    align-self: end;
     justify-self: center;
     width: min(100%, 520px);
     display: grid;
     align-content: center;
     gap: clamp(8px, 2dvh, 14px);
-    padding: clamp(10px, 3dvh, 20px);
+    padding: clamp(3px, 1dvh, 8px) clamp(10px, 3dvh, 20px);
     box-sizing: border-box;
     background-color: #e8edf3;
     border-top: 1px solid var(--border-color);
