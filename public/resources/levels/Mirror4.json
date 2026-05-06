@@ -91,7 +91,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 130,
+         "y": 90,
          "width": 210,
          "height": 20,
          "text": "Mirrors can be used",
@@ -102,7 +102,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 150,
+         "y": 110,
          "width": 210,
          "height": 20,
          "text": "multiple times. Mirrors",
@@ -113,7 +113,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 170,
+         "y": 130,
          "width": 210,
          "height": 20,
          "text": "only break after use if",
@@ -124,7 +124,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 190,
+         "y": 150,
          "width": 210,
          "height": 20,
          "text": "there are cracks on it.",

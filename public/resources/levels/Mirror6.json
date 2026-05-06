@@ -1,8 +1,8 @@
 {
    "color": "green",
    "spawn": {
-      "x": 20,
-      "y": 230
+      "x": 580,
+      "y": 330
    },
    "entities": [
       {
@@ -61,43 +61,10 @@
       },
       {
          "type": "Mirror",
-         "x": 540,
-         "y": 290,
+         "x": 40,
+         "y": 190,
          "color": "gray",
          "persistOnce": false
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 120,
-         "width": 690,
-         "height": 30,
-         "text": "Mirrors will reflect you across the center of the level. When you are",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 150,
-         "width": 690,
-         "height": 30,
-         "text": "mirrored, you will have two hitboxes and will collide with anything",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 180,
-         "width": 690,
-         "height": 30,
-         "text": "mirror you collides with.",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
       },
       {
          "type": "Platform",
@@ -122,6 +89,39 @@
          "width": 130,
          "height": 330,
          "color": "black"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 120,
+         "width": 690,
+         "height": 30,
+         "text": "Mirrors will reflect you across the center of the level. When you are",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 150,
+         "width": 690,
+         "height": 30,
+         "text": "mirrored, you will have two hitboxes and will collide with anything",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 180,
+         "width": 690,
+         "height": 30,
+         "text": "mirror you collides with.",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
       }
    ]
 }

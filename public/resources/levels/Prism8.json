@@ -51,7 +51,7 @@
          "y": 360,
          "width": 250,
          "height": 30,
-         "color": "blue"
+         "color": "red"
       },
       {
          "type": "Platform",

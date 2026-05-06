@@ -39,7 +39,7 @@
       },
       {
          "type": "MovingPlatform",
-         "x": 260,
+         "x": 20,
          "y": 290,
          "width": 220,
          "height": 10,
