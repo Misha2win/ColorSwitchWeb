@@ -118,6 +118,32 @@ button {
     border-radius: var(--radius);
 }
 
+.copyable-dialog {
+    width: min(720px, 90vw);
+    max-width: 90vw;
+}
+
+.dialog-copy-text {
+    display: block;
+    width: 100%;
+    min-height: 320px;
+    max-height: 60vh;
+    box-sizing: border-box;
+    padding: 10px;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #fbfcfe;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 12px;
+    resize: vertical;
+}
+
+.dialog-copy-text:focus {
+    outline: 2px solid rgba(37, 99, 235, 0.22);
+    border-color: var(--accent-color);
+}
+
 /* Game styles */
 
 #game {
@@ -217,6 +243,69 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     transform: translateY(1px);
 }
 
+.editor-play-controls {
+    grid-column: 2;
+    grid-row: 4;
+    justify-self: center;
+    width: 100%;
+    max-width: 520px;
+    display: none;
+    align-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #e8edf3;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.editor-play-controls .mobile-control-row {
+    display: grid;
+    gap: 10px;
+}
+
+.editor-play-controls .mobile-control-row-movement {
+    grid-template-columns: repeat(3, minmax(0px, 1fr));
+}
+
+.editor-play-controls .mobile-control-row-use {
+    grid-template-columns: repeat(5, minmax(0px, 1fr));
+}
+
+.editor-play-controls .mobile-control-row-restart {
+    margin-top: 18px;
+}
+
+.editor-play-controls .mobile-control-button {
+    width: 100%;
+    height: 54px;
+    min-height: 0px;
+    border-radius: var(--radius);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.editor-play-controls .mobile-control-button-primary {
+    color: #0f3b73;
+    border-color: #7bb7ff;
+    background: linear-gradient(#fafdff, #d8ebff);
+}
+
+.editor-play-controls .mobile-control-button.is-pressed {
+    color: #0b3a77;
+    border-color: var(--accent-color);
+    background: #d8ebff;
+    box-shadow: inset 0px 2px 5px rgba(23, 32, 42, 0.18);
+    transform: translateY(1px);
+}
+
 /* Editor styles */
 
 #editor {
@@ -227,7 +316,9 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
 
     margin: auto;
     padding: 0px 18px 24px;
+    width: 100%;
     max-width: 1400px;
+    box-sizing: border-box;
 }
 
 /* Toolbar styles */
@@ -236,6 +327,7 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     grid-column: 2;
     grid-row: 1;
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     justify-content: center;
     background-color: var(--bar-background);
@@ -244,13 +336,23 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     border: 1px solid var(--border-color);
     border-bottom: 0px;
     box-shadow: 0px 6px 18px rgba(23, 32, 42, 0.08);
+    width: 752px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #level-toolbar button {
-    width: 100%;
+    flex: 1 1 92px;
+    width: auto;
+    min-width: 92px;
     min-height: 42px;
     height: auto;
     padding: 4px 8px;
+}
+
+#button-duplicate-selected,
+#button-delete-selected {
+    display: none;
 }
 
 #current-level-label {
@@ -275,6 +377,12 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     grid-row: 2;
     justify-self: center;
     display: block;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Entity toolbar styles */
@@ -413,7 +521,8 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     gap: 14px;
     background-color: var(--bar-background);
     border-radius: 0px 0px var(--radius) var(--radius);
-    width: 100%;
+    width: 752px;
+    max-width: 100%;
     box-sizing: border-box;
     padding: 8px 10px;
     border: 1px solid var(--border-color);
@@ -458,4 +567,153 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     min-height: 34px;
     height: auto;
     padding: 4px 8px;
+}
+
+@media (pointer: coarse), (max-width: 820px) {
+    body.editor-playing .editor-play-controls {
+        display: grid;
+    }
+}
+
+@media (pointer: coarse) {
+    #button-duplicate-selected,
+    #button-delete-selected {
+        display: inline-flex;
+    }
+}
+
+@media (max-width: 1100px), (pointer: coarse) {
+    body.editor-page {
+        overflow-x: hidden;
+    }
+
+    body.editor-page nav {
+        display: none;
+    }
+
+    #editor {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        grid-template-columns: minmax(0px, 1fr);
+        max-width: 820px;
+        padding: 8px 8px 18px;
+    }
+
+    #level-toolbar,
+    #editor-canvas,
+    #editor-info,
+    #entity-toolbar,
+    #entity-properties,
+    #editor-play-controls {
+        grid-column: 1;
+        justify-self: stretch;
+        width: 100%;
+        min-width: 0px;
+        max-width: 100%;
+    }
+
+    #level-toolbar {
+        order: 1;
+        grid-row: 1;
+    }
+
+    #level-toolbar button {
+        flex-basis: 104px;
+        min-width: 104px;
+        min-height: 38px;
+    }
+
+    #editor-canvas {
+        order: 2;
+        grid-row: 2;
+        justify-self: center;
+    }
+
+    #editor-info {
+        order: 3;
+        grid-row: 3;
+        justify-content: center;
+    }
+
+    #level-navigation {
+        margin-left: 0px;
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    #current-level-label {
+        flex: 1 1 180px;
+        min-width: 0px;
+    }
+
+    #editor-play-controls {
+        order: 4;
+        grid-row: 4;
+    }
+
+    #entity-toolbar {
+        order: 5;
+        grid-row: 5;
+        justify-self: stretch;
+        max-height: none;
+        margin-top: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+    }
+
+    #entity-toolbar #entity-toolbar-title {
+        border-radius: var(--radius) var(--radius) 0px 0px;
+    }
+
+    #entity-toolbar .button-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+        width: calc(100% - 12px);
+    }
+
+    .button-entity {
+        min-height: 40px;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #entity-properties {
+        order: 6;
+        grid-row: 6;
+        justify-self: stretch;
+        max-height: none;
+        margin-top: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+    }
+
+    #property-editor-title {
+        border-radius: var(--radius) var(--radius) 0px 0px;
+    }
+
+    .property-form-group {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .property-form-group input,
+    .property-form-group select,
+    .property-form-group textarea,
+    .property-form-group input[type="number"] {
+        width: 100%;
+        max-width: 100%;
+        min-height: 36px;
+    }
+
+    .dialog {
+        width: calc(100vw - 24px);
+        max-width: calc(100vw - 24px);
+        box-sizing: border-box;
+    }
+
+    .dialog-copy-text {
+        min-height: 45vh;
+    }
 }

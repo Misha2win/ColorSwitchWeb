@@ -4,7 +4,7 @@ import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
 import * as Physics from './math/PhysicsEngine.js'
-import { promptChoices, promptInput, dialog } from './utility/Prompt.js'
+import { promptChoices, promptInput, dialog, copyableDialog } from './utility/Prompt.js'
 
 const colorChoices = [
     'black',
@@ -341,9 +341,10 @@ export default class EditorArea {
         this.height = null
         this.canvas = null
         this.context = null
-        this.intervalId = null
+        this.animationFrameId = null
         this.lastTime = 0
         this.mouseInfo = null
+        this.activePointerId = null
 
         this.rect = false
         this.selectedEntity = null
@@ -376,13 +377,14 @@ export default class EditorArea {
         this.spawn = { x: 30, y: 30 }
         this.entities = []
         this.mouseInfo = { held: false, previous: { x: 0, y: 0 }, position: { x: 0, y: 0 } }
+        this.activePointerId = null
         this.syncLevelColorControl()
         this.syncLevelNavigationControls('Loading levels...')
         this.checkOverwriteSupport()
 
         this.lastTime = performance.now()
-        if (this.intervalId) clearInterval(this.intervalId)
-        this.intervalId = setInterval(() => this.loop(), 20)
+        if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId)
+        this.animationFrameId = requestAnimationFrame(now => this.loop(now))
 
         this.loadUsedLevels().catch((err) => {
             this.syncLevelNavigationControls('Levels failed to load')
@@ -394,9 +396,8 @@ export default class EditorArea {
         this.stopPlayingLevel()
     }
 
-    loop() {
-        const now = performance.now()
-        const delta = (now - this.lastTime) / 1000
+    loop(now = performance.now()) {
+        const delta = Math.min((now - this.lastTime) / 1000, 0.05)
         this.lastTime = now
 
         const { context, rect } = this
@@ -410,34 +411,34 @@ export default class EditorArea {
 
             if (level.player?.requestRestart) {
                 this.restartPlayingLevel()
-                return
+            } else {
+                level.draw(context)
             }
+        } else {
+            this.drawGrid(context)
 
-            level.draw(context)
-            return
-        }
-
-        this.drawGrid(context)
-
-        context.save()
-        drawSpawnMarker(context, this.spawn, Color.getColor(this.levelColor))
-        context.restore()
-
-        for (const entity of this.entities) {
             context.save()
-            entity.draw(context)
+            drawSpawnMarker(context, this.spawn, Color.getColor(this.levelColor))
             context.restore()
-            if (entity === this.selectedEntity) {
+
+            for (const entity of this.entities) {
+                context.save()
+                entity.draw(context)
+                context.restore()
+                if (entity === this.selectedEntity) {
+                    context.fillStyle = 'rgba(0, 100, 200, 0.4)'
+                    context.fillRect(entity.x - 5, entity.y - 5, entity.width + 10, entity.height + 10)
+                }
+            }
+
+            if (rect) {
+                const previewRect = Physics.getNormalizedBox(rect)
                 context.fillStyle = 'rgba(0, 100, 200, 0.4)'
-                context.fillRect(entity.x - 5, entity.y - 5, entity.width + 10, entity.height + 10)
+                context.fillRect(previewRect.x, previewRect.y, previewRect.width, previewRect.height)
             }
         }
 
-        if (rect) {
-            const previewRect = Physics.getNormalizedBox(rect)
-            context.fillStyle = 'rgba(0, 100, 200, 0.4)'
-            context.fillRect(previewRect.x, previewRect.y, previewRect.width, previewRect.height)
-        }
+        this.animationFrameId = requestAnimationFrame(nextNow => this.loop(nextNow))
     }
 
     clear() {
@@ -445,9 +446,9 @@ export default class EditorArea {
     }
 
     stop() {
-        if (!this.intervalId) return
-        clearInterval(this.intervalId)
-        this.intervalId = null
+        if (!this.animationFrameId) return
+        cancelAnimationFrame(this.animationFrameId)
+        this.animationFrameId = null
     }
 
     drawGrid(context) {
@@ -487,12 +488,43 @@ export default class EditorArea {
         return Math.round(value / 10) * 10
     }
 
-    updateMousePosition(event) {
+    getPointerId(event) {
+        return event.pointerId ?? 'mouse'
+    }
+
+    capturePointer(pointerId) {
+        try {
+            this.canvas.setPointerCapture?.(pointerId)
+        } catch {
+            // Synthetic pointer events do not always have an active browser pointer to capture.
+        }
+    }
+
+    releasePointer(pointerId) {
+        try {
+            if (this.canvas.hasPointerCapture?.(pointerId)) {
+                this.canvas.releasePointerCapture(pointerId)
+            }
+        } catch {
+            // Synthetic pointer events do not always have an active browser pointer to release.
+        }
+    }
+
+    updatePointerPosition(event) {
         if (!event) return
+
+        const canvasRect = this.canvas.getBoundingClientRect()
+        const hasClientPosition = typeof event.clientX === 'number' && typeof event.clientY === 'number'
+        const position = hasClientPosition && canvasRect.width && canvasRect.height
+            ? {
+                x: (event.clientX - canvasRect.left) * (this.canvas.width / canvasRect.width),
+                y: (event.clientY - canvasRect.top) * (this.canvas.height / canvasRect.height)
+            }
+            : { x: event.offsetX, y: event.offsetY }
 
         Object.assign(this.mouseInfo, {
             previous: { x: this.mouseInfo.position.x, y: this.mouseInfo.position.y },
-            position: { x: event.offsetX, y: event.offsetY }
+            position
         })
     }
 
@@ -537,10 +569,14 @@ export default class EditorArea {
         }
     }
 
-    onMousedown(event) {
-        this.updateMousePosition(event)
+    onPointerDown(event) {
         if (this.playingLevel) return
+        if (event.button != null && event.button !== 0) return
 
+        event.preventDefault()
+        this.activePointerId = this.getPointerId(event)
+        this.capturePointer(this.activePointerId)
+        this.updatePointerPosition(event)
         Object.assign(this.mouseInfo, {
             held: true
         })
@@ -550,11 +586,15 @@ export default class EditorArea {
         this.selectedEntity = entity
         this.selectedEntityMoved = false
         populatePropertyEditor(entity)
+        this.syncSelectionControls()
         if (!entity) this.rect = this.getPlacementRect()
     }
 
-    onMousemove(event) {
-        this.updateMousePosition(event)
+    onPointerMove(event) {
+        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+        if (this.activePointerId !== null) event.preventDefault()
+
+        this.updatePointerPosition(event)
         const mouse = this.mouseInfo
 
         if (this.playingLevel) return
@@ -584,8 +624,13 @@ export default class EditorArea {
         }
     }
 
-    onMouseup(event) {
-        this.updateMousePosition(event)
+    onPointerUp(event) {
+        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+
+        event.preventDefault()
+        this.updatePointerPosition(event)
+        this.releasePointer(this.activePointerId)
+        this.activePointerId = null
         Object.assign(this.mouseInfo, {
             held: false
         })
@@ -607,6 +652,28 @@ export default class EditorArea {
 
         this.rect = false
         this.selectedEntityMoved = false
+        this.syncSelectionControls()
+    }
+
+    onPointerCancel(event) {
+        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+
+        event.preventDefault()
+        this.releasePointer(this.activePointerId)
+        this.activePointerId = null
+        Object.assign(this.mouseInfo, {
+            held: false
+        })
+        if (this.selectedEntity && this.selectedEntityMoved) {
+            Object.assign(this.selectedEntity, {
+                x: this.round(this.selectedEntity.x),
+                y: this.round(this.selectedEntity.y)
+            })
+            populatePropertyEditor(this.selectedEntity)
+        }
+        this.rect = false
+        this.selectedEntityMoved = false
+        this.syncSelectionControls()
     }
 
     createEntity() {
@@ -615,6 +682,7 @@ export default class EditorArea {
             this.spawn = copySpawn(normRect)
             this.selectedEntity = null
             populatePropertyEditor(null)
+            this.syncSelectionControls()
             return
         }
 
@@ -624,6 +692,7 @@ export default class EditorArea {
         this.entities.push(entity)
         this.selectedEntity = entity
         populatePropertyEditor(entity)
+        this.syncSelectionControls()
     }
 
     handleEntityClick(event) {
@@ -632,6 +701,15 @@ export default class EditorArea {
             .forEach(el => el.classList.remove('selected'))
         event.currentTarget.classList.add('selected')
         this.type = event.currentTarget.dataset.type
+    }
+
+    syncSelectionControls() {
+        const deleteButton = document.getElementById('button-delete-selected')
+        const duplicateButton = document.getElementById('button-duplicate-selected')
+        const hasEditableSelection = !this.playingLevel && !!this.selectedEntity
+
+        if (deleteButton) deleteButton.disabled = !hasEditableSelection
+        if (duplicateButton) duplicateButton.disabled = !hasEditableSelection
     }
 
     loadUsedLevels() {
@@ -722,7 +800,7 @@ export default class EditorArea {
         if (this.playingLevel) return
         if (type !== 'json') return
 
-        console.log(JSON.stringify(this.getLevelJSON(), null, 3))
+        copyableDialog('Level JSON', JSON.stringify(this.getLevelJSON(), null, 3))
     }
 
     handlePlayClick(event) {
@@ -735,6 +813,7 @@ export default class EditorArea {
             this.playSnapshot = this.getLevelJSON()
             this.playingLevel = this.createPlayableLevel(this.playSnapshot)
             event.currentTarget.textContent = 'Stop Playing'
+            document.body.classList.add('editor-playing')
             this.syncLevelNavigationControls()
         } catch (err) {
             dialog('Cannot play level:', err.message)
@@ -820,27 +899,40 @@ export default class EditorArea {
 
         if (event.key === 'Backspace' || event.key === 'Delete') {
             event.preventDefault()
-            const index = this.entities.indexOf(this.selectedEntity)
-            if (index !== -1) {
-                this.entities.splice(index, 1)
-                this.selectedEntity = null
-                populatePropertyEditor(null)
-            }
+            this.deleteSelectedEntity()
         }
 
         if (event.key === 'd' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
-            if (!this.selectedEntity) return
-            const entityJSON = entityToJSON(this.selectedEntity)
-            if (!entityJSON) return
-
-            const entity = createEntityFromJSON(offsetEntityJSON(entityJSON, 10, 10))
-            if (!entity) return
-
-            this.entities.push(entity)
-            this.selectedEntity = entity
-            populatePropertyEditor(entity)
+            this.duplicateSelectedEntity()
         }
+    }
+
+    deleteSelectedEntity() {
+        if (this.playingLevel) return
+
+        const index = this.entities.indexOf(this.selectedEntity)
+        if (index === -1) return
+
+        this.entities.splice(index, 1)
+        this.selectedEntity = null
+        populatePropertyEditor(null)
+        this.syncSelectionControls()
+    }
+
+    duplicateSelectedEntity() {
+        if (this.playingLevel || !this.selectedEntity) return
+
+        const entityJSON = entityToJSON(this.selectedEntity)
+        if (!entityJSON) return
+
+        const entity = createEntityFromJSON(offsetEntityJSON(entityJSON, 10, 10))
+        if (!entity) return
+
+        this.entities.push(entity)
+        this.selectedEntity = entity
+        populatePropertyEditor(entity)
+        this.syncSelectionControls()
     }
 
     async handleLoadStringClick() {
@@ -885,6 +977,7 @@ export default class EditorArea {
         if (previousButton) previousButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex <= 0
         if (nextButton) nextButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex >= this.levelNames.length - 1
         this.syncSaveControls()
+        this.syncSelectionControls()
     }
 
     syncSaveControls() {
@@ -929,6 +1022,7 @@ export default class EditorArea {
         if (levelIndex !== -1) this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
         this.syncLevelNavigationControls()
         populatePropertyEditor(null)
+        this.syncSelectionControls()
 
         if (unsupportedTypes.length) {
             dialog(
@@ -942,6 +1036,14 @@ export default class EditorArea {
         if (!this.previewPlayer) this.previewPlayer = new Player(0, 0)
 
         return this.previewPlayer
+    }
+
+    getCurrentPlayer() {
+        return this.playingLevel?.player ?? null
+    }
+
+    resetFrameClock() {
+        this.lastTime = performance.now()
     }
 
     createPlayableLevel(levelJSON) {
@@ -968,6 +1070,9 @@ export default class EditorArea {
         if (this.playingLevel) this.playingLevel.setPlayer(null)
         this.playingLevel = false
         this.playSnapshot = null
+        document.body.classList.remove('editor-playing')
+        document.querySelectorAll('#editor-play-controls .mobile-control-button.is-pressed')
+            .forEach(button => button.classList.remove('is-pressed'))
         document.getElementById('button-play').textContent = 'Play Level'
         this.syncLevelNavigationControls()
     }

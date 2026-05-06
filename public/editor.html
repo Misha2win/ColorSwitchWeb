@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="./main.css" />
         <script type="module" src="./js/Editor.js" defer></script>
     </head>
-    <body>
+    <body class="editor-page">
         <nav>
             <a href="index.html">Game</a>
         </nav>
@@ -22,6 +22,8 @@
                 <button onclick="this.blur()" id="button-save" disabled title="Checking save support...">Save Level</button>
                 <button onclick="this.blur()" id="button-save-as-new">Save As New</button>
                 <button onclick="this.blur()" id="button-print-json">Print Level JSON</button>
+                <button onclick="this.blur()" id="button-duplicate-selected" disabled>Duplicate</button>
+                <button onclick="this.blur()" id="button-delete-selected" disabled>Delete</button>
                 <button onclick="this.blur()" id="button-help">Help</button>
             </div>
             <div id="entity-toolbar">
@@ -71,6 +73,23 @@
                     <div id="current-level-label" aria-live="polite">Loading levels...</div>
                     <button id="button-previous-level" disabled>←</button>
                     <button id="button-next-level" disabled>→</button>
+                </div>
+            </div>
+            <div id="editor-play-controls" class="editor-play-controls" aria-label="Touch play controls">
+                <div class="mobile-control-row mobile-control-row-movement">
+                    <button type="button" class="mobile-control-button" data-key="ArrowLeft" aria-label="Move left">←</button>
+                    <button type="button" class="mobile-control-button mobile-control-button-primary" data-key="ArrowUp" aria-label="Jump">↑</button>
+                    <button type="button" class="mobile-control-button" data-key="ArrowRight" aria-label="Move right">→</button>
+                </div>
+                <div class="mobile-control-row mobile-control-row-use">
+                    <button type="button" class="mobile-control-button" data-key="ShiftLeft" aria-label="Shift">Shift</button>
+                    <button type="button" class="mobile-control-button" data-key="Digit1" aria-label="1">1</button>
+                    <button type="button" class="mobile-control-button" data-key="Digit2" aria-label="2">2</button>
+                    <button type="button" class="mobile-control-button" data-key="Digit3" aria-label="3">3</button>
+                    <button type="button" class="mobile-control-button" data-key="KeyE" aria-label="Use item">Use</button>
+                </div>
+                <div class="mobile-control-row mobile-control-row-restart">
+                    <button type="button" class="mobile-control-button" data-key="KeyR" aria-label="Restart level">Restart</button>
                 </div>
             </div>
         </div>

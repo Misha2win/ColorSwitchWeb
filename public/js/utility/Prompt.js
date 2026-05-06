@@ -25,6 +25,50 @@ export function dialog(title, text) {
 }
 
 /**
+ * Helper function for showing larger copyable text, such as generated JSON.
+ */
+export function copyableDialog(title, text) {
+    const dialog = document.createElement('dialog')
+    dialog.classList.add('dialog', 'copyable-dialog')
+    dialog.innerHTML = `
+        <div class="dialog-title"></div>
+        <form method="dialog" class="form">
+            <textarea class="dialog-copy-text" readonly spellcheck="false"></textarea>
+            <menu>
+                <button type="button" class="dialog-copy-button">Copy</button>
+                <button value="ok">OK</button>
+            </menu>
+        </form>`
+    document.body.appendChild(dialog)
+
+    const titleElement = dialog.querySelector('.dialog-title')
+    const textarea = dialog.querySelector('.dialog-copy-text')
+    const copyButton = dialog.querySelector('.dialog-copy-button')
+
+    titleElement.textContent = title
+    textarea.value = text
+
+    copyButton.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(text)
+        } catch {
+            textarea.focus()
+            textarea.select()
+            document.execCommand('copy')
+        }
+        copyButton.textContent = 'Copied'
+    })
+
+    dialog.showModal()
+    textarea.focus()
+    textarea.select()
+
+    dialog.addEventListener('close', () => {
+        dialog.remove()
+    })
+}
+
+/**
  * Helper function to make dialogs were the user picks one from a list of options
  */
 export function promptChoices(title, label, options, defaultValue) {
