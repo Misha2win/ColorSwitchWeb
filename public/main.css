@@ -376,6 +376,31 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     padding: 4px 8px;
 }
 
+body.editor-playing #entity-toolbar,
+body.editor-playing #entity-properties,
+body.editor-playing #editor-info {
+    display: none;
+}
+
+body.editor-playing #level-toolbar {
+    width: 752px;
+    padding: 10px;
+    background-color: var(--bar-background);
+    border: 1px solid var(--border-color);
+    border-bottom: 0px;
+    border-radius: var(--radius) var(--radius) 0px 0px;
+    box-shadow: 0px 6px 18px rgba(23, 32, 42, 0.08);
+}
+
+body.editor-playing #level-toolbar button:not(#button-play) {
+    display: none;
+}
+
+body.editor-playing #button-play {
+    flex: 0 0 auto;
+    min-width: 120px;
+}
+
 #button-duplicate-selected,
 #button-delete-selected {
     display: none;
@@ -392,8 +417,15 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     background-color: var(--surface);
     border: 1px solid var(--border-color);
     border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
     text-align: center;
     box-shadow: inset 0px 1px 2px rgba(23, 32, 42, 0.05);
+}
+
+#current-level-label:disabled {
+    cursor: default;
+    opacity: 1;
 }
 
 /* Editor canvas styles */

@@ -4,7 +4,7 @@ import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
 import * as Physics from './math/PhysicsEngine.js'
-import { promptChoices, promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
+import { promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
 
 const colorChoices = [
     'black',
@@ -22,6 +22,7 @@ const touchDragLiftOffset = { x: 0, y: -55 }
 const noDragLiftOffset = { x: 0, y: 0 }
 const minimumVisibleDraggedPixels = 10
 const levelUiHeight = 95
+const draftLevelSelectValue = '__editor-draft-level__'
 
 function camelToTitle(input) {
     return input
@@ -329,6 +330,20 @@ function getUnsupportedTypes(levelJSON) {
 
 function copyLevelJSON(levelJSON) {
     return JSON.parse(JSON.stringify(levelJSON))
+}
+
+function createStarterLevelJSON() {
+    return {
+        color: 'gray',
+        spawn: { x: 20, y: 560 },
+        entities: [
+            { type: "Platform", x: 10, y: 10, width: 730, height: 10, color: "black" },
+            { type: "Platform", x: 10, y: 10, width: 10, height: 580, color: "black" },
+            { type: "Platform", x: 730, y: 10, width: 10, height: 580, color: "black" },
+            { type: "Platform", x: 10, y: 580, width: 730, height: 10, color: "black" },
+            { type: "Goal", x: 710, y: 560, color: "gray" },
+        ]
+    }
 }
 
 async function fetchLevelJSON(name) {
@@ -710,6 +725,7 @@ export default class EditorArea {
             held: true
         })
         const mouse = this.mouseInfo
+        const hadSelectedEntity = !!this.selectedEntity
         const entity = this.findEntityAt(mouse.position)
 
         this.selectedEntity = entity
@@ -723,6 +739,9 @@ export default class EditorArea {
         this.syncSelectionControls()
         if (entity) {
             this.dragInfo = this.createDragInfo(entity, mouse.position, event)
+        } else if (hadSelectedEntity) {
+            this.rect = false
+            this.dragInfo = null
         } else {
             this.rect = this.getPlacementRect()
             this.dragInfo = this.rect.fixed ? this.createDragInfo(this.rect, mouse.position, event) : null
@@ -945,18 +964,38 @@ export default class EditorArea {
         this.syncSaveControls()
     }
 
-    async handleLoadClick() {
+    async handleCurrentLevelSelectChange(event) {
         if (this.playingLevel) return
+
+        const name = event.target.value
+        if (!name || name === draftLevelSelectValue || name === this.currentLevelName) {
+            this.syncLevelNavigationControls()
+            return
+        }
 
         try {
             await this.loadUsedLevels()
-            const choices = this.levelNames.map(name => ({ value: name, display: name }))
-            const choice = await promptChoices('Pick a level to load:', 'Level:', choices)
-            if (!choice) return
+            const levelIndex = this.levelNames.indexOf(name)
+            if (levelIndex === -1) {
+                this.syncLevelNavigationControls()
+                return
+            }
 
-            await this.loadCachedLevelAt(this.levelNames.indexOf(choice))
+            await this.loadCachedLevelAt(levelIndex)
         } catch (err) {
+            this.syncLevelNavigationControls()
             dialog('There was an error loading your level:', err.message)
+        }
+    }
+
+    async handleCreateNewClick() {
+        if (this.playingLevel) return
+
+        try {
+            this.storeCurrentLevelJSON()
+            await this.loadLevelJSON(createStarterLevelJSON(), 'New Level')
+        } catch (err) {
+            dialog('There was an error creating a new level:', err.message)
         }
     }
 
@@ -1106,13 +1145,48 @@ export default class EditorArea {
         return 'No level loaded'
     }
 
+    addCurrentLevelOption(select, value, text) {
+        const option = document.createElement('option')
+        option.value = value
+        option.textContent = text
+        select.appendChild(option)
+    }
+
+    syncCurrentLevelSelect(select, statusText = null) {
+        select.replaceChildren()
+
+        if (statusText) {
+            this.addCurrentLevelOption(select, '', statusText)
+            select.value = ''
+            select.disabled = true
+            return
+        }
+
+        if (!this.levelNames.length) {
+            this.addCurrentLevelOption(select, '', this.getLevelNavigationLabel())
+            select.value = ''
+            select.disabled = true
+            return
+        }
+
+        if (this.currentLevelIndex === -1 && this.currentLevelName) {
+            this.addCurrentLevelOption(select, draftLevelSelectValue, this.currentLevelName)
+        }
+
+        this.levelNames.forEach((name, index) => {
+            this.addCurrentLevelOption(select, name, `${name} (${index + 1}/${this.levelNames.length})`)
+        })
+        select.value = this.currentLevelIndex === -1 ? draftLevelSelectValue : this.currentLevelName
+        select.disabled = this.playingLevel
+    }
+
     syncLevelNavigationControls(statusText = null) {
         const previousButton = document.getElementById('button-previous-level')
         const nextButton = document.getElementById('button-next-level')
         const label = document.getElementById('current-level-label')
         const hasOrderedLevel = this.currentLevelIndex !== -1 && this.levelNames.length > 0
 
-        if (label) label.textContent = statusText ?? this.getLevelNavigationLabel()
+        if (label) this.syncCurrentLevelSelect(label, statusText)
         if (previousButton) previousButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex <= 0
         if (nextButton) nextButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex >= this.levelNames.length - 1
         this.syncSaveControls()

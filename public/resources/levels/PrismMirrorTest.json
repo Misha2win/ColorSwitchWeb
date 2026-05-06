@@ -1,7 +1,7 @@
 {
    "color": "magenta",
    "spawn": {
-      "x": 20,
+      "x": 320,
       "y": 130
    },
    "entities": [
@@ -183,7 +183,7 @@
       },
       {
          "type": "Mirror",
-         "x": 100,
+         "x": 50,
          "y": 90,
          "color": "blue",
          "persistOnce": false
