@@ -7,6 +7,8 @@ const coarsePointerQuery = window.matchMedia('(pointer: coarse)')
 const compactWidthQuery = window.matchMedia('(max-width: 1100px)')
 const compactHeightQuery = window.matchMedia('(max-height: 850px)')
 const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+const mobileCanvasMargin = 5
+const mobileControls = document.getElementById('mobile-game-controls')
 const mobileControlButtons = document.querySelectorAll('.mobile-control-button')
 
 function shouldUseMobileLayout() {
@@ -16,6 +18,31 @@ function shouldUseMobileLayout() {
 
 function updateMobileLayout() {
     document.body.classList.toggle('mobile-game-layout', shouldUseMobileLayout())
+    syncMobileCanvasSize()
+}
+
+function getViewportHeight() {
+    return window.visualViewport?.height ?? window.innerHeight
+}
+
+function syncMobileCanvasSize() {
+    if (!game.canvas) return
+
+    if (!document.body.classList.contains('mobile-game-layout')) {
+        game.canvas.style.width = ''
+        game.canvas.style.height = ''
+        return
+    }
+
+    const controlsHeight = mobileControls?.getBoundingClientRect().height ?? 0
+    const availableWidth = Math.max(0, window.innerWidth - mobileCanvasMargin * 2)
+    const availableHeight = Math.max(0, getViewportHeight() - controlsHeight - mobileCanvasMargin * 2)
+    const canvasRatio = game.canvas.width / game.canvas.height
+    const fittedHeight = Math.min(availableWidth / canvasRatio, availableHeight)
+    const fittedWidth = fittedHeight * canvasRatio
+
+    game.canvas.style.width = `${fittedWidth}px`
+    game.canvas.style.height = `${fittedHeight}px`
 }
 
 function addMediaQueryListener(query, listener) {
@@ -33,7 +60,6 @@ function setMobileButtonPressed(button, isPressed) {
 }
 
 function setupMobileControls() {
-    const mobileControls = document.getElementById('mobile-game-controls')
     if (!mobileControls) return
 
     const activePointers = new Map()
@@ -139,6 +165,7 @@ for (const query of [coarsePointerQuery, compactWidthQuery, compactHeightQuery])
     addMediaQueryListener(query, updateMobileLayout)
 }
 window.addEventListener('resize', updateMobileLayout)
+window.visualViewport?.addEventListener('resize', updateMobileLayout)
 updateMobileLayout()
 setupMobileControls()
 

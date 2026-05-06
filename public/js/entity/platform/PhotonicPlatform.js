@@ -38,7 +38,7 @@ export default class PhotonicPlatform extends Platform {
          const lineSpeed = 350
          const travelDistance = this.width + this.height + lineWidth * 2
          const travelDuration = travelDistance / lineSpeed
-         const cycleTime = this.totalDelta % (travelDuration + 1)
+         const cycleTime = this.totalDelta % (travelDuration + 0.25)
 
          if (cycleTime < travelDuration) {
             const linePosition = this.x + this.y - lineWidth + cycleTime * lineSpeed
