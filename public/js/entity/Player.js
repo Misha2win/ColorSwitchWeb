@@ -90,7 +90,8 @@ export default class Player extends Entity {
     }
 
     restart() {
-        this.mirror = null
+        this.removeMirror()
+
         this.heldItem = null
         this.yVelocity = 0
         this.onGround = false
@@ -132,7 +133,7 @@ export default class Player extends Entity {
     }
 
     draw(context) {
-        if (this.color === Color.WHITE || this.color === Color.YELLOW) {
+        if (this.color.hasPoorVisibility()) {
             context.fillStyle = 'black'
             context.fillRect(this.x, this.y, this.width, this.height)
 

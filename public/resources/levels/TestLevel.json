@@ -190,24 +190,6 @@
          "color": "black"
       },
       {
-         "type": "HealthGate",
-         "x": 420,
-         "y": 20,
-         "width": 60,
-         "height": 70,
-         "greaterThan": true,
-         "health": 50
-      },
-      {
-         "type": "HealthGate",
-         "x": 260,
-         "y": 20,
-         "width": 60,
-         "height": 70,
-         "greaterThan": false,
-         "health": 50
-      },
-      {
          "type": "Platform",
          "x": 670,
          "y": 90,
@@ -369,8 +351,7 @@
          "y": 20,
          "width": 60,
          "height": 70,
-         "color": "green",
-         "health": 1.1
+         "color": "green"
       },
       {
          "type": "Element",
@@ -378,8 +359,7 @@
          "y": 100,
          "width": 60,
          "height": 240,
-         "color": "red",
-         "health": -1
+         "color": "red"
       },
       {
          "type": "Element",
@@ -387,8 +367,7 @@
          "y": 100,
          "width": 60,
          "height": 240,
-         "color": "blue",
-         "health": -1
+         "color": "blue"
       },
       {
          "type": "Prism",
@@ -501,9 +480,9 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 465,
+         "y": 460,
          "width": 690,
-         "height": 20,
+         "height": 30,
          "text": "This is the testing level and there is no way to finish this level.",
          "fontSize": 20,
          "color": "black",
@@ -512,9 +491,9 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 555,
+         "y": 550,
          "width": 690,
-         "height": 20,
+         "height": 30,
          "text": "But you can play around if you'd like :)",
          "fontSize": 20,
          "color": "black",

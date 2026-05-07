@@ -150,69 +150,47 @@
       },
       {
          "type": "Text",
-         "x": 400,
+         "x": 440,
          "y": 120,
          "width": 280,
          "height": 20,
-         "text": "← This is a Photonic Platform.",
+         "text": "Photonic platform's colors",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
-         "x": 400,
+         "x": 440,
          "y": 140,
          "width": 280,
          "height": 20,
-         "text": "They change color when a",
+         "text": "are influenced by the prism",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
-         "x": 400,
+         "x": 440,
          "y": 160,
          "width": 280,
          "height": 20,
-         "text": "prism beam collides with",
+         "text": "beams that collide with them",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
-         "x": 400,
-         "y": 180,
-         "width": 280,
+         "x": 410,
+         "y": 140,
+         "width": 40,
          "height": 20,
-         "text": "them. Try disabling it by",
-         "fontSize": 20,
+         "text": "← ",
+         "fontSize": 30,
          "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 400,
-         "y": 200,
-         "width": 280,
-         "height": 20,
-         "text": "removing red from the",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 400,
-         "y": 220,
-         "width": 280,
-         "height": 20,
-         "text": "top prism.",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "background": null
       }
    ]
 }

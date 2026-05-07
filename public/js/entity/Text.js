@@ -2,7 +2,7 @@ import Entity from './Entity.js'
 
 export default class Text extends Entity {
 
-    constructor(x, y, width, height, text = 'Text', fontSize = 24, color = 'black', background = 'white') {
+    constructor(x, y, width, height, text = 'Text', fontSize = 20, color = 'black', background = '') {
         super(x, y, width, height)
         this.text = text
         this.fontSize = fontSize

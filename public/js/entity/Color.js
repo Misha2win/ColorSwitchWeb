@@ -60,7 +60,13 @@ export default class Color {
    }
 
    intersects(other) {
+      Color.#assertColor(other)
+
       return ((this.#color & Color.#RGB_MASK) & (other.#color & Color.#RGB_MASK)) !== 0
+   }
+
+   hasPoorVisibility() {
+      return this.#color === Color.WHITE.#color || this.#color === Color.YELLOW.#color
    }
 
    static getColor(name) {

@@ -4,7 +4,6 @@ import Item from "../entity/item/Item.js"
 import Color from "../entity/Color.js"
 import Ghost from "../entity/Ghost.js"
 import Goal from "../entity/point/Goal.js"
-import Point from "../entity/point/Point.js"
 import Prism, { Beam } from "../entity/obstacle/Prism.js"
 import Element from "../entity/obstacle/Element.js"
 import Text from "../entity/Text.js"
@@ -139,7 +138,7 @@ export default class Level {
         if (!levelWidth) return
 
         for (const entity of this.entities) {
-            if (entity instanceof Point) continue
+            if (entity instanceof Goal) continue
 
             const overrides = {}
             overrides.x = levelWidth - entity.x - entity.width

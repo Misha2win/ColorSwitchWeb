@@ -7,13 +7,11 @@ import Obstacle from "./Obstacle.js"
 
 export default class Element extends Obstacle {
 
-    constructor(x, y, width, height, color = Color.RED, health = -1) {
+    constructor(x, y, width, height, color = Color.RED) {
         super(x, y, width, height, color)
 
         this.totalDelta = 0
         this.drawColor = this.color.drawColor
-
-        this.collisionHealth = health
     }
 
     update(delta) {
@@ -58,20 +56,6 @@ export default class Element extends Obstacle {
         if (!(other instanceof Player)) return
 
         other.addHealth(this.collisionHealth)
-    }
-
-    toJSON() {
-        return {
-            ...super.toJSON(),
-            health: this.collisionHealth
-        }
-    }
-
-    getProperties() {
-        return [
-            ...super.getProperties(),
-            { name: 'health', label: 'Health Change', type: 'number', step: 0.1, get: entity => entity.collisionHealth, set: (entity, value) => { entity.collisionHealth = value } }
-        ]
     }
 
 }

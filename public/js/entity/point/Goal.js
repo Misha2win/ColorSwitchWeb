@@ -1,11 +1,70 @@
 import Color from "../Color.js"
+import Entity from "../Entity.js"
 import Player from "../Player.js"
-import Point from "./Point.js"
 
-export default class Goal extends Point {
+export default class Goal extends Entity {
 
    constructor(x, y, color = Color.GREEN) {
-      super(x, y, color)
+      super(x, y, 20, 20)
+      this.color = color
+
+      this.shiftTimer = 0
+
+      this.drawX = x
+      this.drawY = y
+      this.drawWidth = 20
+      this.drawHeight = 20
+   }
+
+   update(delta) {
+      this.shiftTimer += delta
+
+      const amp = 0.5
+      const per = 10
+
+      const sin = amp * (Math.sin(this.shiftTimer * per) + 1)
+      const cos = amp * (Math.cos(this.shiftTimer * per) + 1)
+
+      this.drawWidth = this.width - cos * 2
+      this.drawHeight = this.height - sin * 2
+   }
+
+   draw(context) {
+      if (this.color.hasPoorVisibility()) {
+         context.fillStyle = 'black'
+         context.beginPath()
+         context.ellipse(
+            this.x + this.width / 2,
+            this.y + this.height / 2,
+            this.drawWidth / 2,
+            this.drawHeight / 2,
+            0, 0, Math.PI * 2
+         )
+         context.fill()
+
+         context.fillStyle = this.color.drawColor
+         context.beginPath()
+         context.ellipse(
+            this.x + this.width / 2,
+            this.y + this.height / 2,
+            this.drawWidth / 2 - 1,
+            this.drawHeight / 2 - 1,
+            0, 0, Math.PI * 2
+         )
+         context.fill()
+      } else {
+         context.fillStyle = this.color.drawColor
+
+         context.beginPath()
+         context.ellipse(
+            this.x + this.width / 2,
+            this.y + this.height / 2,
+            this.drawWidth / 2,
+            this.drawHeight / 2,
+            0, 0, Math.PI * 2
+         )
+         context.fill()
+      }
    }
 
    canCollideWith(other) {
@@ -21,14 +80,17 @@ export default class Goal extends Point {
 
    toJSON() {
       return {
-         ...super.toJSON(),
+         type: this.type,
+         x: this.x,
+         y: this.y,
          color: this.color.name
       }
    }
 
    getProperties() {
       return [
-         ...super.getProperties(),
+         { name: 'x', type: 'number', step: 10 },
+         { name: 'y', type: 'number', step: 10 },
          { name: 'color', type: 'color' }
       ]
    }

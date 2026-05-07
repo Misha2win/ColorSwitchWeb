@@ -120,8 +120,8 @@
          "height": 20,
          "text": "Prisms can mix colors when ",
          "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "color": "white",
+         "background": null
       },
       {
          "type": "Text",
@@ -131,8 +131,8 @@
          "height": 20,
          "text": "they collide with each other. ",
          "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "color": "white",
+         "background": null
       }
    ]
 }

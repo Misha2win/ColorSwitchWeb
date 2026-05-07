@@ -61,6 +61,15 @@ export default class Mirror extends Item {
 
          context.stroke()
       }
+
+      context.strokeStyle = 'white'
+      context.lineWidth = 2
+      context.beginPath()
+      context.moveTo(this.x + 3, this.y + this.height / 3)
+      context.lineTo(this.x + this.width / 3, this.y + 3)
+      context.moveTo(this.x + 3, this.y + 3 * this.height / 5)
+      context.lineTo(this.x + 3 * this.width / 5, this.y + 3)
+      context.stroke()
    }
 
    onUse(user) {

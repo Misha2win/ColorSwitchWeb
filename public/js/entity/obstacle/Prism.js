@@ -185,7 +185,7 @@ export default class Prism extends Obstacle {
         context.closePath()
         context.fill()
 
-        if (this.color === Color.WHITE) {
+        if (this.color.hasPoorVisibility()) {
             context.strokeStyle = 'black'
             context.stroke()
         }
@@ -334,7 +334,7 @@ export class Beam extends Entity {
         context.fillStyle = this.color.drawColor
         context.fillRect(this.x, this.y, this.width, this.height)
 
-        if (this.color === Color.WHITE) {
+        if (this.color.hasPoorVisibility()) {
             context.strokeStyle = 'black'
             context.strokeRect(this.x, this.y, this.width, this.height)
         }

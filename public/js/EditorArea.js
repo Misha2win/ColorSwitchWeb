@@ -177,7 +177,7 @@ function storeCurrentLevelName(name) {
 }
 
 function drawSpawnMarker(context, spawn, color) {
-    if (color === Color.WHITE || color === Color.YELLOW) {
+    if (color.hasPoorVisibility()) {
         context.beginPath()
         context.ellipse(
             spawn.x + 10,
