@@ -412,6 +412,7 @@ body.editor-playing .toolbar-row:not(.toolbar-row-play) {
 body.editor-playing #button-play {
     flex: 0 0 auto;
     min-width: 120px;
+    grid-column: 1 / -1;
 }
 
 #selection-action-toolbar {
@@ -611,27 +612,26 @@ body.editor-playing #button-play {
     box-shadow: 0px 8px 18px rgba(23, 32, 42, 0.08);
 }
 
-#editor-info #checkbox-debug-mode {
-    margin-left: 0px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--muted-text-color);
-    font-weight: 600;
-}
-
-#checkbox-debug {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--accent-color);
+#button-debug-toggle[aria-pressed="true"] {
+    color: #0f3b73;
+    border-color: #7bb7ff;
+    background: linear-gradient(#fafdff, #d8ebff);
+    box-shadow: inset 0px 0px 0px 1px rgba(37, 99, 235, 0.18);
 }
 
 #level-navigation {
-    margin-left: auto;
+    margin-left: 0px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    flex: 1 1 100%;
     justify-content: flex-end;
-    gap: 1px;
+    column-gap: 1px;
+    row-gap: 6px;
+}
+
+#button-debug-toggle {
+    margin-right: auto;
 }
 
 #level-navigation button {
@@ -661,6 +661,18 @@ body.editor-playing #button-play {
         width: 100%;
     }
 
+    #level-toolbar .toolbar-row-save {
+        order: 1;
+    }
+
+    #level-toolbar .toolbar-row-json {
+        order: 2;
+    }
+
+    #level-toolbar .toolbar-row-play {
+        order: 3;
+    }
+
     #level-toolbar .toolbar-row-play {
         grid-template-columns: minmax(0px, 1fr);
     }
@@ -668,6 +680,10 @@ body.editor-playing #button-play {
     #level-toolbar .toolbar-row button {
         width: 100%;
         min-width: 0px;
+    }
+
+    #button-play {
+        grid-column: 1 / -1;
     }
 
     #selection-action-toolbar {
@@ -745,17 +761,21 @@ body.editor-playing #button-play {
     #editor-info {
         order: 3;
         grid-row: 3;
-        justify-content: center;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 8px;
     }
 
     #level-navigation {
         margin-left: 0px;
-        flex: 1 1 100%;
-        justify-content: center;
+        flex: 1 1 260px;
+        justify-content: flex-start;
+        column-gap: 6px;
+        row-gap: 6px;
     }
 
     #current-level-label {
-        flex: 1 1 180px;
+        flex: 1 1 160px;
         min-width: 0px;
     }
 
@@ -765,8 +785,8 @@ body.editor-playing #button-play {
     }
 
     #entity-toolbar {
-        order: 5;
-        grid-row: 5;
+        order: 6;
+        grid-row: 6;
         justify-self: stretch;
         height: auto;
         max-height: none;
@@ -792,8 +812,8 @@ body.editor-playing #button-play {
     }
 
     #entity-properties {
-        order: 6;
-        grid-row: 6;
+        order: 5;
+        grid-row: 5;
         justify-self: stretch;
         height: auto;
         max-height: none;
@@ -819,6 +839,7 @@ body.editor-playing #button-play {
         width: 100%;
         max-width: 100%;
         min-height: 36px;
+        font-size: 16px;
     }
 
     .dialog {

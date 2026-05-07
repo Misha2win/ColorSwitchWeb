@@ -1178,8 +1178,14 @@ export default class EditorArea {
         const duplicateButton = document.getElementById('button-duplicate-selected')
         const hasEditableSelection = !this.playingLevel && !!this.selectedEntity
 
-        if (deleteButton) deleteButton.disabled = !hasEditableSelection
-        if (duplicateButton) duplicateButton.disabled = !hasEditableSelection
+        if (deleteButton) {
+            deleteButton.hidden = !hasEditableSelection
+            deleteButton.disabled = !hasEditableSelection
+        }
+        if (duplicateButton) {
+            duplicateButton.hidden = !hasEditableSelection
+            duplicateButton.disabled = !hasEditableSelection
+        }
     }
 
     syncHistoryControls() {

@@ -29,12 +29,6 @@
                     <button onclick="this.blur()" id="button-print-json">Copy JSON</button>
                     <button onclick="this.blur()" id="button-load-string">Load JSON</button>
                 </div>
-                <div id="selection-action-toolbar">
-                    <button onclick="this.blur()" id="button-duplicate-selected" disabled>Duplicate</button>
-                    <button onclick="this.blur()" id="button-delete-selected" disabled>Delete</button>
-                    <button onclick="this.blur()" id="button-undo-move" disabled title="Undo last move">Undo</button>
-                    <button onclick="this.blur()" id="button-redo-move" disabled title="Redo last move">Redo</button>
-                </div>
             </div>
             <div id="entity-toolbar">
                 <div id="entity-toolbar-title">Entities</div>
@@ -45,11 +39,14 @@
                 <form id="property-editor-form">Selected entity properties will go here.</form>
             </div>
             <div id="editor-info">
-                <div id="checkbox-debug-mode">
-                    <input type="checkbox" id="checkbox-debug" class="checkbox">
-                    <label for="checkbox-debug" class="label">Debug Mode</label>
-                </div>
                 <div id="level-navigation">
+                    <div id="selection-action-toolbar">
+                        <button onclick="this.blur()" id="button-duplicate-selected" hidden disabled>Duplicate</button>
+                        <button onclick="this.blur()" id="button-delete-selected" hidden disabled>Delete</button>
+                        <button onclick="this.blur()" id="button-undo-move" disabled title="Undo last move">Undo</button>
+                        <button onclick="this.blur()" id="button-redo-move" disabled title="Redo last move">Redo</button>
+                    </div>
+                    <button onclick="this.blur()" id="button-debug-toggle" type="button" aria-pressed="true">Debug</button>
                     <select id="current-level-label" aria-label="Current level" disabled>
                         <option>Loading levels...</option>
                     </select>

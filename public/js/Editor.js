@@ -17,6 +17,8 @@ document.getElementById('button-play').addEventListener('click', (event) => edit
 document.getElementById('button-save').addEventListener('click', (event) => editor.handleSaveClick())
 document.getElementById('button-save-as-new').addEventListener('click', (event) => editor.handleSaveAsNewClick())
 document.getElementById('button-edit-level-order').addEventListener('click', () => editor.handleEditLevelOrderClick())
+const debugButton = document.getElementById('button-debug-toggle')
+debugButton.addEventListener('click', () => setDebugEnabled(!globalThis.debug))
 document.getElementById('button-undo-move').addEventListener('click', () => editor.undoMove())
 document.getElementById('button-redo-move').addEventListener('click', () => editor.redoMove())
 document.getElementById('button-duplicate-selected').addEventListener('click', () => editor.duplicateSelectedEntity())
@@ -31,10 +33,6 @@ window.addEventListener('keydown', (event) => {
 
     editor.handleKeyPress(event)
 }, { capture: true })
-document.getElementById('checkbox-debug').addEventListener('change', event => {
-    globalThis.debug = event.target.checked
-})
-
 function isEditableInteractionTarget(target) {
     const editable = typeof target?.closest === 'function'
         ? target.closest('input, textarea, select, [contenteditable], .dialog-copy-text')
@@ -50,6 +48,11 @@ function shouldHandleEditorKeyEvent(event) {
     if (isEditableInteractionTarget(event.target)) return false
 
     return event.key === 'Backspace' || event.key === 'Delete'
+}
+
+function setDebugEnabled(enabled) {
+    globalThis.debug = enabled
+    debugButton.setAttribute('aria-pressed', enabled ? 'true' : 'false')
 }
 
 function preventDefaultInteraction(event) {
@@ -136,4 +139,4 @@ setupEditorInteractionGuards()
 setupEditorPlayControls()
 
 globalThis.editor = editor
-globalThis.debug = false
+setDebugEnabled(true)
