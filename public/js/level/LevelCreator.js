@@ -50,7 +50,7 @@ export async function getLevelOrderLevels(options = { forceLoad: false }) {
     if (!options.forceLoad && levelOrder.length) return levelOrder
 
     const url = 'resources/levelOrder.json'
-    const resource = await fetch(url)
+    const resource = await fetch(url, { cache: options.forceLoad ? 'no-store' : 'default' })
     if (!resource.ok) throw new Error(`Failed to load ${url}: ${resource.status}`)
     const data = await resource.json()
 

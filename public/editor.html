@@ -16,14 +16,25 @@
         <div id="editor">
             <canvas id="editor-canvas" width="750" height="600"></canvas>
             <div id="level-toolbar" class="button-group">
-                <button onclick="this.blur()" id="button-play">Play</button>
-                <button onclick="this.blur()" id="button-save" disabled title="Checking save support...">Save</button>
-                <button onclick="this.blur()" id="button-save-as-new">Save As New</button>
-                <button onclick="this.blur()" id="button-create-new">Create New</button>
-                <button onclick="this.blur()" id="button-print-json">Copy JSON</button>
-                <button onclick="this.blur()" id="button-load-string">Load JSON</button>
-                <button onclick="this.blur()" id="button-duplicate-selected" disabled>Duplicate</button>
-                <button onclick="this.blur()" id="button-delete-selected" disabled>Delete</button>
+                <div class="toolbar-row toolbar-row-play">
+                    <button onclick="this.blur()" id="button-play">Play</button>
+                </div>
+                <div class="toolbar-row toolbar-row-save">
+                    <button onclick="this.blur()" id="button-save" hidden disabled title="Checking save support...">Save</button>
+                    <button onclick="this.blur()" id="button-save-as-new">Save As New</button>
+                    <button onclick="this.blur()" id="button-create-new">Create New</button>
+                </div>
+                <div class="toolbar-row toolbar-row-json">
+                    <button onclick="this.blur()" id="button-edit-level-order" hidden disabled title="Checking save support...">Edit Order</button>
+                    <button onclick="this.blur()" id="button-print-json">Copy JSON</button>
+                    <button onclick="this.blur()" id="button-load-string">Load JSON</button>
+                </div>
+                <div id="selection-action-toolbar">
+                    <button onclick="this.blur()" id="button-duplicate-selected" disabled>Duplicate</button>
+                    <button onclick="this.blur()" id="button-delete-selected" disabled>Delete</button>
+                    <button onclick="this.blur()" id="button-undo-move" disabled title="Undo last move">Undo</button>
+                    <button onclick="this.blur()" id="button-redo-move" disabled title="Redo last move">Redo</button>
+                </div>
             </div>
             <div id="entity-toolbar">
                 <div id="entity-toolbar-title">Entities</div>

@@ -4,7 +4,7 @@ import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
 import * as Physics from './math/PhysicsEngine.js'
-import { promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
+import { promptInput, dialog, copyableDialog, confirmDialog, editableTextDialog } from './utility/Prompt.js'
 
 const colorChoices = [
     'black',
@@ -18,11 +18,14 @@ const colorChoices = [
     'gray'
 ]
 const editorCurrentLevelStorageKey = 'colorswitch.editor.currentLevelName'
-const touchDragLiftOffset = { x: 0, y: -55 }
+const touchDragLiftOffset = { x: 0, y: -120 }
 const noDragLiftOffset = { x: 0, y: 0 }
+const touchHitSlop = 12
 const minimumVisibleDraggedPixels = 10
 const levelUiHeight = 95
 const draftLevelSelectValue = '__editor-draft-level__'
+const spawnSize = 20
+const levelOrderNamePattern = /^[A-Za-z0-9_-]+$/
 
 function camelToTitle(input) {
     return input
@@ -98,17 +101,52 @@ function isSpawnTool(type) {
 }
 
 function getDragLiftOffset(event) {
-    return event.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset
+    return event?.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset
+}
+
+function getHitSlop(event) {
+    return event?.pointerType === 'touch' ? touchHitSlop : 0
 }
 
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max)
 }
 
+function expandBox(box, amount) {
+    if (!amount) return box
+
+    return {
+        x: box.x - amount,
+        y: box.y - amount,
+        width: box.width + amount * 2,
+        height: box.height + amount * 2
+    }
+}
+
 function copySpawn(spawn) {
     return {
         x: spawn.x,
         y: spawn.y
+    }
+}
+
+function copyPosition(target) {
+    return {
+        x: target.x,
+        y: target.y
+    }
+}
+
+function positionsMatch(first, second) {
+    return first.x === second.x && first.y === second.y
+}
+
+function getSpawnBox(spawn) {
+    return {
+        x: spawn.x,
+        y: spawn.y,
+        width: spawnSize,
+        height: spawnSize
     }
 }
 
@@ -328,6 +366,33 @@ function getUnsupportedTypes(levelJSON) {
     )]
 }
 
+function hasInvalidLevelOrderName(names) {
+    return names.some(name => typeof name !== 'string' || !levelOrderNamePattern.test(name))
+}
+
+function validateLevelOrderJSON(levelOrderJSON) {
+    if (!levelOrderJSON || typeof levelOrderJSON !== 'object' || Array.isArray(levelOrderJSON)) {
+        throw new Error('Level order JSON must be an object.')
+    }
+    if (!Array.isArray(levelOrderJSON.levelOrder)) {
+        throw new Error('Level order JSON must include levelOrder[].')
+    }
+
+    if (hasInvalidLevelOrderName(levelOrderJSON.levelOrder)) {
+        throw new Error('levelOrder[] can only contain level names with letters, numbers, underscores, and hyphens.')
+    }
+
+    if (levelOrderJSON.NotUsed != null) {
+        if (!Array.isArray(levelOrderJSON.NotUsed)) {
+            throw new Error('NotUsed must be an array when it is included.')
+        }
+
+        if (hasInvalidLevelOrderName(levelOrderJSON.NotUsed)) {
+            throw new Error('NotUsed[] can only contain level names with letters, numbers, underscores, and hyphens.')
+        }
+    }
+}
+
 function copyLevelJSON(levelJSON) {
     return JSON.parse(JSON.stringify(levelJSON))
 }
@@ -388,6 +453,34 @@ async function overwriteLevelFile(name, levelJSON) {
     return response.json()
 }
 
+async function fetchLevelOrderJSON() {
+    const response = await fetch('api/level-order', { cache: 'no-store' })
+    if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message || 'Failed to load resources/levelOrder.json.')
+    }
+
+    return response.json()
+}
+
+async function overwriteLevelOrderFile(levelOrderJSON) {
+    validateLevelOrderJSON(levelOrderJSON)
+    const response = await fetch('api/level-order', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(levelOrderJSON)
+    })
+
+    if (!response.ok) {
+        const message = await response.text()
+        throw new Error(message || 'Failed to save resources/levelOrder.json.')
+    }
+
+    return response.json()
+}
+
 async function fetchCanOverwriteLevelFiles() {
     try {
         const response = await fetch('api/levels', { cache: 'no-store' })
@@ -417,9 +510,13 @@ export default class EditorArea {
 
         this.rect = false
         this.selectedEntity = null
+        this.selectedSpawn = false
         this.selectedEntityMoved = false
         this.entities = []
         this.spawn = { x: 30, y: 30 }
+        this.pendingMoveAction = null
+        this.undoStack = []
+        this.redoStack = []
 
         this.type = 'Spawn'
         this.levelColor = 'red'
@@ -445,10 +542,15 @@ export default class EditorArea {
 
         this.spawn = { x: 30, y: 30 }
         this.entities = []
+        this.selectedSpawn = false
         this.mouseInfo = { held: false, previous: { x: 0, y: 0 }, position: { x: 0, y: 0 } }
         this.activePointerId = null
         this.dragInfo = null
+        this.pendingMoveAction = null
+        this.undoStack = []
+        this.redoStack = []
         this.syncLevelNavigationControls('Loading levels...')
+        this.syncHistoryControls()
         this.checkOverwriteSupport()
 
         this.lastTime = performance.now()
@@ -489,6 +591,10 @@ export default class EditorArea {
             context.save()
             drawSpawnMarker(context, this.spawn, Color.getColor(this.levelColor))
             context.restore()
+            if (this.selectedSpawn) {
+                context.fillStyle = 'rgba(0, 100, 200, 0.4)'
+                context.fillRect(this.spawn.x - 5, this.spawn.y - 5, spawnSize + 10, spawnSize + 10)
+            }
 
             for (const entity of this.entities) {
                 context.save()
@@ -577,6 +683,10 @@ export default class EditorArea {
         Object.assign(box, this.getVisiblePosition(box))
     }
 
+    keepSpawnVisible() {
+        Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
+    }
+
     getPointerId(event) {
         return event.pointerId ?? 'mouse'
     }
@@ -617,10 +727,16 @@ export default class EditorArea {
         })
     }
 
-    findEntityAt(point) {
+    findSpawnAt(point, event) {
+        const boundingBox = expandBox(getSpawnBox(this.spawn), getHitSlop(event))
+        return Physics.pointIntersectsBox(point, boundingBox) ? this.spawn : null
+    }
+
+    findEntityAt(point, event) {
+        const hitSlop = getHitSlop(event)
         for (let i = this.entities.length - 1; i >= 0; i--) {
             const entity = this.entities[i]
-            const boundingBox = Physics.boundingBox(entity, entity)
+            const boundingBox = expandBox(Physics.boundingBox(entity, entity), hitSlop)
             if (Physics.pointIntersectsBox(point, boundingBox)) return entity
         }
 
@@ -669,6 +785,107 @@ export default class EditorArea {
         }
     }
 
+    createMoveAction(targetType, target) {
+        return {
+            targetType,
+            target,
+            before: copyPosition(target),
+            after: copyPosition(target)
+        }
+    }
+
+    createPendingMoveAction(entity, spawn) {
+        if (entity) return this.createMoveAction('entity', entity)
+        if (spawn) return this.createMoveAction('spawn', this.spawn)
+
+        return null
+    }
+
+    commitPendingMove() {
+        const pendingMoveAction = this.pendingMoveAction
+        this.pendingMoveAction = null
+        if (!pendingMoveAction) return
+
+        const moveAction = {
+            ...pendingMoveAction,
+            after: copyPosition(pendingMoveAction.target)
+        }
+        if (positionsMatch(moveAction.before, moveAction.after)) {
+            this.syncHistoryControls()
+            return
+        }
+
+        this.undoStack.push(moveAction)
+        this.redoStack = []
+        this.syncHistoryControls()
+    }
+
+    clearMoveHistory() {
+        this.pendingMoveAction = null
+        this.undoStack = []
+        this.redoStack = []
+        this.syncHistoryControls()
+    }
+
+    canApplyMoveAction(action) {
+        if (action.targetType === 'spawn') return action.target === this.spawn
+
+        return this.entities.includes(action.target)
+    }
+
+    applyMoveAction(action, position) {
+        if (!this.canApplyMoveAction(action)) return false
+
+        Object.assign(action.target, position)
+        this.selectedEntity = action.targetType === 'entity' ? action.target : null
+        this.selectedSpawn = action.targetType === 'spawn'
+        this.selectedEntityMoved = false
+        this.rect = false
+        this.dragInfo = null
+        this.syncPropertyEditor()
+        this.syncSelectionControls()
+
+        return true
+    }
+
+    undoMove() {
+        if (this.playingLevel) return false
+
+        const moveAction = this.undoStack.pop()
+        if (!moveAction) {
+            this.syncHistoryControls()
+            return false
+        }
+
+        if (!this.applyMoveAction(moveAction, moveAction.before)) {
+            this.syncHistoryControls()
+            return false
+        }
+
+        this.redoStack.push(moveAction)
+        this.syncHistoryControls()
+        return true
+    }
+
+    redoMove() {
+        if (this.playingLevel) return false
+
+        const moveAction = this.redoStack.pop()
+        if (!moveAction) {
+            this.syncHistoryControls()
+            return false
+        }
+
+        if (!this.applyMoveAction(moveAction, moveAction.after)) {
+            this.syncHistoryControls()
+            return false
+        }
+
+        this.undoStack.push(moveAction)
+        this.syncHistoryControls()
+        return true
+    }
+
     getDragTarget(target, pointerPosition) {
         const dragInfo = this.dragInfo
         if (!dragInfo || dragInfo.target !== target) return null
@@ -705,6 +922,28 @@ export default class EditorArea {
         }
     }
 
+    moveSelectedSpawn(mouse) {
+        const dragTarget = this.getDragTarget(this.spawn, mouse.position)
+        if (dragTarget) {
+            const moved = this.spawn.x !== dragTarget.x || this.spawn.y !== dragTarget.y
+            if (moved) {
+                this.selectedEntityMoved = true
+                Object.assign(this.spawn, dragTarget)
+            }
+            return
+        }
+
+        const dx = mouse.position.x - mouse.previous.x
+        const dy = mouse.position.y - mouse.previous.y
+        if (dx || dy) {
+            this.selectedEntityMoved = true
+            Object.assign(this.spawn, {
+                x: this.spawn.x + dx,
+                y: this.spawn.y + dy
+            })
+        }
+    }
+
     moveFixedPlacementRect(mouse) {
         const dragTarget = this.getDragTarget(this.rect, mouse.position) ?? mouse.position
         Object.assign(this.rect, {
@@ -725,12 +964,16 @@ export default class EditorArea {
             held: true
         })
         const mouse = this.mouseInfo
-        const hadSelectedEntity = !!this.selectedEntity
-        const entity = this.findEntityAt(mouse.position)
+        const hadSelection = !!this.selectedEntity || this.selectedSpawn
+        const entity = this.findEntityAt(mouse.position, event)
+        const spawn = entity ? null : this.findSpawnAt(mouse.position, event)
 
         this.selectedEntity = entity
+        this.selectedSpawn = !!spawn
         this.selectedEntityMoved = false
+        this.pendingMoveAction = this.createPendingMoveAction(entity, spawn)
         if (entity?.type) this.setActiveEntityType(entity.type)
+        if (spawn) this.setActiveEntityType('Spawn')
         if (entity) {
             populatePropertyEditor(entity)
         } else {
@@ -739,7 +982,9 @@ export default class EditorArea {
         this.syncSelectionControls()
         if (entity) {
             this.dragInfo = this.createDragInfo(entity, mouse.position, event)
-        } else if (hadSelectedEntity) {
+        } else if (spawn) {
+            this.dragInfo = this.createDragInfo(this.spawn, mouse.position, event)
+        } else if (hadSelection) {
             this.rect = false
             this.dragInfo = null
         } else {
@@ -760,6 +1005,8 @@ export default class EditorArea {
         if (mouse.held) {
             if (this.selectedEntity) {
                 this.moveSelectedEntity(mouse)
+            } else if (this.selectedSpawn) {
+                this.moveSelectedSpawn(mouse)
             } else if (this.rect?.fixed) {
                 this.moveFixedPlacementRect(mouse)
             } else if (this.rect) {
@@ -779,6 +1026,7 @@ export default class EditorArea {
         this.releasePointer(this.activePointerId)
         this.activePointerId = null
         if (this.selectedEntity && this.selectedEntityMoved) this.moveSelectedEntity(this.mouseInfo)
+        if (this.selectedSpawn && this.selectedEntityMoved) this.moveSelectedSpawn(this.mouseInfo)
         if (!this.selectedEntity && this.rect?.fixed) this.moveFixedPlacementRect(this.mouseInfo)
         Object.assign(this.mouseInfo, {
             held: false
@@ -795,12 +1043,22 @@ export default class EditorArea {
                 this.keepBoxVisible(this.selectedEntity)
                 populatePropertyEditor(this.selectedEntity)
             }
+        } else if (this.selectedSpawn) {
+            if (this.selectedEntityMoved) {
+                Object.assign(this.spawn, {
+                    x: this.round(this.spawn.x),
+                    y: this.round(this.spawn.y)
+                })
+                this.keepSpawnVisible()
+                this.syncPropertyEditor()
+            }
         } else if (this.rect) {
             if (this.rect.fixed) this.keepBoxVisible(this.rect)
             const shouldCreate = this.rect.fixed || (this.rect.width && this.rect.height)
             if (shouldCreate) this.createEntity()
         }
 
+        this.commitPendingMove()
         this.rect = false
         this.dragInfo = null
         this.selectedEntityMoved = false
@@ -824,6 +1082,15 @@ export default class EditorArea {
             this.keepBoxVisible(this.selectedEntity)
             populatePropertyEditor(this.selectedEntity)
         }
+        if (this.selectedSpawn && this.selectedEntityMoved) {
+            Object.assign(this.spawn, {
+                x: this.round(this.spawn.x),
+                y: this.round(this.spawn.y)
+            })
+            this.keepSpawnVisible()
+            this.syncPropertyEditor()
+        }
+        this.commitPendingMove()
         this.rect = false
         this.dragInfo = null
         this.selectedEntityMoved = false
@@ -832,9 +1099,11 @@ export default class EditorArea {
 
     createEntity() {
         const normRect = Physics.getNormalizedBox(this.rect)
+        this.clearMoveHistory()
         if (isSpawnTool(this.type)) {
             this.spawn = copySpawn(normRect)
             this.selectedEntity = null
+            this.selectedSpawn = true
             this.syncPropertyEditor()
             this.syncSelectionControls()
             return
@@ -845,6 +1114,7 @@ export default class EditorArea {
 
         this.entities.push(entity)
         this.selectedEntity = entity
+        this.selectedSpawn = false
         populatePropertyEditor(entity)
         this.syncSelectionControls()
     }
@@ -852,6 +1122,7 @@ export default class EditorArea {
     handleEntityClick(event) {
         if (this.playingLevel) return
         this.selectedEntity = null
+        this.selectedSpawn = false
         this.selectedEntityMoved = false
         this.rect = false
         this.dragInfo = null
@@ -874,7 +1145,7 @@ export default class EditorArea {
             return
         }
 
-        if (isSpawnTool(this.type)) {
+        if (this.selectedSpawn || isSpawnTool(this.type)) {
             populateSpawnPropertyEditor(this)
             return
         }
@@ -889,6 +1160,15 @@ export default class EditorArea {
 
         if (deleteButton) deleteButton.disabled = !hasEditableSelection
         if (duplicateButton) duplicateButton.disabled = !hasEditableSelection
+    }
+
+    syncHistoryControls() {
+        const undoButton = document.getElementById('button-undo-move')
+        const redoButton = document.getElementById('button-redo-move')
+        const canEditHistory = !this.playingLevel
+
+        if (undoButton) undoButton.disabled = !canEditHistory || !this.undoStack.length
+        if (redoButton) redoButton.disabled = !canEditHistory || !this.redoStack.length
     }
 
     loadUsedLevels() {
@@ -999,6 +1279,66 @@ export default class EditorArea {
         }
     }
 
+    async cacheLevelOrderLevels(names) {
+        const missingNames = names.filter(name => !this.levelJSONByName.has(name))
+        const levelEntries = await Promise.all(
+            missingNames.map(async name => [name, await fetchLevelJSON(name)])
+        )
+
+        for (const [name, levelJSON] of levelEntries) {
+            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+        }
+    }
+
+    applyLevelOrderJSON(levelOrderJSON) {
+        this.storeCurrentLevelJSON()
+        this.levelNames = [...levelOrderJSON.levelOrder]
+        this.currentLevelIndex = this.currentLevelName
+            ? this.levelNames.indexOf(this.currentLevelName)
+            : -1
+        this.levelLoadingPromise = null
+
+        if (this.currentLevelIndex === -1) {
+            storeCurrentLevelName(null)
+        } else {
+            storeCurrentLevelName(this.currentLevelName)
+        }
+
+        this.syncLevelNavigationControls()
+    }
+
+    async handleEditLevelOrderClick() {
+        if (this.playingLevel) return
+
+        if (!this.canOverwriteLevelFiles) {
+            dialog(
+                'Cannot edit level order:',
+                'Edit Order is only available when running the local editor server.'
+            )
+            return
+        }
+
+        try {
+            const levelOrderJSON = await fetchLevelOrderJSON()
+            const editedText = await editableTextDialog(
+                'Edit Level Order JSON',
+                JSON.stringify(levelOrderJSON, null, 3),
+                'Save Order'
+            )
+            if (editedText == null) return
+
+            const editedLevelOrderJSON = JSON.parse(editedText)
+            validateLevelOrderJSON(editedLevelOrderJSON)
+            await this.cacheLevelOrderLevels(editedLevelOrderJSON.levelOrder)
+
+            const result = await overwriteLevelOrderFile(editedLevelOrderJSON)
+            this.applyLevelOrderJSON(editedLevelOrderJSON)
+            dialog('Level order saved:', `Overwrote ${result.path ?? 'resources/levelOrder.json'}.`)
+        } catch (err) {
+            dialog('There was an error editing level order:', err.message)
+        }
+    }
+
     handlePrintClick(type) {
         if (this.playingLevel) return
         if (type !== 'json') return
@@ -1079,6 +1419,16 @@ export default class EditorArea {
         if (this.playingLevel) return
         const key = event.key.toLowerCase()
 
+        if (key === 'z' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault()
+            if (event.shiftKey) {
+                this.redoMove()
+            } else {
+                this.undoMove()
+            }
+            return
+        }
+
         if (event.key === 'Backspace' || event.key === 'Delete') {
             event.preventDefault()
             this.deleteSelectedEntity()
@@ -1097,7 +1447,9 @@ export default class EditorArea {
         if (index === -1) return
 
         this.entities.splice(index, 1)
+        this.clearMoveHistory()
         this.selectedEntity = null
+        this.selectedSpawn = false
         this.syncPropertyEditor()
         this.syncSelectionControls()
     }
@@ -1112,7 +1464,9 @@ export default class EditorArea {
         if (!entity) return
 
         this.entities.push(entity)
+        this.clearMoveHistory()
         this.selectedEntity = entity
+        this.selectedSpawn = false
         populatePropertyEditor(entity)
         this.syncSelectionControls()
     }
@@ -1192,23 +1546,39 @@ export default class EditorArea {
         if (nextButton) nextButton.disabled = this.playingLevel || !hasOrderedLevel || this.currentLevelIndex >= this.levelNames.length - 1
         this.syncSaveControls()
         this.syncSelectionControls()
+        this.syncHistoryControls()
     }
 
     syncSaveControls() {
         const saveButton = document.getElementById('button-save')
-        if (!saveButton) return
+        const editLevelOrderButton = document.getElementById('button-edit-level-order')
 
         const hasCurrentLevel = this.currentLevelIndex !== -1 && !!this.currentLevelName
-        saveButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles || !hasCurrentLevel
+        if (saveButton) {
+            saveButton.hidden = !this.canOverwriteLevelFiles
+            saveButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles || !hasCurrentLevel
 
-        if (!this.canOverwriteLevelFiles) {
-            saveButton.title = 'Save Level is only available when running the local editor server.'
-        } else if (!hasCurrentLevel) {
-            saveButton.title = 'Load an existing level before saving over it.'
-        } else if (this.playingLevel) {
-            saveButton.title = 'Stop playing before saving.'
-        } else {
-            saveButton.title = 'Overwrite the currently loaded level JSON file.'
+            if (!this.canOverwriteLevelFiles) {
+                saveButton.title = 'Save Level is only available when running the local editor server.'
+            } else if (!hasCurrentLevel) {
+                saveButton.title = 'Load an existing level before saving over it.'
+            } else if (this.playingLevel) {
+                saveButton.title = 'Stop playing before saving.'
+            } else {
+                saveButton.title = 'Overwrite the currently loaded level JSON file.'
+            }
+        }
+
+        if (editLevelOrderButton) {
+            editLevelOrderButton.hidden = !this.canOverwriteLevelFiles
+            editLevelOrderButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles
+            if (!this.canOverwriteLevelFiles) {
+                editLevelOrderButton.title = 'Edit Order is only available when running the local editor server.'
+            } else if (this.playingLevel) {
+                editLevelOrderButton.title = 'Stop playing before editing the level order.'
+            } else {
+                editLevelOrderButton.title = 'Edit resources/levelOrder.json.'
+            }
         }
     }
 
@@ -1229,7 +1599,9 @@ export default class EditorArea {
         this.spawn = copySpawn(level.spawn)
         this.entities = [...level.entities, ...level.texts]
         this.selectedEntity = null
+        this.selectedSpawn = false
         this.rect = false
+        this.clearMoveHistory()
         this.currentLevelName = name
         this.currentLevelIndex = levelIndex
         if (levelIndex !== -1) {

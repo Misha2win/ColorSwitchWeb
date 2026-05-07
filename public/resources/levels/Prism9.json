@@ -77,7 +77,7 @@
       {
          "type": "ColorChanger",
          "x": 680,
-         "y": 330,
+         "y": 430,
          "color": "blue"
       },
       {
@@ -91,6 +91,28 @@
          "x": 670,
          "y": 130,
          "color": "red"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 130,
+         "width": 330,
+         "height": 20,
+         "text": "Platforms act as filters",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 150,
+         "width": 330,
+         "height": 20,
+         "text": "for prism beams",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
       }
    ]
 }

@@ -1,8 +1,8 @@
 {
-   "color": "red",
+   "color": "blue",
    "spawn": {
       "x": 20,
-      "y": 560
+      "y": 270
    },
    "entities": [
       {
@@ -38,80 +38,60 @@
          "color": "black"
       },
       {
-         "type": "Platform",
-         "x": 190,
-         "y": 20,
-         "width": 90,
-         "height": 560,
-         "color": "red"
-      },
-      {
-         "type": "Platform",
-         "x": 470,
-         "y": 20,
-         "width": 90,
-         "height": 560,
-         "color": "blue"
-      },
-      {
          "type": "Goal",
-         "x": 710,
+         "x": 20,
          "y": 560,
          "color": "green"
       },
       {
          "type": "Prism",
-         "x": 90,
-         "y": 480,
-         "color": "blue",
-         "direction": "UP"
-      },
-      {
-         "type": "Prism",
-         "x": 360,
-         "y": 480,
-         "color": "red",
-         "direction": "UP"
-      },
-      {
-         "type": "Prism",
-         "x": 630,
-         "y": 480,
+         "x": 20,
+         "y": 430,
          "color": "green",
-         "direction": "UP"
+         "direction": "RIGHT"
       },
       {
-         "type": "Text",
-         "x": 290,
-         "y": 140,
-         "width": 170,
-         "height": 20,
-         "text": "Prism beams will",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "type": "Prism",
+         "x": 710,
+         "y": 290,
+         "color": "blue",
+         "direction": "LEFT"
       },
       {
-         "type": "Text",
-         "x": 290,
-         "y": 160,
-         "width": 170,
+         "type": "Platform",
+         "x": 20,
+         "y": 290,
+         "width": 510,
          "height": 20,
-         "text": "forcibly change",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "color": "black"
       },
       {
-         "type": "Text",
-         "x": 290,
-         "y": 180,
-         "width": 170,
-         "height": 20,
-         "text": "your color.",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
+         "type": "Platform",
+         "x": 330,
+         "y": 20,
+         "width": 90,
+         "height": 270,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 330,
+         "y": 310,
+         "width": 90,
+         "height": 270,
+         "color": "cyan"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 160,
+         "y": 230,
+         "color": "blue"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 560,
+         "y": 520,
+         "color": "blue"
       }
    ]
 }

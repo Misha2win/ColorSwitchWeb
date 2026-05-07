@@ -15,6 +15,9 @@ document.getElementById('button-print-json').addEventListener('click', (event) =
 document.getElementById('button-play').addEventListener('click', (event) => editor.handlePlayClick(event))
 document.getElementById('button-save').addEventListener('click', (event) => editor.handleSaveClick())
 document.getElementById('button-save-as-new').addEventListener('click', (event) => editor.handleSaveAsNewClick())
+document.getElementById('button-edit-level-order').addEventListener('click', () => editor.handleEditLevelOrderClick())
+document.getElementById('button-undo-move').addEventListener('click', () => editor.undoMove())
+document.getElementById('button-redo-move').addEventListener('click', () => editor.redoMove())
 document.getElementById('button-duplicate-selected').addEventListener('click', () => editor.duplicateSelectedEntity())
 document.getElementById('button-delete-selected').addEventListener('click', () => editor.deleteSelectedEntity())
 editor.canvas.addEventListener('pointerdown', (event) => editor.onPointerDown(event))
@@ -42,6 +45,7 @@ function isEditableInteractionTarget(target) {
 function shouldHandleEditorKeyEvent(event) {
     const key = event.key.toLowerCase()
     if ((event.metaKey || event.ctrlKey) && key === 'd') return true
+    if ((event.metaKey || event.ctrlKey) && key === 'z') return !isEditableInteractionTarget(event.target)
     if (isEditableInteractionTarget(event.target)) return false
 
     return event.key === 'Backspace' || event.key === 'Delete'

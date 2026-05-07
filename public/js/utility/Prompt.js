@@ -69,6 +69,51 @@ export function copyableDialog(title, text) {
 }
 
 /**
+ * Helper function for editing larger blocks of text, such as JSON.
+ */
+export function editableTextDialog(title, text, saveLabel = 'Save') {
+    return new Promise(resolve => {
+        const dialog = document.createElement('dialog')
+        dialog.classList.add('dialog', 'editable-dialog')
+        dialog.innerHTML = `
+            <div class="dialog-title"></div>
+            <form class="form">
+                <textarea class="dialog-copy-text dialog-edit-text" spellcheck="false"></textarea>
+                <menu>
+                    <button type="button" class="dialog-cancel-button">Cancel</button>
+                    <button type="submit" class="dialog-save-button"></button>
+                </menu>
+            </form>`
+        document.body.appendChild(dialog)
+
+        const titleElement = dialog.querySelector('.dialog-title')
+        const form = dialog.querySelector('.form')
+        const textarea = dialog.querySelector('.dialog-copy-text')
+        const cancelButton = dialog.querySelector('.dialog-cancel-button')
+        const saveButton = dialog.querySelector('.dialog-save-button')
+
+        titleElement.textContent = title
+        textarea.value = text
+        saveButton.textContent = saveLabel
+
+        cancelButton.addEventListener('click', () => dialog.close('cancel'))
+        form.addEventListener('submit', event => {
+            event.preventDefault()
+            dialog.close('save')
+        })
+
+        dialog.showModal()
+        textarea.focus()
+
+        dialog.addEventListener('close', () => {
+            const value = dialog.returnValue === 'save' ? textarea.value : null
+            dialog.remove()
+            resolve(value)
+        })
+    })
+}
+
+/**
  * Helper function for confirming an action before continuing.
  */
 export function confirmDialog(title, text, confirmLabel = 'OK') {

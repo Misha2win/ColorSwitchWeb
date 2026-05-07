@@ -79,6 +79,10 @@ body.editor-page .dialog-copy-text {
     display: none;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 nav {
     margin-bottom: 18px;
     padding: 5px 10px;
@@ -144,7 +148,8 @@ button {
     border-radius: var(--radius);
 }
 
-.copyable-dialog {
+.copyable-dialog,
+.editable-dialog {
     width: min(720px, 90vw);
     max-width: 90vw;
 }
@@ -376,6 +381,10 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     padding: 4px 8px;
 }
 
+.toolbar-row {
+    display: contents;
+}
+
 body.editor-playing #entity-toolbar,
 body.editor-playing #entity-properties,
 body.editor-playing #editor-info {
@@ -396,11 +405,21 @@ body.editor-playing #level-toolbar button:not(#button-play) {
     display: none;
 }
 
+body.editor-playing .toolbar-row:not(.toolbar-row-play) {
+    display: none;
+}
+
 body.editor-playing #button-play {
     flex: 0 0 auto;
     min-width: 120px;
 }
 
+#selection-action-toolbar {
+    display: none;
+}
+
+#button-undo-move,
+#button-redo-move,
 #button-duplicate-selected,
 #button-delete-selected {
     display: none;
@@ -630,6 +649,45 @@ body.editor-playing #button-play {
 }
 
 @media (pointer: coarse) {
+    #level-toolbar {
+        display: grid;
+        grid-template-columns: minmax(0px, 1fr);
+    }
+
+    #level-toolbar .toolbar-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+        gap: 6px;
+        width: 100%;
+    }
+
+    #level-toolbar .toolbar-row-play {
+        grid-template-columns: minmax(0px, 1fr);
+    }
+
+    #level-toolbar .toolbar-row button {
+        width: 100%;
+        min-width: 0px;
+    }
+
+    #selection-action-toolbar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0px, 1fr));
+        gap: 6px;
+        width: 100%;
+    }
+
+    body.editor-playing #selection-action-toolbar {
+        display: none;
+    }
+
+    #selection-action-toolbar button {
+        width: 100%;
+        min-width: 0px;
+    }
+
+    #button-undo-move,
+    #button-redo-move,
     #button-duplicate-selected,
     #button-delete-selected {
         display: inline-flex;
