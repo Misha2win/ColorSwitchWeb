@@ -8,7 +8,6 @@
       "Prism5",
       "PhotonicPlatform2",
       "Prism10",
-      "Prism2",
       "Prism9",
       "FragilePlatform1",
       "Prism8",
@@ -22,11 +21,9 @@
    ],
    "NotUsed": [
       "OrGateTest",
-
       "SuperJump1",
       "SuperJump2",
       "Element4",
-
       "FragilePlatform1",
       "PhotonicPlatformTest",
       "PhotonicPlatform1",
@@ -35,12 +32,10 @@
       "PrismTestingLevel",
       "PrismCollisionTest",
       "ChatGPTLevel",
-
       "Painter1",
       "SizeChanger1",
       "SizeChangerTest",
       "Prism6",
-
       "Element1",
       "Element2",
       "Element3"
