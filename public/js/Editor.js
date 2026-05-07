@@ -2,6 +2,7 @@ import EditorArea from './EditorArea.js'
 
 const editor = new EditorArea()
 editor.start()
+editor.renderEntityToolbar()
 
 document.querySelectorAll('.button-entity')
     .forEach((button) => button.addEventListener('click', event => editor.handleEntityClick(event)))

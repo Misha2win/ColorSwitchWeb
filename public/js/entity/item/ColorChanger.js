@@ -37,6 +37,10 @@ export default class ColorChanger extends Item {
       player.addUses(this.color)
    }
 
+   canCollideWith(other) {
+      return other instanceof Player
+   }
+
    toJSON() {
       return {
          type: this.type,

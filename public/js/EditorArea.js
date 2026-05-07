@@ -100,6 +100,12 @@ function isSpawnTool(type) {
     return type === 'Spawn'
 }
 
+function getEntityToolLabel(type) {
+    if (isSpawnTool(type)) return 'Spawn Point'
+
+    return camelToTitle(type)
+}
+
 function getDragLiftOffset(event) {
     return event?.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset
 }
@@ -1128,6 +1134,20 @@ export default class EditorArea {
         this.dragInfo = null
         this.setActiveEntityType(event.currentTarget.dataset.type)
         this.syncSelectionControls()
+    }
+
+    renderEntityToolbar() {
+        const toolbar = document.getElementById('entity-toolbar-buttons')
+        if (!toolbar) return
+
+        toolbar.replaceChildren()
+        for (const type of ['Spawn', ...EntityCreator.registry.keys()]) {
+            const button = document.createElement('button')
+            button.classList.add('button-entity')
+            button.dataset.type = type
+            button.textContent = getEntityToolLabel(type)
+            toolbar.appendChild(button)
+        }
     }
 
     setActiveEntityType(type) {
