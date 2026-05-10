@@ -107,7 +107,7 @@ export default class Player extends Entity {
         this.requestShift = false
         this.requestUseItem = false
 
-        this.coyoteTimeSeconds = Player.coyoteTimeSeconds
+        this.coyoteTimeSeconds = Player.coyoteTimeSeconds + (globalThis.isMobile ? 0.05 : 0)
         this.timeSinceGrounded = 0
         this.canCoyoteJump = false
     }
@@ -178,7 +178,7 @@ export default class Player extends Entity {
 
         const invTop = this.level?.levelManager?.height
 
-        const drawColor = (x, y, color, count) => {
+        const drawColor = (context, x, y, color, count) => {
             context.save()
 
             context.fillStyle = darkenHex(color.drawColor)
@@ -223,21 +223,57 @@ export default class Player extends Entity {
         context.fillStyle = 'white'
         context.fillRect(5, invTop + 5, 40, 40)
         context.strokeRect(5, invTop + 5, 40, 40)
-        drawColor(10, invTop + 10, Color.RED, this.redUses)
+        drawColor(context, 10, invTop + 10, Color.RED, this.redUses)
 
         context.fillStyle = 'white'
         context.fillRect(50, invTop + 5, 40, 40)
         context.strokeRect(50, invTop + 5, 40, 40)
-        drawColor(55, invTop + 10, Color.GREEN, this.greenUses)
+        drawColor(context, 55, invTop + 10, Color.GREEN, this.greenUses)
 
         context.fillStyle = 'white'
         context.fillRect(95, invTop + 5, 40, 40)
         context.strokeRect(95, invTop + 5, 40, 40)
-        drawColor(100, invTop + 10, Color.BLUE, this.blueUses)
+        drawColor(context,100, invTop + 10, Color.BLUE, this.blueUses)
 
         context.fillStyle = 'white'
         context.fillRect(5, invTop + 50, 40, 40)
         context.strokeRect(5, invTop + 50, 40, 40)
+
+        if (globalThis.isMobile) {
+            const redCanvas = document.getElementById('canvas-Digit1')
+            const redContext = redCanvas.getContext('2d')
+            redContext.clearRect(0, 0, redCanvas.width, redCanvas.height)
+            drawColor(redContext, redCanvas.width / 2 - 15, redCanvas.height / 2 - 15, Color.RED, this.redUses)
+
+            const greenCanvas = document.getElementById('canvas-Digit2')
+            const greenContext = greenCanvas.getContext('2d')
+            greenContext.clearRect(0, 0, greenCanvas.width, greenCanvas.height)
+            drawColor(greenContext, greenCanvas.width / 2 - 15, greenCanvas.height / 2 - 15, Color.GREEN, this.greenUses)
+
+            const blueCanvas = document.getElementById('canvas-Digit3')
+            const blueContext = blueCanvas.getContext('2d')
+            blueContext.clearRect(0, 0, blueCanvas.width, blueCanvas.height)
+            drawColor(blueContext, blueCanvas.width / 2 - 15, blueCanvas.height / 2 - 15, Color.BLUE, this.blueUses)
+
+            const itemCanvas = document.getElementById('canvas-KeyE')
+            const itemContext = itemCanvas.getContext('2d')
+            itemContext.clearRect(0, 0, itemCanvas.width, itemCanvas.height)
+
+            const item = this.heldItem
+            if (item) {
+                item.x = itemCanvas.width / 2 - 15
+                item.y = itemCanvas.height / 2 - 15
+                itemContext.save()
+                item.draw(itemContext)
+                itemContext.restore()
+            } else {
+                itemContext.font = '20px sans-serif'
+                itemContext.textAlign = 'center'
+                itemContext.textBaseline = 'middle'
+                itemContext.fillStyle = 'black'
+                itemContext.fillText('X', itemCanvas.width / 2, itemCanvas.height / 2)
+            }
+        }
 
         const item = this.heldItem
         if (item) {

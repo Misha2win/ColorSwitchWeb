@@ -164,22 +164,26 @@ function setupMobileControls() {
 }
 
 function setupButtonCanvas(button, type) {
-    if (type === 'KeyR') return
+    if (type === 'KeyR' || type === 'ShiftLeft') return
     if (type === 'ArrowLeft' || type === 'ArrowUp' || type === 'ArrowRight') return
 
     button.textContent = ''
 
     const canvas = document.createElement('canvas')
-    canvas.width = button.clientWidth
-    canvas.height = button.clientHeight
 
-    canvas.style.width = '100%'
-    canvas.style.height = '100%'
-    canvas.style.display = 'block'
+    const size = button.clientWidth
+
+    canvas.width = size
+    canvas.height = size
 
     button.appendChild(canvas)
-
     canvas.id = `canvas-${type}`
+
+    const context = canvas.getContext('2d')
+
+    context.translate(canvas.width / 2, canvas.height / 2)
+    context.scale(1.3, 1.3)
+    context.translate(-canvas.width / 2, -canvas.height / 2)
 }
 
 for (const query of [coarsePointerQuery, compactWidthQuery, compactHeightQuery]) {
@@ -191,8 +195,8 @@ updateMobileLayout()
 setupMobileControls()
 
 const password = [
-  'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft',
-  'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a', 'Enter'
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft',
+    'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a', 'Enter'
 ]
 const input = []
 window.addEventListener('keydown', (event) => {
@@ -200,15 +204,16 @@ window.addEventListener('keydown', (event) => {
     if (tag === 'input' || tag === 'textarea' || event.target.isContentEditable) return
 
     if (password[input.length] === event.key) {
-      input.push(event.key)
-      if (password.length === input.length) {
-        globalThis.debug = !globalThis.debug
-        console.log(`Debug mode is now ${ globalThis.debug ? 'on' : 'off' }!`)
-      }
+        input.push(event.key)
+        if (password.length === input.length) {
+            globalThis.debug = !globalThis.debug
+            console.log(`Debug mode is now ${ globalThis.debug ? 'on' : 'off' }!`)
+        }
     } else {
-      input.length = 0
+        input.length = 0
     }
 })
 
 globalThis.game = game
 globalThis.debug = false
+globalThis.isMobile = mobileUserAgent
