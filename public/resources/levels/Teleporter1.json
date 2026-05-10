@@ -68,7 +68,7 @@
          "text": "↓",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -79,7 +79,7 @@
          "text": "This is a teleporter",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -90,7 +90,7 @@
          "text": " ↑ The teleporter will take you",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -101,7 +101,7 @@
          "text": " to the purple circle",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       }
    ]
 }

@@ -92,10 +92,6 @@ function createSelect(options, value) {
     return select
 }
 
-function isAbstractEditorMethodError(err, methodName) {
-    return err instanceof Error && err.message.startsWith(methodName)
-}
-
 function isSpawnTool(type) {
     return type === 'Spawn'
 }
@@ -179,40 +175,17 @@ function storeCurrentLevelName(name) {
 function drawSpawnMarker(context, spawn, color) {
     if (color.hasPoorVisibility()) {
         context.beginPath()
-        context.ellipse(
-            spawn.x + 10,
-            spawn.y + 10,
-            5,
-            5,
-            0,
-            0,
-            Math.PI * 2
-        )
+        context.ellipse(spawn.x + 10, spawn.y + 10, 5, 5, 0, 0, Math.PI * 2)
         context.fillStyle = Color.BLACK
         context.fill()
+
         context.beginPath()
-        context.ellipse(
-            spawn.x + 10,
-            spawn.y + 10,
-            4,
-            4,
-            0,
-            0,
-            Math.PI * 2
-        )
+        context.ellipse(spawn.x + 10, spawn.y + 10, 4, 4, 0, 0, Math.PI * 2)
         context.fillStyle = color.drawColor
         context.fill()
     } else {
         context.beginPath()
-        context.ellipse(
-            spawn.x + 10,
-            spawn.y + 10,
-            5,
-            5,
-            0,
-            0,
-            Math.PI * 2
-        )
+        context.ellipse(spawn.x + 10, spawn.y + 10, 5, 5, 0, 0, Math.PI * 2)
         context.fillStyle = color.drawColor
         context.fill()
     }
@@ -224,7 +197,10 @@ function getEditableProperties(entity) {
     try {
         return entity.getProperties() ?? []
     } catch (err) {
-        if (isAbstractEditorMethodError(err, 'Entity.getProperties')) return []
+        if (err instanceof Error && err.message.startsWith('Entity.getProperties')) {
+            console.error(err)
+            return []
+        }
 
         throw err
     }
@@ -344,7 +320,10 @@ function entityToJSON(entity) {
     try {
         return entity.toJSON()
     } catch (err) {
-        if (isAbstractEditorMethodError(err, 'Entity.toJSON')) return null
+        if (err instanceof Error && err.message.startsWith('Entity.toJSON')) {
+            console.error(err)
+            return null
+        }
 
         throw err
     }
@@ -442,7 +421,7 @@ function getLevelFileBaseName(name) {
     return pathParts[pathParts.length - 1]
 }
 
-async function overwriteLevelFile(name, levelJSON) {
+async function writeLevelFile(name, levelJSON) {
     const response = await fetch(`api/levels/${encodeURIComponent(name)}`, {
         method: 'PUT',
         headers: {
@@ -1419,7 +1398,7 @@ export default class EditorArea {
 
         try {
             const levelJSON = this.getLevelJSON()
-            const result = await overwriteLevelFile(name, levelJSON)
+            const result = await writeLevelFile(name, levelJSON)
             const savedPath = result.path ?? `resources/levels/${name}.json`
             this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
             dialog('Level saved:', `Overwrote ${savedPath}.`)
@@ -1437,8 +1416,40 @@ export default class EditorArea {
         const fileBaseName = getLevelFileBaseName(name)
         if (!fileBaseName) return
 
-        const levelString = JSON.stringify(this.getLevelJSON(), null, 3)
-        downloadFile(`${fileBaseName}.json`, levelString, 'application/json')
+        const append = this.canOverwriteLevelFiles && await confirmDialog(
+            `Save as new level`,
+            `Append ${fileBaseName} to levelOrder.json?`,
+            'Append',
+            'Download'
+        )
+
+        const levelJSON = this.getLevelJSON()
+
+        if (!append) {
+            const levelString = JSON.stringify(levelJSON, null, 3)
+            downloadFile(`${fileBaseName}.json`, levelString, 'application/json')
+            return
+        }
+
+        const levelOrderJSON = await fetchLevelOrderJSON()
+        if (levelOrderJSON.levelOrder.includes(fileBaseName)) {
+            dialog('Level error:', 'A level by this name already exists in levelOrder.json')
+            return
+        }
+
+        const levelResult = await writeLevelFile(fileBaseName, levelJSON)
+        const savedPath = levelResult.path ?? `resources/levels/${fileBaseName}.json`
+        this.levelJSONByName.set(fileBaseName, copyLevelJSON(levelJSON))
+
+        levelOrderJSON.levelOrder.push(fileBaseName)
+
+        await this.cacheLevelOrderLevels(levelOrderJSON.levelOrder)
+
+        const result = await overwriteLevelOrderFile(levelOrderJSON)
+        const orderPath = result.path ?? 'resources/levelOrder.json'
+        this.applyLevelOrderJSON(levelOrderJSON)
+
+        dialog('Level saved and appended:', `Appended to ${orderPath}.\nCreated level at ${savedPath}.`)
     }
 
     handleKeyPress(event) {

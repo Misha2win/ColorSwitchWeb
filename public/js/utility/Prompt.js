@@ -116,7 +116,7 @@ export function editableTextDialog(title, text, saveLabel = 'Save') {
 /**
  * Helper function for confirming an action before continuing.
  */
-export function confirmDialog(title, text, confirmLabel = 'OK') {
+export function confirmDialog(title, text, confirmLabel = 'OK', cancelLabel = 'Cancel') {
     return new Promise(resolve => {
         const dialog = document.createElement('dialog')
         dialog.classList.add('dialog')
@@ -125,7 +125,7 @@ export function confirmDialog(title, text, confirmLabel = 'OK') {
             <form method="dialog" class="form">
                 <div class="dialog-description"></div>
                 <menu>
-                    <button value="cancel">Cancel</button>
+                    <button value="cancel"></button>
                     <button value="confirm"></button>
                 </menu>
             </form>`
@@ -134,6 +134,7 @@ export function confirmDialog(title, text, confirmLabel = 'OK') {
         dialog.querySelector('.dialog-title').textContent = title
         dialog.querySelector('.dialog-description').textContent = text
         dialog.querySelector('button[value="confirm"]').textContent = confirmLabel
+        dialog.querySelector('button[value="cancel"]').textContent = cancelLabel
 
         dialog.showModal()
 

@@ -11,16 +11,17 @@
       "Prism9",
       "FragilePlatform1",
       "Prism8",
-      "Teleporter1",
       "Mirror6",
       "Mirror2",
       "Mirror4",
       "Mirror7",
       "PrismMirrorTest",
-      "TestLevel"
+      "Painter2",
+      "TestLevel",
+      "Password",
+      "OrGateTest"
    ],
    "NotUsed": [
-      "OrGateTest",
       "SuperJump1",
       "SuperJump2",
       "Element4",
@@ -32,7 +33,6 @@
       "PrismTestingLevel",
       "PrismCollisionTest",
       "ChatGPTLevel",
-      "Painter1",
       "SizeChanger1",
       "SizeChangerTest",
       "Prism6",

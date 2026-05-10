@@ -51,7 +51,7 @@
          "y": 360,
          "width": 250,
          "height": 30,
-         "color": "red"
+         "color": "blue"
       },
       {
          "type": "Platform",
@@ -78,18 +78,10 @@
          "color": "black"
       },
       {
-         "type": "Platform",
-         "x": 250,
-         "y": 290,
-         "width": 250,
-         "height": 70,
-         "color": "green"
-      },
-      {
          "type": "Goal",
          "x": 710,
          "y": 340,
-         "color": "green"
+         "color": "blue"
       },
       {
          "type": "Prism",
@@ -106,33 +98,10 @@
          "direction": "RIGHT"
       },
       {
-         "type": "Prism",
-         "x": 530,
-         "y": 20,
-         "color": "green",
-         "direction": "DOWN"
-      },
-      {
-         "type": "Text",
-         "x": 230,
-         "y": 220,
-         "width": 290,
-         "height": 20,
-         "text": "Prisms can mix colors when ",
-         "fontSize": 20,
-         "color": "white",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 230,
-         "y": 240,
-         "width": 290,
-         "height": 20,
-         "text": "they collide with each other. ",
-         "fontSize": 20,
-         "color": "white",
-         "background": null
+         "type": "ColorChanger",
+         "x": 610,
+         "y": 300,
+         "color": "red"
       }
    ]
 }

@@ -40,7 +40,9 @@ export default class Painter extends Item {
       }
 
       for (const platform of this.level?.blockers) {
+         if (platform.color === Color.BLACK) continue
          if (!boxesIntersect(platform, auraHitbox)) continue
+
          platform.color = user.color
       }
 

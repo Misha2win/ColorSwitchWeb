@@ -1,7 +1,7 @@
 {
-   "color": "green",
+   "color": "white",
    "spawn": {
-      "x": 20,
+      "x": 310,
       "y": 560
    },
    "entities": [
@@ -40,9 +40,9 @@
       {
          "type": "Platform",
          "x": 330,
-         "y": 20,
+         "y": 90,
          "width": 90,
-         "height": 560,
+         "height": 490,
          "color": "black"
       },
       {
@@ -94,22 +94,6 @@
          "color": "black"
       },
       {
-         "type": "Platform",
-         "x": 100,
-         "y": 490,
-         "width": 230,
-         "height": 20,
-         "color": "gray"
-      },
-      {
-         "type": "Platform",
-         "x": 20,
-         "y": 390,
-         "width": 230,
-         "height": 20,
-         "color": "gray"
-      },
-      {
          "type": "Goal",
          "x": 710,
          "y": 560,
@@ -117,18 +101,38 @@
       },
       {
          "type": "Mirror",
-         "x": 270,
+         "x": 50,
          "y": 520,
          "color": "gray",
-         "persistOnce": false
+         "persistOnce": true
       },
       {
-         "type": "Teleporter",
-         "x": 440,
-         "y": 40,
-         "hasDestination": true,
-         "endX": 420,
-         "endY": 560
+         "type": "Platform",
+         "x": 100,
+         "y": 310,
+         "width": 30,
+         "height": 80,
+         "color": "blue"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 560,
+         "y": 330,
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 220,
+         "y": 210,
+         "width": 30,
+         "height": 80,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 560,
+         "y": 230,
+         "color": "red"
       }
    ]
 }

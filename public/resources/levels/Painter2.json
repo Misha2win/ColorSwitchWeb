@@ -1,0 +1,87 @@
+{
+   "color": "green",
+   "spawn": {
+      "x": 20,
+      "y": 300
+   },
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 320,
+         "width": 130,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 600,
+         "y": 320,
+         "width": 130,
+         "height": 260,
+         "color": "black"
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 300,
+         "color": "green"
+      },
+      {
+         "type": "Platform",
+         "x": 150,
+         "y": 320,
+         "width": 450,
+         "height": 260,
+         "color": "gray"
+      },
+      {
+         "type": "Painter",
+         "x": 70,
+         "y": 260
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 150,
+         "width": 690,
+         "height": 20,
+         "text": "Painters colored make platforms near you the same color as you",
+         "fontSize": 20,
+         "color": "black",
+         "background": ""
+      }
+   ]
+}

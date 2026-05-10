@@ -111,8 +111,7 @@
          "y": 130,
          "width": 20,
          "height": 10,
-         "color": "red",
-         "health": -1
+         "color": "red"
       },
       {
          "type": "ColorChanger",
@@ -147,50 +146,6 @@
          "y": 350,
          "width": 20,
          "height": 30
-      },
-      {
-         "type": "Text",
-         "x": 440,
-         "y": 120,
-         "width": 280,
-         "height": 20,
-         "text": "Photonic platform's colors",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 440,
-         "y": 140,
-         "width": 280,
-         "height": 20,
-         "text": "are influenced by the prism",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 440,
-         "y": 160,
-         "width": 280,
-         "height": 20,
-         "text": "beams that collide with them",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 410,
-         "y": 140,
-         "width": 40,
-         "height": 20,
-         "text": "← ",
-         "fontSize": 30,
-         "color": "black",
-         "background": null
       }
    ]
 }

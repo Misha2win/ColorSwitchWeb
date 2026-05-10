@@ -92,39 +92,6 @@
          "x": 560,
          "y": 520,
          "color": "blue"
-      },
-      {
-         "type": "Text",
-         "x": 430,
-         "y": 120,
-         "width": 290,
-         "height": 20,
-         "text": "Touching a prism's beam",
-         "fontSize": 20,
-         "color": "black",
-         "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 430,
-         "y": 140,
-         "width": 290,
-         "height": 20,
-         "text": "will forcibly change your",
-         "fontSize": 20,
-         "color": "black",
-         "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 430,
-         "y": 160,
-         "width": 290,
-         "height": 20,
-         "text": "color to the beam's color",
-         "fontSize": 20,
-         "color": "black",
-         "background": ""
       }
    ]
 }

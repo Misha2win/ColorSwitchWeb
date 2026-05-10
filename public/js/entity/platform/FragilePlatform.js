@@ -32,7 +32,7 @@ export default class FragilePlatform extends Platform {
 
       const platformVariant = Math.abs(Math.floor(this.x / 17) * 3 + Math.floor(this.y / 19) * 5) % CRACK_VARIANT_COUNT
 
-      context.strokeStyle = 'gray'
+      context.strokeStyle = this.color.hasPoorVisibility() ? 'gray' : 'rgba(255, 255, 255, 0.75)'
       context.lineWidth = 1.75
       context.lineCap = 'round'
       context.lineJoin = 'round'
@@ -66,6 +66,8 @@ export default class FragilePlatform extends Platform {
 
       const player = this.level?.player
       if (!player) return
+
+      if (!this.canCollideWith(player)) return
 
       if (boxesIntersect({ ...this, y: this.y - 1 }, player)) {
          this.stoodOn = true

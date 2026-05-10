@@ -58,7 +58,7 @@
          "text": "Use WASD to MOVE,",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -69,7 +69,7 @@
          "text": "Use R to RESTART the current level you are in,",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -80,7 +80,7 @@
          "text": "Your goal is to match the color of the goal and",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -91,7 +91,7 @@
          "text": "get to it using the items in each level.",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -124,7 +124,7 @@
          "text": "Press SHIFT to SUBTRACT a color instead of adding it.",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",

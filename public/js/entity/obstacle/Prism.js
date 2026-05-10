@@ -117,7 +117,7 @@ export default class Prism extends Obstacle {
                 if (closest instanceof Platform && !(closest instanceof PhotonicPlatform)) {
                     beam.shorten(closest)
                     const filtered = beam.color === Color.BLACK ? Color.BLACK : beam.color.subtract(closest.color)
-                    if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.Color !== Color.GRAY) beam.partition(filtered)
+                    if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.color !== Color.GRAY) beam.partition(filtered)
                 } else if (closest instanceof Beam) {
                     const mixed = beam.color.add(closest.color)
                     if (beam.color !== mixed) {
