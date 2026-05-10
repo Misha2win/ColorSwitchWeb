@@ -87,6 +87,39 @@
          "x": 540,
          "y": 170,
          "color": "cyan"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 100,
+         "width": 200,
+         "height": 20,
+         "text": "Mirrors without cracks",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 120,
+         "width": 200,
+         "height": 20,
+         "text": "can be used multiple",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 140,
+         "width": 200,
+         "height": 20,
+         "text": "times.",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
       }
    ]
 }

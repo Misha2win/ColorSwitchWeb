@@ -478,12 +478,18 @@
          "y": 520
       },
       {
+         "type": "Goal",
+         "x": 320,
+         "y": 90,
+         "color": "green"
+      },
+      {
          "type": "Text",
          "x": 30,
          "y": 460,
          "width": 690,
          "height": 30,
-         "text": "This is the testing level and there is no way to finish this level.",
+         "text": "You won! This is the testing level. There are no more levels.",
          "fontSize": 20,
          "color": "black",
          "background": null
@@ -494,7 +500,7 @@
          "y": 550,
          "width": 690,
          "height": 30,
-         "text": "But you can play around if you'd like :)",
+         "text": "But you can just play around if you'd like :)",
          "fontSize": 20,
          "color": "black",
          "background": null

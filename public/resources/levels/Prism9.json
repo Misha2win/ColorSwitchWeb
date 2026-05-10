@@ -109,7 +109,29 @@
          "y": 150,
          "width": 330,
          "height": 20,
-         "text": "for prism beams",
+         "text": "for prism beams.",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 180,
+         "width": 330,
+         "height": 20,
+         "text": "The diagram at the bottom",
+         "fontSize": 20,
+         "color": "black",
+         "background": null
+      },
+      {
+         "type": "Text",
+         "x": 40,
+         "y": 200,
+         "width": 330,
+         "height": 20,
+         "text": "right might be useful.",
          "fontSize": 20,
          "color": "black",
          "background": null
