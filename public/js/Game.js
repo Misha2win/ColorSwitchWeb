@@ -158,7 +158,28 @@ function setupMobileControls() {
             event.preventDefault()
             button.blur()
         })
+
+        setupButtonCanvas(button, button.dataset.key)
     }
+}
+
+function setupButtonCanvas(button, type) {
+    if (type === 'KeyR') return
+    if (type === 'ArrowLeft' || type === 'ArrowUp' || type === 'ArrowRight') return
+
+    button.textContent = ''
+
+    const canvas = document.createElement('canvas')
+    canvas.width = button.clientWidth
+    canvas.height = button.clientHeight
+
+    canvas.style.width = '100%'
+    canvas.style.height = '100%'
+    canvas.style.display = 'block'
+
+    button.appendChild(canvas)
+
+    canvas.id = `canvas-${type}`
 }
 
 for (const query of [coarsePointerQuery, compactWidthQuery, compactHeightQuery]) {
@@ -177,7 +198,7 @@ const input = []
 window.addEventListener('keydown', (event) => {
     const tag = (event.target.tagName || '').toLowerCase()
     if (tag === 'input' || tag === 'textarea' || event.target.isContentEditable) return
-    
+
     if (password[input.length] === event.key) {
       input.push(event.key)
       if (password.length === input.length) {
