@@ -4,7 +4,8 @@ import Item from "../entity/item/Item.js"
 import Color from "../entity/Color.js"
 import Ghost from "../entity/Ghost.js"
 import Goal from "../entity/point/Goal.js"
-import Prism, { Beam } from "../entity/obstacle/Prism.js"
+import Prism from "../entity/obstacle/Prism.js"
+import Beam from "../entity/obstacle/Beam.js"
 import Element from "../entity/obstacle/Element.js"
 import Text from "../entity/Text.js"
 
@@ -96,8 +97,8 @@ export default class Level {
         for (const entity of this.entities) entity.preparePhysics(delta)
     }
 
-    onPlayerColorChange() {
-        for (const entity of this.entities) entity.onPlayerColorChange()
+    onPlayerColorChange(old, current) {
+        for (const entity of this.entities) entity.onPlayerColorChange(old, current)
     }
 
     update(delta) {

@@ -51,7 +51,7 @@ export default class ColorMixer extends Item {
       }
       user.removeItem()
 
-      this.level?.onPlayerColorChange()
+      this.level?.onPlayerColorChange(old, current)
    }
 
    toJSON() {

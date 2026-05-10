@@ -5,18 +5,15 @@ import Entity from './Entity.js'
 
 export default class Player extends Entity {
 
-    static coyoteTimeSeconds = 0.1
-
     constructor(x, y, eventListeners = true) {
         super(x, y, 20, 20)
 
-        this.speed = 350
-        this.jumpSpeed = 900
-        this.yVelocity = 0
+        this.speed = 450
 
         this.requestLeft = false
         this.requestRight = false
-        this.requestJump = false
+        this.requestUp = false
+        this.requestDown = false
         this.requestRestart = false
         this.requestUseItem = false
 
@@ -26,12 +23,6 @@ export default class Player extends Entity {
 
         this.ignoreInputs = false
 
-        this.onGround = false
-
-        this.coyoteTimeSeconds = Player.coyoteTimeSeconds
-        this.timeSinceGrounded = 0
-        this.canCoyoteJump = false
-
         this.heldItem = null
 
         this.mirror = null
@@ -40,15 +31,6 @@ export default class Player extends Entity {
             window.addEventListener('keydown', (event) => this.onKeyDown(event))
             window.addEventListener('keyup', (event) => this.onKeyUp(event))
         }
-    }
-
-    canJump () {
-        return this.onGround || (this.canCoyoteJump && this.timeSinceGrounded < this.coyoteTimeSeconds)
-    }
-
-    onJump() {
-        this.canCoyoteJump = false
-        this.onGround = false
     }
 
     createMirror(color) {
@@ -93,8 +75,6 @@ export default class Player extends Entity {
         this.removeMirror()
 
         this.heldItem = null
-        this.yVelocity = 0
-        this.onGround = false
 
         this.redUses = 0
         this.greenUses = 0
@@ -102,14 +82,11 @@ export default class Player extends Entity {
 
         this.requestLeft = false
         this.requestRight = false
-        this.requestJump = false
+        this.requestUp = false
+        this.requestDown = false
         this.requestRestart = false
         this.requestShift = false
         this.requestUseItem = false
-
-        this.coyoteTimeSeconds = Player.coyoteTimeSeconds
-        this.timeSinceGrounded = 0
-        this.canCoyoteJump = false
     }
 
     useItem() {
@@ -225,17 +202,14 @@ export default class Player extends Entity {
         context.strokeRect(5, invTop + 5, 40, 40)
         drawColor(10, invTop + 10, Color.RED, this.redUses)
 
-        context.fillStyle = 'white'
         context.fillRect(50, invTop + 5, 40, 40)
         context.strokeRect(50, invTop + 5, 40, 40)
         drawColor(55, invTop + 10, Color.GREEN, this.greenUses)
 
-        context.fillStyle = 'white'
         context.fillRect(95, invTop + 5, 40, 40)
         context.strokeRect(95, invTop + 5, 40, 40)
         drawColor(100, invTop + 10, Color.BLUE, this.blueUses)
 
-        context.fillStyle = 'white'
         context.fillRect(5, invTop + 50, 40, 40)
         context.strokeRect(5, invTop + 50, 40, 40)
 
@@ -301,13 +275,6 @@ export default class Player extends Entity {
             this.useItem()
         }
 
-        if (!this.onGround) {
-            this.timeSinceGrounded += delta
-        } else {
-            this.canCoyoteJump = true
-            this.timeSinceGrounded = 0
-        }
-
         const change = (color) => !this.requestShift
             ? this.color.add(color)
             : this.color.subtract(color)
@@ -317,16 +284,19 @@ export default class Player extends Entity {
             : this.color.intersects(color)
 
         if (this.requestOne && this.redUses > 0 && willCauseChange(Color.RED)) {
-            this.color = change(Color.RED)
-            this.level.onPlayerColorChange()
+            const newColor = change(Color.RED)
+            this.level.onPlayerColorChange(this.color, newColor)
+            this.color = newColor
             this.redUses--
         } else if (this.requestTwo && this.greenUses > 0 && willCauseChange(Color.GREEN)) {
-            this.color = change(Color.GREEN)
-            this.level.onPlayerColorChange()
+            const newColor = change(Color.GREEN)
+            this.level.onPlayerColorChange(this.color, newColor)
+            this.color = newColor
             this.greenUses--
         } else if (this.requestThree && this.blueUses > 0 && willCauseChange(Color.BLUE)) {
-            this.color = change(Color.BLUE)
-            this.level.onPlayerColorChange()
+            const newColor = change(Color.BLUE)
+            this.level.onPlayerColorChange(this.color, newColor)
+            this.color = newColor
             this.blueUses--
         }
 
@@ -336,16 +306,30 @@ export default class Player extends Entity {
     }
 
     addUses(color) {
-        if (color.collidesWith(Color.RED)) {
+        if (color.intersects(Color.RED)) {
             this.redUses++
         }
 
-        if (color.collidesWith(Color.GREEN)) {
+        if (color.intersects(Color.GREEN)) {
             this.greenUses++
         }
 
-        if (color.collidesWith(Color.BLUE)) {
+        if (color.intersects(Color.BLUE)) {
             this.blueUses++
+        }
+    }
+
+    removeUses(color) {
+        if (color.intersects(Color.RED)) {
+            if (this.redUses > 0) this.redUses--
+        }
+
+        if (color.intersects(Color.GREEN)) {
+            if (this.greenUses > 0) this.greenUses--
+        }
+
+        if (color.intersects(Color.BLUE)) {
+            if (this.blueUses > 0) this.blueUses--
         }
     }
 
@@ -362,8 +346,10 @@ export default class Player extends Entity {
             this.requestLeft = isPressed
         } else if (code === 'KeyD' || code === 'ArrowRight') {
             this.requestRight = isPressed
-        } else if (code === 'KeyW' || code === 'ArrowUp' || code === 'Space') {
-            this.requestJump = isPressed
+        } else if (code === 'KeyW' || code === 'ArrowUp') {
+            this.requestUp = isPressed
+        } else if (code === 'KeyS' || code === 'ArrowDown') {
+            this.requestDown = isPressed
         } else if (code === 'KeyE') {
             this.requestUseItem = isPressed
         } else if (code === 'KeyR') {

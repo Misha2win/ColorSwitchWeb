@@ -77,7 +77,7 @@ export default class FragilePlatform extends Platform {
    }
 
    canCollideWith(other) {
-      return !this.broken && this.color.collidesWith(other.color)
+      return !this.broken && super.canCollideWith(other)
    }
 
 }

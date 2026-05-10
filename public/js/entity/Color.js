@@ -43,20 +43,31 @@ export default class Color {
    }
 
    complement(other) {
+      Color.#assertColor(other)
+
       const added = this.add(other)
       const complemented = (~added.#color) & Color.#RGB_MASK
+
       return Color.#BY_VALUE[complemented]
    }
 
    collidesWith(other) {
       Color.#assertColor(other)
 
+      // Gray collides with nothing
       if (this.#color === Color.#GRAY_VALUE || other.#color === Color.#GRAY_VALUE) return false
 
+      // White and Black collide with everything
       if (this.#color === Color.BLACK.#color || other.#color === Color.BLACK.#color) return true
       if (this.#color === Color.WHITE.#color || other.#color === Color.WHITE.#color) return true
 
       return ((this.#color & Color.#RGB_MASK) & (other.#color & Color.#RGB_MASK)) !== 0
+   }
+
+   getIntersection(other) {
+      Color.#assertColor(other)
+
+      return Color.#BY_VALUE[(this.#color & Color.#RGB_MASK) & (other.#color & Color.#RGB_MASK)]
    }
 
    intersects(other) {

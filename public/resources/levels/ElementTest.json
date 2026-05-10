@@ -1,0 +1,85 @@
+{
+   "color": "gray",
+   "spawn": {
+      "x": 20,
+      "y": 560
+   },
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 580,
+         "width": 730,
+         "height": 10,
+         "color": "black"
+      },
+      {
+         "type": "Goal",
+         "x": 710,
+         "y": 560,
+         "color": "gray"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 180,
+         "y": 140,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 290,
+         "y": 320,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 270,
+         "y": 220,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 120,
+         "y": 260,
+         "color": "red"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 140,
+         "y": 360,
+         "color": "red"
+      },
+      {
+         "type": "Element",
+         "x": 370,
+         "y": 30,
+         "width": 40,
+         "height": 540,
+         "color": "red"
+      }
+   ]
+}

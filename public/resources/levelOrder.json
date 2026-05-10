@@ -2,14 +2,12 @@
    "levelOrder": [
       "Level0",
       "ColorChanger1",
-      "ColorChanger2",
       "Prism1",
       "Prism4",
       "Prism5",
       "PhotonicPlatform2",
       "Prism10",
       "Prism9",
-      "FragilePlatform1",
       "Prism8",
       "Mirror6",
       "Mirror2",
@@ -19,7 +17,8 @@
       "Painter2",
       "TestLevel",
       "Password",
-      "OrGateTest"
+      "OrGateTest",
+      "ElementTest"
    ],
    "NotUsed": [
       "SuperJump1",

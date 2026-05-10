@@ -34,6 +34,7 @@ export default class Vector {
 
     normalize() {
         const length = this.length()
+        if (length === 0) return new Vector()
         return new Vector(this.x / length, this.y / length)
     }
 

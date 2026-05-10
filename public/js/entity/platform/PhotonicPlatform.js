@@ -2,7 +2,7 @@ import { boxesIntersect } from "../../math/PhysicsEngine.js";
 import { darkenHex, lightenHex } from "../../utility/Util.js";
 import Color from "../Color.js";
 import Entity from "../Entity.js";
-import { Beam } from "../obstacle/Prism.js";
+import Beam from "../obstacle/Beam.js";
 import Player from "../Player.js";
 import Platform from "./Platform.js";
 

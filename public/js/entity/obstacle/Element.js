@@ -17,7 +17,7 @@ export default class Element extends Obstacle {
     update(delta) {
         this.totalDelta += delta
 
-        const sin = 0.5 + (Math.sin(this.totalDelta * 2) + 1) / 7
+        const sin = 0.5 + (Math.sin(this.totalDelta * 10) + 1) / 7
         const clean = this.color.drawColor.replace('#', '')
 
         const red = parseInt(clean.slice(0, 2), 16)
@@ -36,26 +36,23 @@ export default class Element extends Obstacle {
     }
 
     draw(context) {
-        context.fillStyle = this.drawColor
+        context.fillStyle = this.color.drawColor
 
-        if (this.level) {
-            const player = this.level.player
-            if (player && !this.canCollideWith(player)) {
-                context.fillStyle = lightenHex(this.drawColor, 0.8)
-            }
+        if (this.level?.player) {
+            context.fillStyle = this.drawColor
         }
 
         context.fillRect(this.x, this.y, this.width, this.height)
     }
 
     canCollideWith(other) {
-        return other.color !== this.color
+        return true
     }
 
     onCollide(other) {
         if (!(other instanceof Player)) return
 
-        other.addHealth(this.collisionHealth)
+        other.removeUses(this.color)
     }
 
 }

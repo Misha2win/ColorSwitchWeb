@@ -26,7 +26,7 @@ export default class Platform extends Entity {
             : this.canCollideWith(tester)
 
          if (!collides) {
-            return `${this.color.drawColor}64`
+            return `${this.color.drawColor}32`
          }
       }
 
@@ -43,7 +43,8 @@ export default class Platform extends Entity {
    }
 
    canCollideWith(other) {
-      return this.color === Color.BLACK || this.color.collidesWith(other.color)
+      return this.color === Color.BLACK
+         || (this.color.collidesWith(other.color) && this.level?.player?.color.collidesWith(this.color))
    }
 
    onCollide(other) {

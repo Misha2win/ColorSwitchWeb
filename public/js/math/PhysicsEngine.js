@@ -13,20 +13,13 @@ export function calculatePhysics(delta, level) {
 
     if (!player) return
 
-    const playerVelocity = new Vector(0, player.yVelocity)
-    if (player.requestLeft) playerVelocity.x -= player.speed
-    if (player.requestRight) playerVelocity.x += player.speed
+    const direction = new Vector(0, 0)
+    if (player.requestLeft) direction.x -= 1
+    if (player.requestRight) direction.x += 1
+    if (player.requestUp) direction.y -= 1
+    if (player.requestDown) direction.y += 1
 
-    if (player.requestJump && player.canJump()) { // Jump
-        playerVelocity.y = -player.jumpSpeed
-        player.onJump()
-    }
-
-    // Apply gravity
-    playerVelocity.y = Math.min(
-        playerVelocity.y + physics.gravity * delta,
-        physics.maxFallSpeed
-    )
+    const playerVelocity = direction.normalize().multiply(player.speed)
 
     const collisionCandidates = []
     for (const blocker of blockers) {
@@ -39,16 +32,9 @@ export function calculatePhysics(delta, level) {
         playerVelocity.x = 0
     }
 
-    player.onGround = false
-
-    const y = player.y
-    const yCollision = moveWithSweptCollision(player, collisionCandidates, playerVelocity.y * delta, 'y')
-    if (yCollision) {
-        if (playerVelocity.y > 0 && (yCollision.swept || player.y < y)) player.onGround = true
+    if (moveWithSweptCollision(player, collisionCandidates, playerVelocity.y * delta, 'y')) {
         playerVelocity.y = 0
     }
-
-    player.yVelocity = playerVelocity.y
 
     for (const entity1 of entities) {
         for (const entity2 of entities) {

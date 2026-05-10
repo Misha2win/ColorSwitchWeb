@@ -1,5 +1,3 @@
-import { Beam } from "./obstacle/Prism.js"
-
 export default class Ghost {
 
     constructor(original, overrides = {}) {
