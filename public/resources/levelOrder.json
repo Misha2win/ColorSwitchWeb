@@ -21,6 +21,9 @@
       "Password",
       "OrGateTest"
    ],
+   "mobileLevels": {
+      "Level0": "Level0Mobile"
+   },
    "NotUsed": [
       "SuperJump1",
       "SuperJump2",

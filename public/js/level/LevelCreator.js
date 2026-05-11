@@ -57,6 +57,16 @@ export async function getLevelOrderLevels(options = { forceLoad: false }) {
     if (!Array.isArray(data.levelOrder)) throw new Error('Level missing levelOrder[]')
 
     levelOrder.length = 0
-    levelOrder.push(...data.levelOrder)
+
+    if (globalThis.isMobile) {
+        const mobileLevels = data.levelOrder.map(levelName => {
+            const mobileLevel = data.mobileLevels[levelName]
+            return mobileLevel ? mobileLevel : levelName
+        })
+        levelOrder.push(...mobileLevels)
+    } else {
+        levelOrder.push(...data.levelOrder)
+    }
+
     return levelOrder
 }
