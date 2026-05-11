@@ -246,6 +246,15 @@ body.game-page.mobile-game-layout .mobile-control-row-use {
 
 body.game-page.mobile-game-layout .mobile-control-row-restart {
     margin-top: clamp(18px, 5dvh, 34px);
+    grid-template-columns: minmax(0px, 1fr) clamp(46px, 10dvh, 72px);
+    align-items: stretch;
+}
+
+body.game-page.mobile-game-layout #canvas-color-diagram {
+    width: clamp(46px, 10dvh, 72px);
+    height: clamp(46px, 10dvh, 72px);
+    display: block;
+    box-sizing: border-box;
 }
 
 body.game-page.mobile-game-layout .mobile-control-button {
