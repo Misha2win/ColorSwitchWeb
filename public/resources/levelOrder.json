@@ -21,6 +21,9 @@
       "ElementTest",
       "Level0Mobile"
    ],
+   "mobileLevels": {
+      "Level0": "Level0Mobile"
+   },
    "NotUsed": [
       "SuperJump1",
       "SuperJump2",
