@@ -217,3 +217,5 @@ window.addEventListener('keydown', (event) => {
 globalThis.game = game
 globalThis.debug = false
 globalThis.isMobile = mobileUserAgent
+
+if (!mobileUserAgent) game.canvas.height += 95
