@@ -1,11 +1,6 @@
 import GameArea from './GameArea.js'
 
 const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
-globalThis.isMobile = mobileUserAgent
-
-const game = new GameArea()
-game.start()
-
 const coarsePointerQuery = window.matchMedia('(pointer: coarse)')
 const compactWidthQuery = window.matchMedia('(max-width: 1100px)')
 const compactHeightQuery = window.matchMedia('(max-height: 850px)')
@@ -18,8 +13,18 @@ function shouldUseMobileLayout() {
     return hasTouch && (mobileUserAgent || compactWidthQuery.matches || compactHeightQuery.matches)
 }
 
+globalThis.isMobile = shouldUseMobileLayout()
+globalThis.debug = false
+
+const game = new GameArea()
+game.start()
+
+globalThis.game = game
+
 function updateMobileLayout() {
-    document.body.classList.toggle('mobile-game-layout', shouldUseMobileLayout())
+    const isMobile = shouldUseMobileLayout()
+    document.body.classList.toggle('mobile-game-layout', isMobile)
+    globalThis.isMobile = isMobile
     syncMobileCanvasSize()
 }
 
@@ -215,6 +220,3 @@ window.addEventListener('keydown', (event) => {
         input.length = 0
     }
 })
-
-globalThis.game = game
-globalThis.debug = false
