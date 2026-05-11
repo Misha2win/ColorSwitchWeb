@@ -201,23 +201,72 @@ export default class Player extends Entity {
 
         context.strokeStyle = 'black'
 
-        context.fillStyle = 'white'
-        context.fillRect(5, invTop + 5, 40, 40)
-        context.strokeRect(5, invTop + 5, 40, 40)
-        drawColor(context, 10, invTop + 10, Color.RED, this.redUses)
 
-        context.fillRect(50, invTop + 5, 40, 40)
-        context.strokeRect(50, invTop + 5, 40, 40)
-        drawColor(context, 55, invTop + 10, Color.GREEN, this.greenUses)
 
-        context.fillRect(95, invTop + 5, 40, 40)
-        context.strokeRect(95, invTop + 5, 40, 40)
-        drawColor(context,100, invTop + 10, Color.BLUE, this.blueUses)
+        if (!globalThis.isMobile) {
+            context.fillStyle = 'white'
+            context.fillRect(5, invTop + 5, 40, 40)
+            context.strokeRect(5, invTop + 5, 40, 40)
+            drawColor(context, 10, invTop + 10, Color.RED, this.redUses)
 
-        context.fillRect(5, invTop + 50, 40, 40)
-        context.strokeRect(5, invTop + 50, 40, 40)
+            context.fillRect(50, invTop + 5, 40, 40)
+            context.strokeRect(50, invTop + 5, 40, 40)
+            drawColor(context, 55, invTop + 10, Color.GREEN, this.greenUses)
 
-        if (globalThis.isMobile) {
+            context.fillRect(95, invTop + 5, 40, 40)
+            context.strokeRect(95, invTop + 5, 40, 40)
+            drawColor(context,100, invTop + 10, Color.BLUE, this.blueUses)
+
+            context.fillRect(5, invTop + 50, 40, 40)
+            context.strokeRect(5, invTop + 50, 40, 40)
+
+            const item = this.heldItem
+            if (item) {
+                item.x = 10
+                item.y = invTop + 55
+                context.save()
+                item.draw(context)
+                context.restore()
+            }
+
+            const vennWidth = 85
+            const vennHeight = 85
+            const vennX = gameWidth - vennWidth - 5
+            const vennY = invTop + 5
+            const vennSize = Math.min(vennWidth, vennHeight)
+            const vennRadius = vennSize * 0.3
+            const vennCenterX = vennX + vennWidth / 2
+            const vennRedX = vennCenterX - vennRadius * 0.4
+            const vennGreenX = vennCenterX + vennRadius * 0.4
+            const vennBlueX = vennCenterX
+            const vennTopY = vennY + vennHeight * 0.42
+            const vennBottomY = vennTopY + vennRadius * 0.6
+
+            context.save()
+            context.fillStyle = 'black'
+            context.fillRect(vennX, vennY, vennWidth, vennHeight)
+
+            context.globalCompositeOperation = 'lighter'
+            context.fillStyle = Color.RED.drawColor
+            context.beginPath()
+            context.arc(vennRedX, vennTopY, vennRadius, 0, Math.PI * 2)
+            context.fill()
+
+            context.fillStyle = Color.GREEN.drawColor
+            context.beginPath()
+            context.arc(vennGreenX, vennTopY, vennRadius, 0, Math.PI * 2)
+            context.fill()
+
+            context.fillStyle = Color.BLUE.drawColor
+            context.beginPath()
+            context.arc(vennBlueX, vennBottomY, vennRadius, 0, Math.PI * 2)
+            context.fill()
+
+            context.globalCompositeOperation = 'source-over'
+            context.strokeStyle = 'white'
+            context.strokeRect(vennX, vennY, vennWidth, vennHeight)
+            context.restore()
+        } else {
             const redCanvas = document.getElementById('canvas-Digit1')
             const redContext = redCanvas.getContext('2d')
             redContext.clearRect(0, 0, redCanvas.width, redCanvas.height)
@@ -251,54 +300,52 @@ export default class Player extends Entity {
                 itemContext.fillStyle = 'black'
                 itemContext.fillText('X', itemCanvas.width / 2, itemCanvas.height / 2)
             }
+
+            const diagramCanvas = document.getElementById('canvas-color-diagram')
+            const diagramContext = diagramCanvas.getContext('2d')
+
+            diagramCanvas.width = diagramCanvas.clientWidth
+            diagramCanvas.height = diagramCanvas.clientHeight
+
+            const drawWidth = diagramCanvas.width
+            const drawHeight = diagramCanvas.height
+
+            const vennSize = Math.min(drawWidth, drawHeight)
+            const vennX = (drawWidth - vennSize) / 2
+            const vennY = (drawHeight - vennSize) / 2
+
+            const vennRadius = vennSize * 0.3
+            const vennCenterX = vennX + vennSize / 2
+            const vennRedX = vennCenterX - vennRadius * 0.4
+            const vennGreenX = vennCenterX + vennRadius * 0.4
+            const vennBlueX = vennCenterX
+            const vennTopY = vennY + vennSize * 0.42
+            const vennBottomY = vennTopY + vennRadius * 0.6
+
+            diagramContext.fillStyle = 'black'
+            diagramContext.fillRect(vennX, vennY, vennSize, vennSize)
+
+            diagramContext.globalCompositeOperation = 'lighter'
+
+            diagramContext.fillStyle = Color.RED.drawColor
+            diagramContext.beginPath()
+            diagramContext.arc(vennRedX, vennTopY, vennRadius, 0, Math.PI * 2)
+            diagramContext.fill()
+
+            diagramContext.fillStyle = Color.GREEN.drawColor
+            diagramContext.beginPath()
+            diagramContext.arc(vennGreenX, vennTopY, vennRadius, 0, Math.PI * 2)
+            diagramContext.fill()
+
+            diagramContext.fillStyle = Color.BLUE.drawColor
+            diagramContext.beginPath()
+            diagramContext.arc(vennBlueX, vennBottomY, vennRadius, 0, Math.PI * 2)
+            diagramContext.fill()
+
+            diagramContext.globalCompositeOperation = 'source-over'
+            diagramContext.strokeStyle = 'white'
+            diagramContext.strokeRect(vennX, vennY, vennSize, vennSize)
         }
-
-        const item = this.heldItem
-        if (item) {
-            item.x = 10
-            item.y = invTop + 55
-            context.save()
-            item.draw(context)
-            context.restore()
-        }
-
-        const vennWidth = 85
-        const vennHeight = 85
-        const vennX = gameWidth - vennWidth - 5
-        const vennY = invTop + 5
-        const vennSize = Math.min(vennWidth, vennHeight)
-        const vennRadius = vennSize * 0.3
-        const vennCenterX = vennX + vennWidth / 2
-        const vennRedX = vennCenterX - vennRadius * 0.4
-        const vennGreenX = vennCenterX + vennRadius * 0.4
-        const vennBlueX = vennCenterX
-        const vennTopY = vennY + vennHeight * 0.42
-        const vennBottomY = vennTopY + vennRadius * 0.6
-
-        context.save()
-        context.fillStyle = 'black'
-        context.fillRect(vennX, vennY, vennWidth, vennHeight)
-
-        context.globalCompositeOperation = 'lighter'
-        context.fillStyle = Color.RED.drawColor
-        context.beginPath()
-        context.arc(vennRedX, vennTopY, vennRadius, 0, Math.PI * 2)
-        context.fill()
-
-        context.fillStyle = Color.GREEN.drawColor
-        context.beginPath()
-        context.arc(vennGreenX, vennTopY, vennRadius, 0, Math.PI * 2)
-        context.fill()
-
-        context.fillStyle = Color.BLUE.drawColor
-        context.beginPath()
-        context.arc(vennBlueX, vennBottomY, vennRadius, 0, Math.PI * 2)
-        context.fill()
-
-        context.globalCompositeOperation = 'source-over'
-        context.strokeStyle = 'white'
-        context.strokeRect(vennX, vennY, vennWidth, vennHeight)
-        context.restore()
     }
 
     update(delta) {
