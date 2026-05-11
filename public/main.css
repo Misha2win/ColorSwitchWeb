@@ -237,33 +237,37 @@ body.game-page.mobile-game-layout #game {
 }
 
 .mobile-control-row-movement {
+    display: grid;
+
     grid-template-columns: repeat(3, minmax(0px, 1fr));
     grid-template-rows: repeat(2, minmax(0px, 1fr));
+
+    grid-template-areas:
+        "left up right"
+        "left down right";
+
+    height: clamp(46px, 10dvh, 72px);
+}
+
+[data-key="ArrowLeft"] {
+    grid-area: left;
+}
+
+[data-key="ArrowUp"] {
+    grid-area: up;
+}
+
+[data-key="ArrowDown"] {
+    grid-area: down;
+}
+
+[data-key="ArrowRight"] {
+    grid-area: right;
 }
 
 .mobile-control-row-movement .mobile-control-button {
     height: auto;
     min-height: 0px;
-}
-
-.mobile-control-row-movement [data-key="ArrowLeft"] {
-    grid-column: 1;
-    grid-row: 1 / 3;
-}
-
-.mobile-control-row-movement [data-key="ArrowUp"] {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.mobile-control-row-movement [data-key="ArrowDown"] {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.mobile-control-row-movement [data-key="ArrowRight"] {
-    grid-column: 3;
-    grid-row: 1 / 3;
 }
 
 .mobile-control-row-use {
