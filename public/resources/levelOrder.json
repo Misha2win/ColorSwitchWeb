@@ -11,14 +11,15 @@
       "Prism8",
       "Mirror6",
       "Mirror2",
-      "Mirror4",
+      "Mirror9",
       "Mirror7",
       "PrismMirrorTest",
       "Painter2",
       "TestLevel",
       "Password",
       "OrGateTest",
-      "ElementTest"
+      "ElementTest",
+      "Level0Mobile"
    ],
    "NotUsed": [
       "SuperJump1",

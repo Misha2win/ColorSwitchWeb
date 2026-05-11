@@ -1,3 +1,4 @@
+import { darkenHex } from "../../utility/Util.js"
 import Color from "../Color.js"
 import Entity from "../Entity.js"
 import Player from "../Player.js"
@@ -30,41 +31,27 @@ export default class Goal extends Entity {
    }
 
    draw(context) {
-      if (this.color.hasPoorVisibility()) {
-         context.fillStyle = 'black'
-         context.beginPath()
-         context.ellipse(
-            this.x + this.width / 2,
-            this.y + this.height / 2,
-            this.drawWidth / 2,
-            this.drawHeight / 2,
-            0, 0, Math.PI * 2
-         )
-         context.fill()
+      context.fillStyle = this.color.hasPoorVisibility() ? 'black' : darkenHex(this.color.drawColor, 0.5)
+      context.beginPath()
+      context.ellipse(
+         this.x + this.width / 2,
+         this.y + this.height / 2,
+         this.drawWidth / 2,
+         this.drawHeight / 2,
+         0, 0, Math.PI * 2
+      )
+      context.fill()
 
-         context.fillStyle = this.color.drawColor
-         context.beginPath()
-         context.ellipse(
-            this.x + this.width / 2,
-            this.y + this.height / 2,
-            this.drawWidth / 2 - 1,
-            this.drawHeight / 2 - 1,
-            0, 0, Math.PI * 2
-         )
-         context.fill()
-      } else {
-         context.fillStyle = this.color.drawColor
-
-         context.beginPath()
-         context.ellipse(
-            this.x + this.width / 2,
-            this.y + this.height / 2,
-            this.drawWidth / 2,
-            this.drawHeight / 2,
-            0, 0, Math.PI * 2
-         )
-         context.fill()
-      }
+      context.fillStyle = this.color.drawColor
+      context.beginPath()
+      context.ellipse(
+         this.x + this.width / 2,
+         this.y + this.height / 2,
+         this.drawWidth / 2 - 1,
+         this.drawHeight / 2 - 1,
+         0, 0, Math.PI * 2
+      )
+      context.fill()
    }
 
    canCollideWith(other) {

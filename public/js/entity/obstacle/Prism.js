@@ -107,6 +107,8 @@ export default class Prism extends Obstacle {
                 return beam.color != entity.color
             } else if (entity instanceof Element) {
                 return !beam.color.collidesWith(entity.color)
+            } else if (entity instanceof Prism) {
+                return true
             }
 
             return false
@@ -143,6 +145,8 @@ export default class Prism extends Obstacle {
                         beam.shorten(closest)
                         beam.partition(mixed)
                     }
+                } else if (closest instanceof Prism) {
+                    beam.shorten(closest)
                 }
             }
         }

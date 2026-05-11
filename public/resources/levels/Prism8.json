@@ -101,7 +101,7 @@
          "type": "ColorChanger",
          "x": 610,
          "y": 300,
-         "color": "red"
+         "color": "white"
       }
    ]
 }

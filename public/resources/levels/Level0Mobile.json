@@ -52,10 +52,10 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 90,
+         "y": 60,
          "width": 690,
          "height": 20,
-         "text": "Use WASD to MOVE",
+         "text": "Use ARROW BUTTONS to MOVE",
          "fontSize": 20,
          "color": "white",
          "background": ""
@@ -63,10 +63,10 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 110,
+         "y": 90,
          "width": 690,
          "height": 20,
-         "text": "Use R to RESTART the level",
+         "text": "Use COLOR BUTTONS to ADD to your color",
          "fontSize": 20,
          "color": "white",
          "background": ""
@@ -125,6 +125,28 @@
          "fontSize": 20,
          "color": "black",
          "background": "white"
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 120,
+         "width": 690,
+         "height": 20,
+         "text": "Use SHIFT to SUBTRACT from your color instead of adding",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 30,
+         "y": 150,
+         "width": 690,
+         "height": 20,
+         "text": "Special items will appear in your right most ITEM BUTTON",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
       }
    ]
 }
