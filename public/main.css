@@ -272,6 +272,10 @@ body.game-page.mobile-game-layout #game {
 
 .mobile-control-row-restart {
     margin-top: clamp(18px, 5dvh, 34px);
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-restart {
+    margin-top: clamp(18px, 5dvh, 34px);
     grid-template-columns: minmax(0px, 1fr) clamp(46px, 10dvh, 72px);
     align-items: stretch;
 }
