@@ -1,12 +1,14 @@
 import GameArea from './GameArea.js'
 
+const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+globalThis.isMobile = mobileUserAgent
+
 const game = new GameArea()
 game.start()
 
 const coarsePointerQuery = window.matchMedia('(pointer: coarse)')
 const compactWidthQuery = window.matchMedia('(max-width: 1100px)')
 const compactHeightQuery = window.matchMedia('(max-height: 850px)')
-const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
 const mobileCanvasMargin = 5
 const mobileControls = document.getElementById('mobile-game-controls')
 const mobileControlButtons = document.querySelectorAll('.mobile-control-button')
@@ -216,6 +218,3 @@ window.addEventListener('keydown', (event) => {
 
 globalThis.game = game
 globalThis.debug = false
-globalThis.isMobile = mobileUserAgent
-
-if (!mobileUserAgent) game.canvas.height += 95
