@@ -238,6 +238,32 @@ body.game-page.mobile-game-layout .mobile-control-row {
 
 body.game-page.mobile-game-layout .mobile-control-row-movement {
     grid-template-columns: repeat(3, minmax(0px, 1fr));
+    grid-template-rows: repeat(2, minmax(0px, 1fr));
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement .mobile-control-button {
+    height: auto;
+    min-height: 0px;
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement [data-key="ArrowLeft"] {
+    grid-column: 1;
+    grid-row: 1 / 3;
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement [data-key="ArrowUp"] {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement [data-key="ArrowDown"] {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+body.game-page.mobile-game-layout .mobile-control-row-movement [data-key="ArrowRight"] {
+    grid-column: 3;
+    grid-row: 1 / 3;
 }
 
 body.game-page.mobile-game-layout .mobile-control-row-use {
@@ -310,6 +336,32 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
 
 .editor-play-controls .mobile-control-row-movement {
     grid-template-columns: repeat(3, minmax(0px, 1fr));
+    grid-template-rows: repeat(2, minmax(0px, 1fr));
+}
+
+.editor-play-controls .mobile-control-row-movement .mobile-control-button {
+    height: auto;
+    min-height: 0px;
+}
+
+.editor-play-controls .mobile-control-row-movement [data-key="ArrowLeft"] {
+    grid-column: 1;
+    grid-row: 1 / 3;
+}
+
+.editor-play-controls .mobile-control-row-movement [data-key="ArrowUp"] {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.editor-play-controls .mobile-control-row-movement [data-key="ArrowDown"] {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.editor-play-controls .mobile-control-row-movement [data-key="ArrowRight"] {
+    grid-column: 3;
+    grid-row: 1 / 3;
 }
 
 .editor-play-controls .mobile-control-row-use {

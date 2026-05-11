@@ -172,7 +172,7 @@ function setupMobileControls() {
 
 function setupButtonCanvas(button, type) {
     if (type === 'KeyR' || type === 'ShiftLeft') return
-    if (type === 'ArrowLeft' || type === 'ArrowUp' || type === 'ArrowRight') return
+    if (type === 'ArrowLeft' || type === 'ArrowUp' || type === 'ArrowRight' || type === 'ArrowDown') return
 
     button.textContent = ''
 
