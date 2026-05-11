@@ -2,7 +2,7 @@
    "color": "gray",
    "spawn": {
       "x": 20,
-      "y": 290
+      "y": 560
    },
    "entities": [
       {
@@ -16,9 +16,9 @@
       {
          "type": "Platform",
          "x": 10,
-         "y": 390,
+         "y": 580,
          "width": 730,
-         "height": 200,
+         "height": 10,
          "color": "black"
       },
       {
@@ -26,7 +26,7 @@
          "x": 10,
          "y": 10,
          "width": 730,
-         "height": 200,
+         "height": 10,
          "color": "black"
       },
       {
@@ -40,57 +40,57 @@
       {
          "type": "Goal",
          "x": 710,
-         "y": 290,
+         "y": 560,
          "color": "green"
       },
       {
          "type": "ColorChanger",
          "x": 360,
-         "y": 285,
+         "y": 520,
          "color": "green"
       },
       {
          "type": "Text",
          "x": 30,
-         "y": 60,
+         "y": 200,
          "width": 690,
          "height": 20,
          "text": "Use ARROW BUTTONS to MOVE",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       },
       {
          "type": "Text",
-         "x": 30,
-         "y": 90,
+         "x": 40,
+         "y": 230,
          "width": 690,
          "height": 20,
          "text": "Use COLOR BUTTONS to ADD to your color",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       },
       {
          "type": "Text",
          "x": 30,
-         "y": 470,
+         "y": 350,
          "width": 690,
          "height": 20,
          "text": "Your objective is to get to the GOAL and match its COLOR",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       },
       {
          "type": "Text",
          "x": 30,
-         "y": 490,
+         "y": 380,
          "width": 690,
          "height": 20,
          "text": "The GOAL is the UNDULATING circle on the right. Good luck!",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       },
       {
@@ -129,23 +129,23 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 120,
+         "y": 260,
          "width": 690,
          "height": 20,
          "text": "Use SHIFT to SUBTRACT from your color instead of adding",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       },
       {
          "type": "Text",
          "x": 30,
-         "y": 150,
+         "y": 290,
          "width": 690,
          "height": 20,
          "text": "Special items will appear in your right most ITEM BUTTON",
          "fontSize": 20,
-         "color": "white",
+         "color": "black",
          "background": ""
       }
    ]

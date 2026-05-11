@@ -19,7 +19,8 @@
       "Painter2",
       "TestLevel",
       "Password",
-      "OrGateTest"
+      "OrGateTest",
+      "Level0Mobile"
    ],
    "mobileLevels": {
       "Level0": "Level0Mobile"
