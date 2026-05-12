@@ -11,6 +11,11 @@
 }
 
 button {
+    width: 60px;
+    height: 60px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: var(--text-color);
     font: inherit;
@@ -54,22 +59,22 @@ html, body {
     font-size: 14px;
 }
 
-body.editor-page,
-body.editor-page #editor,
-body.editor-page #level-toolbar,
-body.editor-page #entity-toolbar,
-body.editor-page #entity-properties,
-body.editor-page #editor-info,
-body.editor-page #editor-play-controls {
+.editor-page,
+.editor-page #editor,
+.editor-page #level-toolbar,
+.editor-page #entity-toolbar,
+.editor-page #entity-properties,
+.editor-page #editor-info,
+.editor-page .editor-play-controls {
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
 }
 
-body.editor-page input,
-body.editor-page textarea,
-body.editor-page select,
-body.editor-page .dialog-copy-text {
+.editor-page input,
+.editor-page textarea,
+.editor-page select,
+.editor-page .dialog-copy-text {
     user-select: text;
     -webkit-user-select: text;
     -webkit-touch-callout: default;
@@ -111,14 +116,6 @@ nav a:hover {
     border: 1px solid var(--border-color);
     background-color: var(--surface);
     box-shadow: 0px 8px 24px rgba(23, 32, 42, 0.12);
-}
-
-button {
-    width: 60px;
-    height: 60px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .dialog {
@@ -186,11 +183,19 @@ button {
     margin: auto;
 }
 
-.mobile-game-controls {
+.mobile-game-controls,
+.editor-play-controls {
     display: none;
+    align-content: center;
+    gap: clamp(8px, 2dvh, 14px);
+    box-sizing: border-box;
+    background-color: #e8edf3;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-body.game-page.mobile-game-layout {
+.game-page.mobile-game-layout {
     height: 100dvh;
     display: grid;
     grid-template-rows: minmax(0px, 1fr) auto;
@@ -199,11 +204,29 @@ body.game-page.mobile-game-layout {
     touch-action: none;
 }
 
-body.game-page.mobile-game-layout nav {
-    display: none;
+.game-page.mobile-game-layout nav {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 6px);
+    right: calc(env(safe-area-inset-right, 0px) + 6px);
+    z-index: 10;
+    width: auto;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    box-shadow: none;
+    touch-action: manipulation;
 }
 
-body.game-page.mobile-game-layout #game {
+.game-page.mobile-game-layout nav a {
+    min-height: 30px;
+    padding: 0px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background-color: rgba(31, 41, 55, 0.78);
+    box-shadow: 0px 2px 8px rgba(23, 32, 42, 0.18);
+    backdrop-filter: blur(8px);
+}
+
+.game-page.mobile-game-layout #game {
     position: static;
     align-self: center;
     justify-self: center;
@@ -219,16 +242,12 @@ body.game-page.mobile-game-layout #game {
     align-self: end;
     justify-self: center;
     width: min(100%, 520px);
-    display: grid;
-    align-content: center;
-    gap: clamp(8px, 2dvh, 14px);
     padding: clamp(3px, 1dvh, 8px) clamp(10px, 3dvh, 20px);
-    box-sizing: border-box;
-    background-color: #e8edf3;
     border-top: 1px solid var(--border-color);
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
+}
+
+.game-page.mobile-game-layout .mobile-game-controls {
+    display: grid;
 }
 
 .mobile-control-row {
@@ -274,13 +293,12 @@ body.game-page.mobile-game-layout #game {
     margin-top: clamp(18px, 5dvh, 34px);
 }
 
-body.game-page.mobile-game-layout .mobile-control-row-restart {
-    margin-top: clamp(18px, 5dvh, 34px);
+.game-page.mobile-game-layout .mobile-control-row-restart {
     grid-template-columns: minmax(0px, 1fr) clamp(46px, 10dvh, 72px);
     align-items: stretch;
 }
 
-body.game-page.mobile-game-layout #canvas-color-diagram {
+.game-page.mobile-game-layout #canvas-color-diagram {
     width: clamp(46px, 10dvh, 72px);
     height: clamp(46px, 10dvh, 72px);
     display: block;
@@ -299,7 +317,8 @@ body.game-page.mobile-game-layout #canvas-color-diagram {
     -webkit-tap-highlight-color: transparent;
 }
 
-.mobile-control-button-primary {
+.mobile-control-button-primary,
+#button-debug-toggle[aria-pressed="true"] {
     color: #0f3b73;
     border-color: #7bb7ff;
     background: linear-gradient(#fafdff, #d8ebff);
@@ -319,18 +338,10 @@ body.game-page.mobile-game-layout #canvas-color-diagram {
     justify-self: center;
     width: 100%;
     max-width: 520px;
-    display: none;
-    align-content: center;
-    gap: 10px;
     margin-top: 12px;
     padding: 10px;
-    box-sizing: border-box;
-    background-color: #e8edf3;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 /* Editor styles */
@@ -350,6 +361,15 @@ body.game-page.mobile-game-layout #canvas-color-diagram {
 
 /* Toolbar styles */
 
+#level-toolbar,
+#editor-info {
+    width: 752px;
+    max-width: 100%;
+    box-sizing: border-box;
+    background-color: var(--bar-background);
+    border: 1px solid var(--border-color);
+}
+
 #level-toolbar {
     grid-column: 2;
     grid-row: 1;
@@ -357,55 +377,40 @@ body.game-page.mobile-game-layout #canvas-color-diagram {
     flex-wrap: wrap;
     gap: 6px;
     justify-content: center;
-    background-color: var(--bar-background);
     border-radius: var(--radius) var(--radius) 0px 0px;
     padding: 10px;
-    border: 1px solid var(--border-color);
     border-bottom: 0px;
     box-shadow: 0px 6px 18px rgba(23, 32, 42, 0.08);
-    width: 752px;
-    max-width: 100%;
-    box-sizing: border-box;
+}
+
+#level-toolbar button,
+#level-navigation button {
+    width: auto;
+    height: auto;
+    padding: 4px 8px;
 }
 
 #level-toolbar button {
     flex: 1 1 92px;
-    width: auto;
     min-width: 92px;
     min-height: 42px;
-    height: auto;
-    padding: 4px 8px;
 }
 
 .toolbar-row {
     display: contents;
 }
 
-body.editor-playing #entity-toolbar,
-body.editor-playing #entity-properties,
-body.editor-playing #editor-info {
+.editor-playing #entity-toolbar,
+.editor-playing #entity-properties,
+.editor-playing #editor-info {
     display: none;
 }
 
-body.editor-playing #level-toolbar {
-    width: 752px;
-    padding: 10px;
-    background-color: var(--bar-background);
-    border: 1px solid var(--border-color);
-    border-bottom: 0px;
-    border-radius: var(--radius) var(--radius) 0px 0px;
-    box-shadow: 0px 6px 18px rgba(23, 32, 42, 0.08);
-}
-
-body.editor-playing #level-toolbar button:not(#button-play) {
+.editor-playing .toolbar-row:not(.toolbar-row-play) {
     display: none;
 }
 
-body.editor-playing .toolbar-row:not(.toolbar-row-play) {
-    display: none;
-}
-
-body.editor-playing #button-play {
+.editor-playing #button-play {
     flex: 0 0 auto;
     min-width: 120px;
     grid-column: 1 / -1;
@@ -463,30 +468,38 @@ body.editor-playing #button-play {
 
 /* Entity toolbar styles */
 
-#entity-toolbar {
+#entity-toolbar,
+#entity-properties {
     width: 75%;
     height: 600px;
     max-height: 600px;
-    grid-column: 1;
     grid-row: 2;
-    justify-self: end;
     background-color: var(--bar-background);
-    border-radius: var(--radius) 0px 0px var(--radius);
     border: 1px solid var(--border-color);
-    border-right: 0px;
     overflow-y: auto;
     box-shadow: 0px 8px 18px rgba(23, 32, 42, 0.08);
 }
 
-#entity-toolbar #entity-toolbar-title {
+#entity-toolbar {
+    grid-column: 1;
+    justify-self: end;
+    border-radius: var(--radius) 0px 0px var(--radius);
+    border-right: 0px;
+}
+
+#entity-toolbar-title,
+#property-editor-title {
     margin: 0px 0px 6px;
     padding: 9px 8px;
-    border-radius: var(--radius) 0px 0px 0px;
     color: var(--muted-text-color);
     background-color: var(--surface);
     border-bottom: 1px solid var(--border-color);
     font-weight: 700;
     text-align: center;
+}
+
+#entity-toolbar-title {
+    border-radius: var(--radius) 0px 0px 0px;
 }
 
 #entity-toolbar .button-group {
@@ -517,29 +530,14 @@ body.editor-playing #button-play {
 /* Entity property menu styles */
 
 #entity-properties {
-    width: 75%;
-    height: 600px;
-    max-height: 600px;
     grid-column: 3;
-    grid-row: 2;
     justify-self: start;
-    background-color: var(--bar-background);
     border-radius: 0px var(--radius) var(--radius) 0px;
-    border: 1px solid var(--border-color);
     border-left: 0px;
-    overflow-y: auto;
-    box-shadow: 0px 8px 18px rgba(23, 32, 42, 0.08);
 }
 
 #property-editor-title {
-    margin: 0px 0px 6px;
-    padding: 9px 8px;
     border-radius: 0px var(--radius) 0px 0px;
-    color: var(--muted-text-color);
-    background-color: var(--surface);
-    border-bottom: 1px solid var(--border-color);
-    font-weight: 700;
-    text-align: center;
 }
 
 #property-editor-form {
@@ -563,7 +561,9 @@ body.editor-playing #button-play {
     font-weight: 600;
 }
 
-.property-form-group input, .property-form-group select, .property-form-group textarea {
+.property-form-group input,
+.property-form-group select,
+.property-form-group textarea {
     max-width: 80%;
     min-height: 28px;
     box-sizing: border-box;
@@ -573,7 +573,9 @@ body.editor-playing #button-play {
     background-color: #fbfcfe;
 }
 
-.property-form-group input:focus, .property-form-group select:focus, .property-form-group textarea:focus {
+.property-form-group input:focus,
+.property-form-group select:focus,
+.property-form-group textarea:focus {
     outline: 2px solid rgba(37, 99, 235, 0.22);
     border-color: var(--accent-color);
 }
@@ -597,21 +599,13 @@ body.editor-playing #button-play {
     flex-wrap: wrap;
     align-items: center;
     gap: 14px;
-    background-color: var(--bar-background);
     border-radius: 0px 0px var(--radius) var(--radius);
-    width: 752px;
-    max-width: 100%;
-    box-sizing: border-box;
     padding: 8px 10px;
-    border: 1px solid var(--border-color);
     border-top: 0px;
     box-shadow: 0px 8px 18px rgba(23, 32, 42, 0.08);
 }
 
 #button-debug-toggle[aria-pressed="true"] {
-    color: #0f3b73;
-    border-color: #7bb7ff;
-    background: linear-gradient(#fafdff, #d8ebff);
     box-shadow: inset 0px 0px 0px 1px rgba(37, 99, 235, 0.18);
 }
 
@@ -631,15 +625,12 @@ body.editor-playing #button-play {
 }
 
 #level-navigation button {
-    width: auto;
     min-width: 40px;
     min-height: 34px;
-    height: auto;
-    padding: 4px 8px;
 }
 
-@media (pointer: coarse), (max-width: 820px) {
-    body.editor-playing .editor-play-controls {
+@media (any-pointer: coarse), (pointer: coarse) {
+    .editor-playing .editor-play-controls {
         display: grid;
     }
 }
@@ -667,9 +658,6 @@ body.editor-playing #button-play {
 
     #level-toolbar .toolbar-row-play {
         order: 3;
-    }
-
-    #level-toolbar .toolbar-row-play {
         grid-template-columns: minmax(0px, 1fr);
     }
 
@@ -689,7 +677,7 @@ body.editor-playing #button-play {
         width: 100%;
     }
 
-    body.editor-playing #selection-action-toolbar {
+    .editor-playing #selection-action-toolbar {
         display: none;
     }
 
@@ -707,21 +695,31 @@ body.editor-playing #button-play {
 }
 
 @media (max-width: 1100px), (pointer: coarse) {
-    body.editor-page {
+    .editor-page {
+        display: flex;
+        flex-direction: column;
         overflow-x: hidden;
     }
 
-    body.editor-page nav {
-        display: none;
+    .editor-page nav {
+        order: 2;
+        margin: 6px 0px 0px;
+        padding: 8px 10px calc(env(safe-area-inset-bottom, 0px) + 8px);
+    }
+
+    .editor-page nav a {
+        min-height: 34px;
     }
 
     #editor {
+        order: 1;
         display: flex;
         flex-direction: column;
         align-items: stretch;
         grid-template-columns: minmax(0px, 1fr);
+        margin: 0px auto;
         max-width: 820px;
-        padding: 8px 8px 18px;
+        padding: 6px 8px 18px;
     }
 
     #level-toolbar,
@@ -729,7 +727,7 @@ body.editor-playing #button-play {
     #editor-info,
     #entity-toolbar,
     #entity-properties,
-    #editor-play-controls {
+    .editor-play-controls {
         grid-column: 1;
         justify-self: stretch;
         width: 100%;
@@ -775,14 +773,20 @@ body.editor-playing #button-play {
         min-width: 0px;
     }
 
-    #editor-play-controls {
+    .editor-page input,
+    .editor-page select,
+    .editor-page textarea,
+    .editor-page .dialog-copy-text {
+        font-size: 16px;
+    }
+
+    .editor-play-controls {
         order: 4;
         grid-row: 4;
     }
 
-    #entity-toolbar {
-        order: 6;
-        grid-row: 6;
+    #entity-toolbar,
+    #entity-properties {
         justify-self: stretch;
         height: auto;
         max-height: none;
@@ -791,8 +795,14 @@ body.editor-playing #button-play {
         border-radius: var(--radius);
     }
 
-    #entity-toolbar #entity-toolbar-title {
+    #entity-toolbar-title,
+    #property-editor-title {
         border-radius: var(--radius) var(--radius) 0px 0px;
+    }
+
+    #entity-toolbar {
+        order: 6;
+        grid-row: 6;
     }
 
     #entity-toolbar .button-group {
@@ -810,16 +820,6 @@ body.editor-playing #button-play {
     #entity-properties {
         order: 5;
         grid-row: 5;
-        justify-self: stretch;
-        height: auto;
-        max-height: none;
-        margin-top: 12px;
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius);
-    }
-
-    #property-editor-title {
-        border-radius: var(--radius) var(--radius) 0px 0px;
     }
 
     .property-form-group {
@@ -835,7 +835,6 @@ body.editor-playing #button-play {
         width: 100%;
         max-width: 100%;
         min-height: 36px;
-        font-size: 16px;
     }
 
     .dialog {
