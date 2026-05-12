@@ -238,7 +238,7 @@ nav a:hover {
     box-sizing: border-box;
 }
 
-body.game-page.mobile-game-layout .mobile-game-controls {
+.mobile-game-controls {
     align-self: end;
     justify-self: center;
     width: min(100%, 520px);
@@ -250,16 +250,28 @@ body.game-page.mobile-game-layout .mobile-game-controls {
     display: grid;
 }
 
-body.game-page.mobile-game-layout .mobile-control-row {
+.mobile-control-row {
     display: grid;
     gap: clamp(8px, 2dvh, 12px);
 }
 
-body.game-page.mobile-game-layout .mobile-control-row-movement {
+.mobile-control-row-movement {
     grid-template-columns: repeat(3, minmax(0px, 1fr));
 }
 
-body.game-page.mobile-game-layout .mobile-control-row-use {
+.mobile-control-row-movement [data-key="ArrowLeft"] {
+    grid-column: 1;
+}
+
+.mobile-control-row-movement [data-key="ArrowUp"] {
+    grid-column: 2;
+}
+
+.mobile-control-row-movement [data-key="ArrowRight"] {
+    grid-column: 3;
+}
+
+.mobile-control-row-use {
     grid-template-columns: repeat(5, minmax(0px, 1fr));
 }
 
@@ -279,7 +291,7 @@ body.game-page.mobile-game-layout .mobile-control-row-use {
     box-sizing: border-box;
 }
 
-body.game-page.mobile-game-layout .mobile-control-button {
+.mobile-control-button {
     width: 100%;
     height: clamp(46px, 10dvh, 72px);
     min-height: 0px;
@@ -298,7 +310,7 @@ body.game-page.mobile-game-layout .mobile-control-button {
     background: linear-gradient(#fafdff, #d8ebff);
 }
 
-body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
+.mobile-control-button.is-pressed {
     color: #0b3a77;
     border-color: var(--accent-color);
     background: #d8ebff;
@@ -316,49 +328,6 @@ body.game-page.mobile-game-layout .mobile-control-button.is-pressed {
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-}
-
-.editor-play-controls .mobile-control-row {
-    display: grid;
-    gap: 10px;
-}
-
-.editor-play-controls .mobile-control-row-movement {
-    grid-template-columns: repeat(3, minmax(0px, 1fr));
-}
-
-.editor-play-controls .mobile-control-row-use {
-    grid-template-columns: repeat(5, minmax(0px, 1fr));
-}
-
-.editor-play-controls .mobile-control-row-restart {
-    margin-top: 18px;
-}
-
-.editor-play-controls .mobile-control-button {
-    width: 100%;
-    height: 54px;
-    min-height: 0px;
-    border-radius: var(--radius);
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0px;
-    touch-action: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.editor-play-controls .mobile-control-button-primary {
-    color: #0f3b73;
-    border-color: #7bb7ff;
-    background: linear-gradient(#fafdff, #d8ebff);
-}
-
-.editor-play-controls .mobile-control-button.is-pressed {
-    color: #0b3a77;
-    border-color: var(--accent-color);
-    background: #d8ebff;
-    box-shadow: inset 0px 2px 5px rgba(23, 32, 42, 0.18);
-    transform: translateY(1px);
 }
 
 /* Editor styles */
