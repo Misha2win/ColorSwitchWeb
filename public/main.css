@@ -392,7 +392,7 @@ nav a:hover {
     display: none;
 }
 
-.editor-playing .toolbar-row:not(.toolbar-row-play) {
+.editor-playing #level-toolbar .toolbar-row:not(.toolbar-row-play) {
     display: none;
 }
 
