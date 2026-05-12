@@ -485,6 +485,7 @@ export default class EditorArea {
 
         this.width = null
         this.height = null
+        this.editorElement = null
         this.canvas = null
         this.context = null
         this.animationFrameId = null
@@ -518,6 +519,7 @@ export default class EditorArea {
     }
 
     start() {
+        this.editorElement = document.getElementById('editor')
         this.canvas = document.getElementById(this.canvasId)
         this.width = this.canvas.width
         this.height = this.canvas.height
@@ -1362,7 +1364,7 @@ export default class EditorArea {
             this.playingLevel = this.createPlayableLevel(this.playSnapshot)
             this.setLevelUIVisible(true)
             event.currentTarget.textContent = 'Stop Playing'
-            document.body.classList.add('editor-playing')
+            this.editorElement?.classList.add('editor-playing')
             this.syncLevelNavigationControls()
         } catch (err) {
             dialog('Cannot play level:', err.message)
@@ -1699,7 +1701,7 @@ export default class EditorArea {
         this.playingLevel = false
         this.playSnapshot = null
         this.setLevelUIVisible(false)
-        document.body.classList.remove('editor-playing')
+        this.editorElement?.classList.remove('editor-playing')
         document.querySelectorAll('#editor-play-controls .mobile-control-button.is-pressed')
             .forEach(button => button.classList.remove('is-pressed'))
         document.getElementById('button-play').textContent = 'Play'
