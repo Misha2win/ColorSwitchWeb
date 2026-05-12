@@ -102,11 +102,11 @@ export default class Prism extends Obstacle {
             if (entity instanceof Beam) {
                 return beam.prism !== entity.prism && beam.color != entity.color
             } else if (entity instanceof Platform) {
-                return entity.color === Color.GRAY || entity.canCollideWith(beam)
+                return entity.canCollideWith(beam)
             } else if (entity instanceof ColorChanger) {
                 return beam.color != entity.color
             } else if (entity instanceof Element) {
-                return !beam.color.collidesWith(entity.color)
+                return beam.color.collidesWith(entity.color)
             } else if (entity instanceof Prism) {
                 return true
             }
@@ -127,9 +127,13 @@ export default class Prism extends Obstacle {
                 if (!boxesIntersect(beam, closest)) continue
 
                 if (closest instanceof Platform && !(closest instanceof PhotonicPlatform)) {
-                    beam.shorten(closest)
-                    const filtered = beam.color === Color.BLACK ? Color.BLACK : beam.color.subtract(closest.color)
-                    if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.color !== Color.GRAY) beam.partition(filtered)
+                    const mixed = beam.color.add(closest.color)
+                    if (beam.color !== mixed) {
+                        beam.shorten(closest)
+                        beam.partition(mixed)
+                    } else if (closest.color === Color.BLACK) {
+                        beam.shorten(closest)
+                    }
                 } else if (closest instanceof Beam) {
                     const mixed = beam.color.add(closest.color)
                     if (beam.color !== mixed) {
@@ -140,11 +144,9 @@ export default class Prism extends Obstacle {
                     beam.shorten(closest)
                     beam.partition(closest.color)
                 } else if (closest instanceof Element) {
-                    const mixed = beam.color.add(closest.color)
-                    if (beam.color !== mixed) {
-                        beam.shorten(closest)
-                        beam.partition(mixed)
-                    }
+                    beam.shorten(closest)
+                    const filtered = beam.color === Color.BLACK ? Color.BLACK : beam.color.subtract(closest.color)
+                    if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.color !== Color.GRAY) beam.partition(filtered)
                 } else if (closest instanceof Prism) {
                     beam.shorten(closest)
                 }

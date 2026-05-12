@@ -52,6 +52,9 @@ export default class Element extends Obstacle {
     onCollide(other) {
         if (!(other instanceof Player)) return
 
+        const newColor = other.color.subtract(this.color)
+        if (newColor !== other.color) other.color = newColor
+
         other.removeUses(this.color)
     }
 

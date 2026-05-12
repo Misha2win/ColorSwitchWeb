@@ -1,5 +1,5 @@
 {
-   "color": "green",
+   "color": "red",
    "spawn": {
       "x": 710,
       "y": 290
@@ -88,12 +88,6 @@
          "color": "green"
       },
       {
-         "type": "ColorChanger",
-         "x": 170,
-         "y": 285,
-         "color": "red"
-      },
-      {
          "type": "Goal",
          "x": 20,
          "y": 290,
@@ -106,6 +100,22 @@
          "width": 110,
          "height": 20,
          "color": "black"
+      },
+      {
+         "type": "Element",
+         "x": 450,
+         "y": 305,
+         "width": 10,
+         "height": 110,
+         "color": "green"
+      },
+      {
+         "type": "Element",
+         "x": 450,
+         "y": 185,
+         "width": 10,
+         "height": 110,
+         "color": "green"
       }
    ]
 }
