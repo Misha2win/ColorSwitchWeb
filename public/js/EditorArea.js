@@ -1477,6 +1477,11 @@ export default class EditorArea {
             event.preventDefault()
             this.duplicateSelectedEntity()
         }
+
+        if (key === 's' && (event.metaKey || event.ctrlKey)) {
+            event.preventDefault()
+            this.handleSaveClick()
+        }
     }
 
     deleteSelectedEntity() {
