@@ -145,7 +145,7 @@ export default class Level {
             overrides.x = levelWidth - entity.x - entity.width
             overrides.y = entity.y
 
-            if (entity instanceof Platform || entity instanceof Element) {
+            if (entity instanceof Platform) {
                 overrides.color = this.getGhostColor(entity.color, mirroredColor, this.player.color)
             } else if (entity instanceof Item) {
                 overrides.position = {

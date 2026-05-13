@@ -1,8 +1,8 @@
 {
-   "color": "blue",
+   "color": "red",
    "spawn": {
-      "x": 20,
-      "y": 560
+      "x": 370,
+      "y": 550
    },
    "entities": [
       {
@@ -38,123 +38,83 @@
          "color": "black"
       },
       {
-         "type": "Platform",
-         "x": 340,
-         "y": 20,
-         "width": 10,
-         "height": 430,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 110,
-         "y": 450,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 100,
-         "y": 250,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 20,
-         "y": 150,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 20,
-         "y": 350,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 390,
-         "y": 450,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 490,
-         "y": 350,
-         "width": 240,
-         "height": 10,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 400,
-         "y": 250,
-         "width": 240,
-         "height": 10,
-         "color": "blue"
-      },
-      {
-         "type": "Platform",
-         "x": 490,
-         "y": 150,
-         "width": 240,
-         "height": 10,
-         "color": "blue"
-      },
-      {
-         "type": "Platform",
-         "x": 390,
-         "y": 260,
-         "width": 10,
-         "height": 190,
-         "color": "green"
-      },
-      {
-         "type": "Platform",
-         "x": 390,
-         "y": 20,
-         "width": 10,
-         "height": 240,
-         "color": "blue"
-      },
-      {
          "type": "Goal",
-         "x": 710,
+         "x": 420,
          "y": 560,
-         "color": "yellow"
+         "color": "white"
       },
       {
          "type": "Prism",
-         "x": 360,
+         "x": 365,
          "y": 20,
-         "color": "blue",
+         "color": "red",
          "direction": "DOWN"
       },
       {
          "type": "ColorChanger",
-         "x": 670,
-         "y": 520,
+         "x": 55,
+         "y": 460,
          "color": "green"
       },
       {
          "type": "ColorChanger",
-         "x": 50,
-         "y": 90,
+         "x": 665,
+         "y": 460,
          "color": "blue"
       },
       {
-         "type": "ColorChanger",
-         "x": 670,
-         "y": 90,
-         "color": "red"
+         "type": "Element",
+         "x": 320,
+         "y": 20,
+         "width": 20,
+         "height": 500,
+         "color": "blue"
+      },
+      {
+         "type": "Element",
+         "x": 410,
+         "y": 20,
+         "width": 20,
+         "height": 500,
+         "color": "green"
+      },
+      {
+         "type": "Platform",
+         "x": 120,
+         "y": 520,
+         "width": 250,
+         "height": 20,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 380,
+         "y": 520,
+         "width": 250,
+         "height": 20,
+         "color": "black"
+      },
+      {
+         "type": "Element",
+         "x": 20,
+         "y": 520,
+         "width": 100,
+         "height": 20,
+         "color": "green"
+      },
+      {
+         "type": "Element",
+         "x": 630,
+         "y": 520,
+         "width": 100,
+         "height": 20,
+         "color": "blue"
+      },
+      {
+         "type": "Goal",
+         "x": 300,
+         "y": 560,
+         "color": "white"
       }
    ]
 }
