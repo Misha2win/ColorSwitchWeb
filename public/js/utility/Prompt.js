@@ -103,7 +103,6 @@ export function editableTextDialog(title, text, saveLabel = 'Save') {
         })
 
         dialog.showModal()
-        textarea.focus()
 
         dialog.addEventListener('close', () => {
             const value = dialog.returnValue === 'save' ? textarea.value : null
