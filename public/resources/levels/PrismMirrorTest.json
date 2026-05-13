@@ -2,7 +2,7 @@
    "color": "magenta",
    "spawn": {
       "x": 320,
-      "y": 130
+      "y": 75
    },
    "entities": [
       {
@@ -142,14 +142,14 @@
       {
          "type": "Mirror",
          "x": 50,
-         "y": 90,
+         "y": 70,
          "color": "blue",
          "persistOnce": false
       },
       {
          "type": "ColorChanger",
          "x": 440,
-         "y": 90,
+         "y": 70,
          "color": "blue"
       },
       {
@@ -280,6 +280,13 @@
          "y": 180,
          "color": "green",
          "direction": "DOWN"
+      },
+      {
+         "type": "Prism",
+         "x": 590,
+         "y": 130,
+         "color": "red",
+         "direction": "UP"
       }
    ]
 }

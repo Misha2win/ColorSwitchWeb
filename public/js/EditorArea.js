@@ -25,6 +25,10 @@ const minimumVisibleDraggedPixels = 10
 const levelUiHeight = 95
 const draftLevelSelectValue = '__editor-draft-level__'
 const spawnSize = 20
+const spawnPositionProperties = [
+    { name: 'x', type: 'number', step: 10 },
+    { name: 'y', type: 'number', step: 10 }
+]
 const levelOrderNamePattern = /^[A-Za-z0-9_-]+$/
 
 function camelToTitle(input) {
@@ -210,6 +214,42 @@ function canResizeEntity(entity) {
     return getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
 }
 
+function appendPropertyEditorField(form, entity, property) {
+    const div = document.createElement('div')
+    div.setAttribute('class', 'property-form-group')
+    form.appendChild(div)
+
+    const id = `property-${property.name}`
+    const label = document.createElement('label')
+    label.setAttribute('for', id)
+    label.textContent = property.label ?? camelToTitle(property.name)
+    div.appendChild(label)
+
+    const currentValue = getPropertyValue(entity, property)
+    const formValue = valueToFormValue(currentValue)
+    const input = createPropertyInput(property, formValue)
+    input.setAttribute('id', id)
+    input.setAttribute('name', id)
+    div.appendChild(input)
+
+    const eventName = property.type === 'select' || property.type === 'color' || property.type === 'boolean'
+        ? 'change'
+        : 'input'
+    input.addEventListener(eventName, (event) => {
+        const value = readFormValue(event, property)
+        if (value == null && property.type === 'number') return
+        setPropertyValue(entity, property, value)
+    })
+
+    if (property.type === 'number') {
+        input.addEventListener('change', () => {
+            const value = readFormValue({ target: input }, property)
+            if (value != null) setPropertyValue(entity, property, value)
+            input.value = valueToFormValue(getPropertyValue(entity, property))
+        })
+    }
+}
+
 function populatePropertyEditor(entity) {
     const form = document.getElementById('property-editor-form')
     form.innerHTML = ''
@@ -226,45 +266,17 @@ function populatePropertyEditor(entity) {
     }
 
     for (const property of editableProperties) {
-        const div = document.createElement('div')
-        div.setAttribute('class', 'property-form-group')
-        form.appendChild(div)
-
-        const id = `property-${property.name}`
-        const label = document.createElement('label')
-        label.setAttribute('for', id)
-        label.textContent = property.label ?? camelToTitle(property.name)
-        div.appendChild(label)
-
-        const currentValue = getPropertyValue(entity, property)
-        const formValue = valueToFormValue(currentValue)
-        const input = createPropertyInput(property, formValue)
-        input.setAttribute('id', id)
-        input.setAttribute('name', id)
-        div.appendChild(input)
-
-        const eventName = property.type === 'select' || property.type === 'color' || property.type === 'boolean'
-            ? 'change'
-            : 'input'
-        input.addEventListener(eventName, (event) => {
-            const value = readFormValue(event, property)
-            if (value == null && property.type === 'number') return
-            setPropertyValue(entity, property, value)
-        })
-
-        if (property.type === 'number') {
-            input.addEventListener('change', () => {
-                const value = readFormValue({ target: input }, property)
-                if (value != null) setPropertyValue(entity, property, value)
-                input.value = valueToFormValue(getPropertyValue(entity, property))
-            })
-        }
+        appendPropertyEditorField(form, entity, property)
     }
 }
 
 function populateSpawnPropertyEditor(editor) {
     const form = document.getElementById('property-editor-form')
     form.innerHTML = ''
+
+    for (const property of spawnPositionProperties) {
+        appendPropertyEditorField(form, editor.spawn, property)
+    }
 
     const div = document.createElement('div')
     div.setAttribute('class', 'property-form-group')
