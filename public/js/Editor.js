@@ -45,6 +45,7 @@ function shouldHandleEditorKeyEvent(event) {
     const key = event.key.toLowerCase()
     if ((event.metaKey || event.ctrlKey) && key === 'd') return true
     if ((event.metaKey || event.ctrlKey) && key === 'z') return !isEditableInteractionTarget(event.target)
+    if ((event.metaKey || event.ctrlKey) && key === 's') return true
     if (isEditableInteractionTarget(event.target)) return false
 
     return event.key === 'Backspace' || event.key === 'Delete'
