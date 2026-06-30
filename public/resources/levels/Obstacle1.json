@@ -1,0 +1,55 @@
+{
+   "color": "yellow",
+   "spawn": {
+      "x": 710,
+      "y": 290
+   },
+   "entities": [
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 730,
+         "height": 180,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 730,
+         "y": 10,
+         "width": 10,
+         "height": 580,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 10,
+         "y": 410,
+         "width": 730,
+         "height": 180,
+         "color": "black"
+      },
+      {
+         "type": "Goal",
+         "x": 20,
+         "y": 290,
+         "color": "red"
+      },
+      {
+         "type": "Element",
+         "x": 320,
+         "y": 190,
+         "width": 110,
+         "height": 220,
+         "color": "green"
+      }
+   ]
+}
