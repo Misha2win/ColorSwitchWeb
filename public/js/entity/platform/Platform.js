@@ -65,10 +65,10 @@ export default class Platform extends Entity {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number', step: 10 },
-         { name: 'y', type: 'number', step: 10 },
-         { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
-         { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 },
+         { name: 'x', type: 'number' },
+         { name: 'y', type: 'number' },
+         { name: 'width', type: 'number', min: 10 },
+         { name: 'height', type: 'number', min: 10 },
          { name: 'color', type: 'color' }
       ]
    }

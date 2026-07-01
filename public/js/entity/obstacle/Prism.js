@@ -232,8 +232,8 @@ export default class Prism extends Obstacle {
 
     getProperties() {
         return [
-            { name: 'x', type: 'number', step: 10 },
-            { name: 'y', type: 'number', step: 10 },
+            { name: 'x', type: 'number' },
+            { name: 'y', type: 'number' },
             { name: 'color', type: 'color' },
             { name: 'direction', type: 'select', options: ['UP', 'RIGHT', 'DOWN', 'LEFT'], get: entity => Direction.toString(entity.direction), set: (entity, value) => { entity.direction = Direction.fromString(value) } }
         ]

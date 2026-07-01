@@ -47,10 +47,10 @@ export default class MovingPlatform extends Platform {
    getProperties() {
       return [
          ...super.getProperties(),
-         { name: 'startX', type: 'number', step: 10, get: entity => entity.x1, set: (entity, value) => { entity.x1 = value } },
-         { name: 'startY', type: 'number', step: 10, get: entity => entity.y1, set: (entity, value) => { entity.y1 = value } },
-         { name: 'endX', type: 'number', step: 10, get: entity => entity.x2, set: (entity, value) => { entity.x2 = value } },
-         { name: 'endY', type: 'number', step: 10, get: entity => entity.y2, set: (entity, value) => { entity.y2 = value } }
+         { name: 'startX', type: 'number', get: entity => entity.x1, set: (entity, value) => { entity.x1 = value } },
+         { name: 'startY', type: 'number', get: entity => entity.y1, set: (entity, value) => { entity.y1 = value } },
+         { name: 'endX', type: 'number', get: entity => entity.x2, set: (entity, value) => { entity.x2 = value } },
+         { name: 'endY', type: 'number', get: entity => entity.y2, set: (entity, value) => { entity.y2 = value } }
       ]
    }
 

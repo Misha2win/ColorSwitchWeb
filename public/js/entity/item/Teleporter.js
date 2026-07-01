@@ -81,11 +81,11 @@ export default class Teleporter extends Item {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number', step: 10 },
-         { name: 'y', type: 'number', step: 10 },
+         { name: 'x', type: 'number' },
+         { name: 'y', type: 'number' },
          { name: 'hasDestination', type: 'boolean' },
-         { name: 'endX', type: 'number', step: 10 },
-         { name: 'endY', type: 'number', step: 10 }
+         { name: 'endX', type: 'number' },
+         { name: 'endY', type: 'number' }
       ]
    }
 

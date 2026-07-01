@@ -107,6 +107,8 @@ app.put('/api/levels/:name', async (req, res) => {
 
 app.use(exStatic(staticDirectory))
 
-app.listen(port, host, () => {
+const server = app.listen(port, host, () => {
     console.log(`Listening on http://${host}:${port}/`)
 })
+
+export default server

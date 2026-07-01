@@ -3,8 +3,13 @@ import Player from './entity/Player.js'
 import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
 import * as LevelCreator from './level/LevelCreator.js'
+import {
+    fetchCanOverwriteLevelFiles,
+    fetchLevelOrderJSON,
+    overwriteLevelOrderFile
+} from './level/LevelOrderApi.js'
 import * as Physics from './math/PhysicsEngine.js'
-import { promptInput, dialog, copyableDialog, confirmDialog, editableTextDialog } from './utility/Prompt.js'
+import { promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
 
 const colorChoices = [
     'black',
@@ -25,12 +30,20 @@ const minimumVisibleDraggedPixels = 10
 const levelUiHeight = 95
 const draftLevelSelectValue = '__editor-draft-level__'
 const spawnSize = 20
+const editorGridSize = 5
+const keyboardNudgePixels = editorGridSize
+const commandKeyboardNudgePixels = editorGridSize * 2
+const keyboardNudgeDirections = {
+    ArrowLeft: { x: -1, y: 0 },
+    ArrowRight: { x: 1, y: 0 },
+    ArrowUp: { x: 0, y: -1 },
+    ArrowDown: { x: 0, y: 1 }
+}
+const gridSnappedNumberPropertyNames = new Set(['x', 'y', 'width', 'height', 'startX', 'startY', 'endX', 'endY'])
 const spawnPositionProperties = [
-    { name: 'x', type: 'number', step: 10 },
-    { name: 'y', type: 'number', step: 10 }
+    { name: 'x', type: 'number' },
+    { name: 'y', type: 'number' }
 ]
-const levelOrderNamePattern = /^[A-Za-z0-9_-]+$/
-
 function camelToTitle(input) {
     return input
         .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
@@ -59,11 +72,30 @@ function valueToFormValue(value) {
     return String(value)
 }
 
+function isGridSnappedNumberProperty(property) {
+    return property.type === 'number' && gridSnappedNumberPropertyNames.has(property.name)
+}
+
+function getNumberPropertyStep(property) {
+    if (property.step != null) return property.step
+    if (isGridSnappedNumberProperty(property)) return editorGridSize
+
+    return null
+}
+
+function getNumberPropertyRoundTo(property) {
+    if (property.roundTo != null) return property.roundTo
+    if (isGridSnappedNumberProperty(property)) return editorGridSize
+
+    return null
+}
+
 function normalizeNumberValue(value, property) {
     if (!Number.isFinite(value)) return null
-    if (!property.roundTo) return value
+    const roundTo = getNumberPropertyRoundTo(property)
+    if (!roundTo) return value
 
-    const roundedValue = Math.round(value / property.roundTo) * property.roundTo
+    const roundedValue = Math.round(value / roundTo) * roundTo
     if (property.min == null) return roundedValue
 
     return Math.max(property.min, roundedValue)
@@ -311,7 +343,8 @@ function createPropertyInput(property, value) {
     }
 
     if (property.type === 'number') {
-        if (property.step != null) input.setAttribute('step', property.step)
+        const step = getNumberPropertyStep(property)
+        if (step != null) input.setAttribute('step', step)
         if (property.min != null) input.setAttribute('min', property.min)
     }
     input.value = value
@@ -361,33 +394,6 @@ function getUnsupportedTypes(levelJSON) {
             .filter(entityJSON => !EntityCreator.registry.has(entityJSON.type))
             .map(entityJSON => entityJSON.type ?? '(missing type)')
     )]
-}
-
-function hasInvalidLevelOrderName(names) {
-    return names.some(name => typeof name !== 'string' || !levelOrderNamePattern.test(name))
-}
-
-function validateLevelOrderJSON(levelOrderJSON) {
-    if (!levelOrderJSON || typeof levelOrderJSON !== 'object' || Array.isArray(levelOrderJSON)) {
-        throw new Error('Level order JSON must be an object.')
-    }
-    if (!Array.isArray(levelOrderJSON.levelOrder)) {
-        throw new Error('Level order JSON must include levelOrder[].')
-    }
-
-    if (hasInvalidLevelOrderName(levelOrderJSON.levelOrder)) {
-        throw new Error('levelOrder[] can only contain level names with letters, numbers, underscores, and hyphens.')
-    }
-
-    if (levelOrderJSON.NotUsed != null) {
-        if (!Array.isArray(levelOrderJSON.NotUsed)) {
-            throw new Error('NotUsed must be an array when it is included.')
-        }
-
-        if (hasInvalidLevelOrderName(levelOrderJSON.NotUsed)) {
-            throw new Error('NotUsed[] can only contain level names with letters, numbers, underscores, and hyphens.')
-        }
-    }
 }
 
 function copyLevelJSON(levelJSON) {
@@ -450,46 +456,6 @@ async function writeLevelFile(name, levelJSON) {
     return response.json()
 }
 
-async function fetchLevelOrderJSON() {
-    const response = await fetch('api/level-order', { cache: 'no-store' })
-    if (!response.ok) {
-        const message = await response.text()
-        throw new Error(message || 'Failed to load resources/levelOrder.json.')
-    }
-
-    return response.json()
-}
-
-async function overwriteLevelOrderFile(levelOrderJSON) {
-    validateLevelOrderJSON(levelOrderJSON)
-    const response = await fetch('api/level-order', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(levelOrderJSON)
-    })
-
-    if (!response.ok) {
-        const message = await response.text()
-        throw new Error(message || 'Failed to save resources/levelOrder.json.')
-    }
-
-    return response.json()
-}
-
-async function fetchCanOverwriteLevelFiles() {
-    try {
-        const response = await fetch('api/levels', { cache: 'no-store' })
-        if (!response.ok) return false
-
-        const capabilities = await response.json()
-        return capabilities.canOverwriteLevels === true
-    } catch (err) {
-        return false
-    }
-}
-
 export default class EditorArea {
 
     constructor(canvasId = 'editor-canvas') {
@@ -523,6 +489,7 @@ export default class EditorArea {
         this.levelLoadingPromise = null
         this.currentLevelIndex = -1
         this.currentLevelName = null
+        this.currentLevelCanOverwrite = false
         this.canOverwriteLevelFiles = false
 
         this.playingLevel = false
@@ -659,7 +626,7 @@ export default class EditorArea {
     }
 
     round(value) {
-        return Math.round(value / 10) * 10
+        return Math.round(value / editorGridSize) * editorGridSize
     }
 
     setLevelUIVisible(showingLevelUI) {
@@ -796,6 +763,13 @@ export default class EditorArea {
     createPendingMoveAction(entity, spawn) {
         if (entity) return this.createMoveAction('entity', entity)
         if (spawn) return this.createMoveAction('spawn', this.spawn)
+
+        return null
+    }
+
+    createSelectedMoveAction() {
+        if (this.selectedEntity) return this.createMoveAction('entity', this.selectedEntity)
+        if (this.selectedSpawn) return this.createMoveAction('spawn', this.spawn)
 
         return null
     }
@@ -951,11 +925,42 @@ export default class EditorArea {
         })
     }
 
+    nudgeSelected(direction, distance) {
+        if (this.playingLevel || (!this.selectedEntity && !this.selectedSpawn)) return false
+
+        const target = this.selectedEntity ?? this.spawn
+        if (!this.pendingMoveAction || this.pendingMoveAction.target !== target) {
+            this.commitPendingMove()
+            this.pendingMoveAction = this.createSelectedMoveAction()
+        }
+
+        Object.assign(target, {
+            x: target.x + direction.x * distance,
+            y: target.y + direction.y * distance
+        })
+
+        if (this.selectedEntity) {
+            this.keepBoxVisible(this.selectedEntity)
+            populatePropertyEditor(this.selectedEntity)
+        } else {
+            this.keepSpawnVisible()
+            this.syncPropertyEditor()
+        }
+
+        this.rect = false
+        this.dragInfo = null
+        this.selectedEntityMoved = false
+        this.syncSelectionControls()
+
+        return true
+    }
+
     onPointerDown(event) {
         if (this.playingLevel) return
         if (event.button != null && event.button !== 0) return
 
         event.preventDefault()
+        this.commitPendingMove()
         this.activePointerId = this.getPointerId(event)
         this.capturePointer(this.activePointerId)
         this.updatePointerPosition(event)
@@ -1216,6 +1221,18 @@ export default class EditorArea {
 
         const storedLevelName = readStoredCurrentLevelName()
         const storedLevelIndex = storedLevelName ? this.levelNames.indexOf(storedLevelName) : -1
+        if (storedLevelName && storedLevelIndex === -1) {
+            try {
+                const storedLevelJSON = await fetchLevelJSON(storedLevelName)
+                this.levelJSONByName.set(storedLevelName, copyLevelJSON(storedLevelJSON))
+                await this.loadLevelJSON(copyLevelJSON(storedLevelJSON), storedLevelName, { canOverwrite: true })
+                return
+            } catch (err) {
+                storeCurrentLevelName(null)
+                console.error(err)
+            }
+        }
+
         const initialLevelIndex = storedLevelIndex === -1 ? 0 : storedLevelIndex
 
         await this.loadCachedLevelAt(initialLevelIndex, false)
@@ -1338,23 +1355,9 @@ export default class EditorArea {
         }
 
         try {
-            const levelOrderJSON = await fetchLevelOrderJSON()
-            const editedText = await editableTextDialog(
-                'Edit Level Order JSON',
-                JSON.stringify(levelOrderJSON, null, 3),
-                'Save Order'
-            )
-            if (editedText == null) return
-
-            const editedLevelOrderJSON = JSON.parse(editedText)
-            validateLevelOrderJSON(editedLevelOrderJSON)
-            await this.cacheLevelOrderLevels(editedLevelOrderJSON.levelOrder)
-
-            const result = await overwriteLevelOrderFile(editedLevelOrderJSON)
-            this.applyLevelOrderJSON(editedLevelOrderJSON)
-            dialog('Level order saved:', `Overwrote ${result.path ?? 'resources/levelOrder.json'}.`)
+            window.location.href = 'order-editor.html'
         } catch (err) {
-            dialog('There was an error editing level order:', err.message)
+            dialog('There was an error opening level order:', err.message)
         }
     }
 
@@ -1394,7 +1397,7 @@ export default class EditorArea {
             return
         }
 
-        const name = this.currentLevelIndex !== -1 ? this.currentLevelName : null
+        const name = this.currentLevelCanOverwrite ? this.currentLevelName : null
         if (!name) {
             dialog(
                 'Cannot save level:',
@@ -1468,10 +1471,19 @@ export default class EditorArea {
 
     handleKeyPress(event) {
         if (this.playingLevel) return
+        const nudgeDirection = keyboardNudgeDirections[event.key]
+        if (nudgeDirection) {
+            event.preventDefault()
+            const distance = event.metaKey ? commandKeyboardNudgePixels : keyboardNudgePixels
+            this.nudgeSelected(nudgeDirection, distance)
+            return
+        }
+
         const key = event.key.toLowerCase()
 
         if (key === 'z' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
+            this.commitPendingMove()
             if (event.shiftKey) {
                 this.redoMove()
             } else {
@@ -1482,18 +1494,27 @@ export default class EditorArea {
 
         if (event.key === 'Backspace' || event.key === 'Delete') {
             event.preventDefault()
+            this.commitPendingMove()
             this.deleteSelectedEntity()
         }
 
         if (key === 'd' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
+            this.commitPendingMove()
             this.duplicateSelectedEntity()
         }
 
         if (key === 's' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault()
+            this.commitPendingMove()
             this.handleSaveClick()
         }
+    }
+
+    handleKeyRelease(event) {
+        if (!keyboardNudgeDirections[event.key]) return
+
+        this.commitPendingMove()
     }
 
     deleteSelectedEntity() {
@@ -1609,7 +1630,7 @@ export default class EditorArea {
         const saveButton = document.getElementById('button-save')
         const editLevelOrderButton = document.getElementById('button-edit-level-order')
 
-        const hasCurrentLevel = this.currentLevelIndex !== -1 && !!this.currentLevelName
+        const hasCurrentLevel = this.currentLevelCanOverwrite && !!this.currentLevelName
         if (saveButton) {
             saveButton.hidden = !this.canOverwriteLevelFiles
             saveButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles || !hasCurrentLevel
@@ -1629,11 +1650,11 @@ export default class EditorArea {
             editLevelOrderButton.hidden = !this.canOverwriteLevelFiles
             editLevelOrderButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles
             if (!this.canOverwriteLevelFiles) {
-                editLevelOrderButton.title = 'Edit Order is only available when running the local editor server.'
+                editLevelOrderButton.title = 'Change Order is only available when running the local editor server.'
             } else if (this.playingLevel) {
                 editLevelOrderButton.title = 'Stop playing before editing the level order.'
             } else {
-                editLevelOrderButton.title = 'Edit resources/levelOrder.json.'
+                editLevelOrderButton.title = 'Change the level order.'
             }
         }
     }
@@ -1646,10 +1667,11 @@ export default class EditorArea {
         }
     }
 
-    async loadLevelJSON(levelJSON, name = 'noname') {
+    async loadLevelJSON(levelJSON, name = 'noname', options = {}) {
         const unsupportedTypes = getUnsupportedTypes(levelJSON)
         const level = await LevelCreator.loadLevelFromJSON(levelJSON, name)
         const levelIndex = this.levelNames.indexOf(name)
+        const canOverwriteCurrentLevel = options.canOverwrite === true || levelIndex !== -1
 
         this.levelColor = level.color.toString()
         this.spawn = copySpawn(level.spawn)
@@ -1660,7 +1682,8 @@ export default class EditorArea {
         this.clearMoveHistory()
         this.currentLevelName = name
         this.currentLevelIndex = levelIndex
-        if (levelIndex !== -1) {
+        this.currentLevelCanOverwrite = canOverwriteCurrentLevel
+        if (canOverwriteCurrentLevel) {
             this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
             storeCurrentLevelName(name)
         } else {
