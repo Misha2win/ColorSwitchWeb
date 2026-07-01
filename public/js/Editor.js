@@ -23,6 +23,7 @@ document.getElementById('button-undo-move').addEventListener('click', () => edit
 document.getElementById('button-redo-move').addEventListener('click', () => editor.redoMove())
 document.getElementById('button-duplicate-selected').addEventListener('click', () => editor.duplicateSelectedEntity())
 document.getElementById('button-delete-selected').addEventListener('click', () => editor.deleteSelectedEntity())
+const editorArrowKeys = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'])
 editor.canvas.addEventListener('pointerdown', (event) => editor.onPointerDown(event))
 editor.canvas.addEventListener('pointermove', (event) => editor.onPointerMove(event))
 editor.canvas.addEventListener('pointerup', (event) => editor.onPointerUp(event))
@@ -33,6 +34,13 @@ window.addEventListener('keydown', (event) => {
 
     editor.handleKeyPress(event)
 }, { capture: true })
+window.addEventListener('keyup', (event) => {
+    if (!editorArrowKeys.has(event.key)) return
+
+    editor.handleKeyRelease(event)
+}, { capture: true })
+window.addEventListener('blur', () => editor.commitPendingMove())
+
 function isEditableInteractionTarget(target) {
     const editable = typeof target?.closest === 'function'
         ? target.closest('input, textarea, select, [contenteditable], .dialog-copy-text')
@@ -47,6 +55,7 @@ function shouldHandleEditorKeyEvent(event) {
     if ((event.metaKey || event.ctrlKey) && key === 'z') return !isEditableInteractionTarget(event.target)
     if ((event.metaKey || event.ctrlKey) && key === 's') return true
     if (isEditableInteractionTarget(event.target)) return false
+    if (editorArrowKeys.has(event.key)) return true
 
     return event.key === 'Backspace' || event.key === 'Delete'
 }

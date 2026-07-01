@@ -54,10 +54,10 @@ export default class Text extends Entity {
 
     getProperties() {
         return [
-            { name: 'x', type: 'number', step: 10 },
-            { name: 'y', type: 'number', step: 10 },
-            { name: 'width', type: 'number', min: 10, step: 10, roundTo: 10 },
-            { name: 'height', type: 'number', min: 10, step: 10, roundTo: 10 },
+            { name: 'x', type: 'number' },
+            { name: 'y', type: 'number' },
+            { name: 'width', type: 'number', min: 10 },
+            { name: 'height', type: 'number', min: 10 },
             { name: 'text', type: 'textarea' },
             { name: 'fontSize', type: 'number', min: 1, step: 1 },
             { name: 'color', label: 'Text Color', type: 'text', get: entity => entity.textColor, set: (entity, value) => { entity.textColor = value } },

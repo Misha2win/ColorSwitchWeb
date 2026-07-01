@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Color Switch Order Editor</title>
+
+        <link rel="stylesheet" href="./main.css" />
+        <script type="module" src="./js/LevelOrderEditor.js" defer></script>
+    </head>
+    <body class="order-editor-page">
+        <nav>
+            <a href="editor.html">Editor</a>
+            <a href="index.html">Game</a>
+        </nav>
+        <main id="order-editor">
+            <div id="order-toolbar">
+                <div id="order-view-tabs" aria-label="Level list view">
+                    <button type="button" id="button-show-ordered" class="order-view-button is-active" data-level-list="ordered">
+                        Level Order <span id="level-order-count">0</span>
+                    </button>
+                    <button type="button" id="button-show-unused" class="order-view-button" data-level-list="unused">
+                        Unused Levels <span id="unused-level-count">0</span>
+                    </button>
+                    <button type="button" id="button-show-mobile" class="order-view-button" data-level-list="mobile">
+                        Mobile Levels <span id="mobile-level-count">0</span>
+                    </button>
+                </div>
+                <div id="order-actions">
+                    <button onclick="this.blur()" id="button-add-level" disabled>Add Level</button>
+                    <button onclick="this.blur()" id="button-edit-selected-level" disabled>Edit Selected</button>
+                    <button onclick="this.blur()" id="button-save-order" disabled>Save</button>
+                </div>
+            </div>
+            <div id="order-sections">
+                <section class="order-section is-active" data-level-section="ordered" aria-label="Level order">
+                    <div id="level-order-list" class="order-level-grid" data-level-list="ordered" aria-label="Level order"></div>
+                </section>
+                <section class="order-section" data-level-section="unused" aria-label="Unused levels">
+                    <div id="unused-level-list" class="order-level-grid" data-level-list="unused" aria-label="Unused levels"></div>
+                </section>
+                <section class="order-section" data-level-section="mobile" aria-label="Mobile levels">
+                    <div id="mobile-level-list" class="order-mobile-grid" aria-label="Mobile level mappings"></div>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>
