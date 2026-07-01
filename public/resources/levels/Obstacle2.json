@@ -1,7 +1,7 @@
 {
-   "color": "yellow",
+   "color": "white",
    "spawn": {
-      "x": 20,
+      "x": 710,
       "y": 290
    },
    "entities": [
@@ -41,14 +41,34 @@
          "type": "Goal",
          "x": 710,
          "y": 290,
-         "color": "red"
+         "color": "blue"
       },
       {
          "type": "Element",
-         "x": 315,
+         "x": 220,
          "y": 210,
          "width": 110,
          "height": 180,
+         "color": "green"
+      },
+      {
+         "type": "Element",
+         "x": 420,
+         "y": 210,
+         "width": 110,
+         "height": 180,
+         "color": "red"
+      },
+      {
+         "type": "Goal",
+         "x": 20,
+         "y": 290,
+         "color": "cyan"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 360,
+         "y": 285,
          "color": "green"
       }
    ]

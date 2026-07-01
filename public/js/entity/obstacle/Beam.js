@@ -29,7 +29,7 @@ export default class Beam extends Entity {
       switch (this.direction) {
          case Direction.UP: {
                this.x = this.source.x + this.source.width / 2 - Beam.BEAM_WIDTH / 2
-               this.y = (prevBeam ? prevBeam.y : this.source.y + this.source.height / 2) - Beam.MAX_LENGTH
+               this.y = (prevBeam ? prevBeam.y : this.source.y) - Beam.MAX_LENGTH
                this.width = Beam.BEAM_WIDTH
                this.height = Beam.MAX_LENGTH
                break
