@@ -17,10 +17,7 @@
       "Mirror7",
       "PrismMirrorTest",
       "Painter2",
-      "TestLevel",
-      "Password",
-      "OrGateTest",
-      "Level0Mobile"
+      "TestLevel"
    ],
    "mobileLevels": {
       "Level0": "Level0Mobile"
@@ -42,6 +39,9 @@
       "Prism6",
       "Element1",
       "Element2",
-      "Element3"
+      "Element3",
+      "Password",
+      "OrGateTest",
+      "Level0Mobile"
    ]
 }
