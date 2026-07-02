@@ -31,6 +31,7 @@ const levelUiHeight = 95
 const draftLevelSelectValue = '__editor-draft-level__'
 const spawnSize = 20
 const editorGridSize = 5
+const resizableEntityCreationGridSize = 10
 const keyboardNudgePixels = editorGridSize
 const commandKeyboardNudgePixels = editorGridSize * 2
 const keyboardNudgeDirections = {
@@ -169,14 +170,21 @@ function copySpawn(spawn) {
 }
 
 function copyPosition(target) {
-    return {
+    const position = {
         x: target.x,
         y: target.y
     }
+    if (typeof target.width === 'number') position.width = target.width
+    if (typeof target.height === 'number') position.height = target.height
+
+    return position
 }
 
 function positionsMatch(first, second) {
-    return first.x === second.x && first.y === second.y
+    return first.x === second.x
+        && first.y === second.y
+        && first.width === second.width
+        && first.height === second.height
 }
 
 function getSpawnBox(spawn) {
@@ -227,6 +235,39 @@ function drawSpawnMarker(context, spawn, color) {
     }
 }
 
+function drawSelectionIndicator(context, box, showOutline = true) {
+    const width = Math.max(0, box.width ?? 0)
+    const height = Math.max(0, box.height ?? 0)
+    if (!width || !height) return
+
+    context.save()
+    context.beginPath()
+    context.rect(box.x, box.y, width, height)
+    context.clip()
+    context.fillStyle = 'rgba(0, 100, 200, 0.4)'
+    context.fillRect(box.x, box.y, width, height)
+
+    if (!showOutline) {
+        context.restore()
+        return
+    }
+
+    const lineWidth = Math.min(3, width, height)
+    const x = box.x + lineWidth / 2
+    const y = box.y + lineWidth / 2
+    const drawWidth = Math.max(0, width - lineWidth)
+    const drawHeight = Math.max(0, height - lineWidth)
+
+    context.lineJoin = 'miter'
+    context.strokeStyle = 'rgba(0, 0, 0, 0.9)'
+    context.lineWidth = lineWidth
+    context.strokeRect(x, y, drawWidth, drawHeight)
+    context.strokeStyle = 'rgba(255, 255, 255, 0.95)'
+    context.lineWidth = 1
+    context.strokeRect(x, y, drawWidth, drawHeight)
+    context.restore()
+}
+
 function getEditableProperties(entity) {
     if (!entity || typeof entity.getProperties !== 'function') return []
 
@@ -244,6 +285,27 @@ function getEditableProperties(entity) {
 
 function canResizeEntity(entity) {
     return getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
+}
+
+function getResizeMinimum(entity, propertyName) {
+    const property = getEditableProperties(entity).find(candidate => candidate.name === propertyName)
+    if (Number.isFinite(property?.min)) return property.min
+
+    return editorGridSize
+}
+
+function getResizeDistance(entity, propertyName, distance, shrinking) {
+    if (!shrinking) return distance
+
+    const minimum = getResizeMinimum(entity, propertyName)
+    return Math.max(0, Math.min(distance, entity[propertyName] - minimum))
+}
+
+function getOppositeDirection(direction) {
+    return {
+        x: -direction.x,
+        y: -direction.y
+    }
 }
 
 function appendPropertyEditorField(form, entity, property) {
@@ -557,25 +619,23 @@ export default class EditorArea {
             context.save()
             drawSpawnMarker(context, this.spawn, Color.getColor(this.levelColor))
             context.restore()
-            if (this.selectedSpawn) {
-                context.fillStyle = 'rgba(0, 100, 200, 0.4)'
-                context.fillRect(this.spawn.x - 5, this.spawn.y - 5, spawnSize + 10, spawnSize + 10)
-            }
 
             for (const entity of this.entities) {
                 context.save()
                 entity.draw(context)
                 context.restore()
-                if (entity === this.selectedEntity) {
-                    context.fillStyle = 'rgba(0, 100, 200, 0.4)'
-                    context.fillRect(entity.x - 5, entity.y - 5, entity.width + 10, entity.height + 10)
-                }
             }
 
             if (rect) {
                 const previewRect = Physics.getNormalizedBox(rect)
                 context.fillStyle = 'rgba(0, 100, 200, 0.4)'
                 context.fillRect(previewRect.x, previewRect.y, previewRect.width, previewRect.height)
+            }
+
+            if (this.selectedSpawn) {
+                drawSelectionIndicator(context, getSpawnBox(this.spawn), false)
+            } else if (this.selectedEntity) {
+                drawSelectionIndicator(context, this.selectedEntity, canResizeEntity(this.selectedEntity))
             }
         }
 
@@ -625,8 +685,15 @@ export default class EditorArea {
         context.restore()
     }
 
-    round(value) {
-        return Math.round(value / editorGridSize) * editorGridSize
+    round(value, gridSize = editorGridSize) {
+        return Math.round(value / gridSize) * gridSize
+    }
+
+    getRoundedPointerPosition(gridSize = editorGridSize) {
+        return {
+            x: this.round(this.mouseInfo.position.x, gridSize),
+            y: this.round(this.mouseInfo.position.y, gridSize)
+        }
     }
 
     setLevelUIVisible(showingLevelUI) {
@@ -710,10 +777,7 @@ export default class EditorArea {
     }
 
     getPlacementRect() {
-        const position = {
-            x: this.round(this.mouseInfo.position.x),
-            y: this.round(this.mouseInfo.position.y)
-        }
+        const position = this.getRoundedPointerPosition()
         if (isSpawnTool(this.type)) {
             return {
                 ...position,
@@ -732,11 +796,13 @@ export default class EditorArea {
                 fixed: true
             }
         }
+        const gridSize = entity && canResizeEntity(entity) ? resizableEntityCreationGridSize : editorGridSize
 
         return {
-            ...position,
+            ...this.getRoundedPointerPosition(gridSize),
             width: 0,
-            height: 0
+            height: 0,
+            gridSize
         }
     }
 
@@ -772,6 +838,13 @@ export default class EditorArea {
         if (this.selectedSpawn) return this.createMoveAction('spawn', this.spawn)
 
         return null
+    }
+
+    ensurePendingMoveForTarget(target) {
+        if (this.pendingMoveAction && this.pendingMoveAction.target === target) return
+
+        this.commitPendingMove()
+        this.pendingMoveAction = this.createSelectedMoveAction()
     }
 
     commitPendingMove() {
@@ -929,10 +1002,7 @@ export default class EditorArea {
         if (this.playingLevel || (!this.selectedEntity && !this.selectedSpawn)) return false
 
         const target = this.selectedEntity ?? this.spawn
-        if (!this.pendingMoveAction || this.pendingMoveAction.target !== target) {
-            this.commitPendingMove()
-            this.pendingMoveAction = this.createSelectedMoveAction()
-        }
+        this.ensurePendingMoveForTarget(target)
 
         Object.assign(target, {
             x: target.x + direction.x * distance,
@@ -947,6 +1017,41 @@ export default class EditorArea {
             this.syncPropertyEditor()
         }
 
+        this.rect = false
+        this.dragInfo = null
+        this.selectedEntityMoved = false
+        this.syncSelectionControls()
+
+        return true
+    }
+
+    resizeSelectedEntity(direction, distance, shrinking = false) {
+        if (this.playingLevel || !this.selectedEntity || !canResizeEntity(this.selectedEntity)) return false
+        if (!Number.isFinite(this.selectedEntity.width) || !Number.isFinite(this.selectedEntity.height)) return false
+
+        const target = this.selectedEntity
+        const sizeProperty = direction.x ? 'width' : 'height'
+        const resizeDistance = getResizeDistance(target, sizeProperty, distance, shrinking)
+        if (!resizeDistance) return false
+
+        if (direction.x < 0) {
+            this.ensurePendingMoveForTarget(target)
+            target.x += shrinking ? resizeDistance : -resizeDistance
+            target.width += shrinking ? -resizeDistance : resizeDistance
+        } else if (direction.x > 0) {
+            this.ensurePendingMoveForTarget(target)
+            target.width += shrinking ? -resizeDistance : resizeDistance
+        } else if (direction.y < 0) {
+            this.ensurePendingMoveForTarget(target)
+            target.y += shrinking ? resizeDistance : -resizeDistance
+            target.height += shrinking ? -resizeDistance : resizeDistance
+        } else if (direction.y > 0) {
+            this.ensurePendingMoveForTarget(target)
+            target.height += shrinking ? -resizeDistance : resizeDistance
+        }
+
+        this.keepBoxVisible(target)
+        populatePropertyEditor(target)
         this.rect = false
         this.dragInfo = null
         this.selectedEntityMoved = false
@@ -1014,9 +1119,10 @@ export default class EditorArea {
             } else if (this.rect?.fixed) {
                 this.moveFixedPlacementRect(mouse)
             } else if (this.rect) {
+                const gridSize = this.rect.gridSize ?? editorGridSize
                 Object.assign(this.rect, {
-                    width: this.round(mouse.position.x - this.rect.x),
-                    height: this.round(mouse.position.y - this.rect.y)
+                    width: this.round(mouse.position.x - this.rect.x, gridSize),
+                    height: this.round(mouse.position.y - this.rect.y, gridSize)
                 })
             }
         }
@@ -1474,8 +1580,13 @@ export default class EditorArea {
         const nudgeDirection = keyboardNudgeDirections[event.key]
         if (nudgeDirection) {
             event.preventDefault()
-            const distance = event.metaKey ? commandKeyboardNudgePixels : keyboardNudgePixels
-            this.nudgeSelected(nudgeDirection, distance)
+            if (event.shiftKey) {
+                const resizeDirection = event.metaKey ? getOppositeDirection(nudgeDirection) : nudgeDirection
+                this.resizeSelectedEntity(resizeDirection, keyboardNudgePixels, event.metaKey)
+            } else {
+                const distance = event.metaKey ? commandKeyboardNudgePixels : keyboardNudgePixels
+                this.nudgeSelected(nudgeDirection, distance)
+            }
             return
         }
 
@@ -1650,7 +1761,7 @@ export default class EditorArea {
             editLevelOrderButton.hidden = !this.canOverwriteLevelFiles
             editLevelOrderButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles
             if (!this.canOverwriteLevelFiles) {
-                editLevelOrderButton.title = 'Change Order is only available when running the local editor server.'
+                editLevelOrderButton.title = 'Reorder Levels is only available when running the local editor server.'
             } else if (this.playingLevel) {
                 editLevelOrderButton.title = 'Stop playing before editing the level order.'
             } else {
