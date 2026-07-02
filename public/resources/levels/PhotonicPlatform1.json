@@ -1,24 +1,24 @@
 {
-   "color": "red",
+   "color": "gray",
    "spawn": {
       "x": 20,
-      "y": 340
+      "y": 170
    },
    "entities": [
       {
          "type": "Platform",
          "x": 10,
          "y": 10,
-         "width": 730,
-         "height": 10,
+         "width": 10,
+         "height": 580,
          "color": "black"
       },
       {
          "type": "Platform",
          "x": 10,
-         "y": 10,
-         "width": 10,
-         "height": 580,
+         "y": 490,
+         "width": 730,
+         "height": 100,
          "color": "black"
       },
       {
@@ -30,57 +30,84 @@
          "color": "black"
       },
       {
+         "type": "Goal",
+         "x": 20,
+         "y": 410,
+         "color": "red"
+      },
+      {
          "type": "Platform",
          "x": 10,
-         "y": 580,
+         "y": 10,
          "width": 730,
-         "height": 10,
+         "height": 100,
          "color": "black"
       },
       {
-         "type": "PhotonicPlatform",
-         "x": 20,
-         "y": 360,
-         "width": 710,
-         "height": 30
-      },
-      {
-         "type": "MovingPlatform",
-         "x": 470,
-         "y": 60,
-         "startX": 470,
-         "startY": 60,
-         "endX": 350,
-         "endY": 60,
-         "width": 40,
-         "height": 10,
-         "color": "black"
-      },
-      {
-         "type": "Goal",
-         "x": 710,
-         "y": 340,
-         "color": "green"
-      },
-      {
          "type": "Prism",
-         "x": 350,
-         "y": 20,
-         "color": "blue",
-         "direction": "DOWN"
-      },
-      {
-         "type": "Prism",
-         "x": 380,
-         "y": 20,
+         "x": 365,
+         "y": 110,
          "color": "red",
          "direction": "DOWN"
       },
       {
+         "type": "Platform",
+         "x": 20,
+         "y": 250,
+         "width": 350,
+         "height": 100,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 380,
+         "y": 250,
+         "width": 210,
+         "height": 100,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 370,
+         "y": 260,
+         "width": 10,
+         "height": 90,
+         "color": "black"
+      },
+      {
+         "type": "PhotonicPlatform",
+         "x": 330,
+         "y": 250,
+         "width": 90,
+         "height": 240
+      },
+      {
          "type": "ColorChanger",
-         "x": 550,
+         "x": 310,
+         "y": 165,
+         "color": "red"
+      },
+      {
+         "type": "Prism",
+         "x": 590,
          "y": 300,
-         "color": "green"
+         "color": "red",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "Prism",
+         "x": 710,
+         "y": 300,
+         "color": "red",
+         "direction": "LEFT"
+      },
+      {
+         "type": "Element",
+         "x": 590,
+         "y": 280,
+         "width": 140,
+         "height": 20,
+         "color": "red"
       }
    ]
 }

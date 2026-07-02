@@ -63,13 +63,19 @@
          "type": "Goal",
          "x": 20,
          "y": 290,
-         "color": "cyan"
+         "color": "white"
       },
       {
          "type": "ColorChanger",
          "x": 360,
          "y": 285,
          "color": "green"
+      },
+      {
+         "type": "ColorChanger",
+         "x": 560,
+         "y": 285,
+         "color": "red"
       }
    ]
 }

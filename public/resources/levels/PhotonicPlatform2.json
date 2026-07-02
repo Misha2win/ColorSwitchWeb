@@ -60,14 +60,6 @@
          "direction": "LEFT"
       },
       {
-         "type": "Platform",
-         "x": 230,
-         "y": 250,
-         "width": 30,
-         "height": 100,
-         "color": "black"
-      },
-      {
          "type": "Prism",
          "x": 430,
          "y": 190,

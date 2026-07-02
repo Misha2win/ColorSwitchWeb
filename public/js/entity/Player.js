@@ -8,7 +8,7 @@ export default class Player extends Entity {
     constructor(x, y, eventListeners = true) {
         super(x, y, 20, 20)
 
-        this.speed = 450
+        this.speed = 400
 
         this.requestLeft = false
         this.requestRight = false

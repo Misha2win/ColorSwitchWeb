@@ -52,7 +52,7 @@
       },
       {
          "type": "Prism",
-         "x": 530,
+         "x": 590,
          "y": 290,
          "color": "blue",
          "direction": "RIGHT"
@@ -61,7 +61,7 @@
          "type": "Platform",
          "x": 20,
          "y": 250,
-         "width": 510,
+         "width": 570,
          "height": 100,
          "color": "black"
       },
@@ -75,7 +75,7 @@
       },
       {
          "type": "Platform",
-         "x": 340,
+         "x": 330,
          "y": 350,
          "width": 90,
          "height": 140,
@@ -89,7 +89,7 @@
       },
       {
          "type": "ColorChanger",
-         "x": 460,
+         "x": 450,
          "y": 405,
          "color": "blue"
       },

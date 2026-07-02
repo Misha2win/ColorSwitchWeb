@@ -6,12 +6,13 @@
       "Prism4",
       "Obstacle1",
       "Obstacle2",
-      "PhotonicPlatform2",
+      "PhotonicPlatform1",
       "Mirror6",
       "Mirror2",
       "Mirror9",
       "PrismMirrorTest",
-      "TestLevel"
+      "TestLevel",
+      "PhotonicPlatform1"
    ],
    "mobileLevels": {
       "Level0": "Level0Mobile"
@@ -22,7 +23,6 @@
       "Element4",
       "FragilePlatform1",
       "PhotonicPlatformTest",
-      "PhotonicPlatform1",
       "CodexBridge",
       "MirrorPrismTestLevel",
       "PrismTestingLevel",
@@ -60,6 +60,7 @@
       "Prism9",
       "Prism8",
       "Painter2",
-      "Prism5"
+      "Prism5",
+      "PhotonicPlatform2"
    ]
 }
