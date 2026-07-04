@@ -84,8 +84,8 @@ export default class Teleporter extends Item {
          { name: 'x', type: 'number' },
          { name: 'y', type: 'number' },
          { name: 'hasDestination', type: 'boolean' },
-         { name: 'endX', type: 'number' },
-         { name: 'endY', type: 'number' }
+         { name: 'endX', type: 'number', depends: { hasDestination: true } },
+         { name: 'endY', type: 'number', depends: { hasDestination: true } }
       ]
    }
 

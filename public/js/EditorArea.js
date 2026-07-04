@@ -45,18 +45,6 @@ const spawnPositionProperties = [
     { name: 'x', type: 'number' },
     { name: 'y', type: 'number' }
 ]
-function camelToTitle(input) {
-    return input
-        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-        .replace(/^./, c => c.toUpperCase())
-}
-
-function getPropertyValue(entity, property) {
-    if (property.get) return property.get(entity)
-
-    return entity[property.name]
-}
-
 function setPropertyValue(entity, property, value) {
     if (property.set) {
         property.set(entity, value)
@@ -66,34 +54,19 @@ function setPropertyValue(entity, property, value) {
     entity[property.name] = value
 }
 
-function valueToFormValue(value) {
-    if (value instanceof Color) return value.name
-    if (value == null) return ''
+function propertyValuesMatch(value, expectedValue) {
+    if (Array.isArray(expectedValue)) {
+        return expectedValue.some(option => propertyValuesMatch(value, option))
+    }
 
-    return String(value)
-}
-
-function isGridSnappedNumberProperty(property) {
-    return property.type === 'number' && gridSnappedNumberPropertyNames.has(property.name)
-}
-
-function getNumberPropertyStep(property) {
-    if (property.step != null) return property.step
-    if (isGridSnappedNumberProperty(property)) return editorGridSize
-
-    return null
-}
-
-function getNumberPropertyRoundTo(property) {
-    if (property.roundTo != null) return property.roundTo
-    if (isGridSnappedNumberProperty(property)) return editorGridSize
-
-    return null
+    const valueToCompare = value instanceof Color ? value.name : value
+    const expectedValueToCompare = expectedValue instanceof Color ? expectedValue.name : expectedValue
+    return valueToCompare === expectedValueToCompare
 }
 
 function normalizeNumberValue(value, property) {
     if (!Number.isFinite(value)) return null
-    const roundTo = getNumberPropertyRoundTo(property)
+    const roundTo = property.roundTo ?? (gridSnappedNumberPropertyNames.has(property.name) ? editorGridSize : null)
     if (!roundTo) return value
 
     const roundedValue = Math.round(value / roundTo) * roundTo
@@ -129,28 +102,6 @@ function createSelect(options, value) {
     return select
 }
 
-function isSpawnTool(type) {
-    return type === 'Spawn'
-}
-
-function getEntityToolLabel(type) {
-    if (isSpawnTool(type)) return 'Spawn Point'
-
-    return camelToTitle(type)
-}
-
-function getDragLiftOffset(event) {
-    return event?.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset
-}
-
-function getHitSlop(event) {
-    return event?.pointerType === 'touch' ? touchHitSlop : 0
-}
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max)
-}
-
 function expandBox(box, amount) {
     if (!amount) return box
 
@@ -159,13 +110,6 @@ function expandBox(box, amount) {
         y: box.y - amount,
         width: box.width + amount * 2,
         height: box.height + amount * 2
-    }
-}
-
-function copySpawn(spawn) {
-    return {
-        x: spawn.x,
-        y: spawn.y
     }
 }
 
@@ -268,11 +212,14 @@ function drawSelectionIndicator(context, box, showOutline = true) {
     context.restore()
 }
 
-function getEditableProperties(entity) {
+function getEditableProperties(entity, includeInactive = false) {
     if (!entity || typeof entity.getProperties !== 'function') return []
 
     try {
-        return entity.getProperties() ?? []
+        const properties = entity.getProperties() ?? []
+        if (includeInactive) return properties
+
+        return properties.filter(property => propertyDependencyMatches(entity, properties, property))
     } catch (err) {
         if (err instanceof Error && err.message.startsWith('Entity.getProperties')) {
             console.error(err)
@@ -283,29 +230,16 @@ function getEditableProperties(entity) {
     }
 }
 
-function canResizeEntity(entity) {
-    return getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
-}
+function propertyDependencyMatches(entity, properties, property) {
+    if (!property.depends) return true
 
-function getResizeMinimum(entity, propertyName) {
-    const property = getEditableProperties(entity).find(candidate => candidate.name === propertyName)
-    if (Number.isFinite(property?.min)) return property.min
-
-    return editorGridSize
-}
-
-function getResizeDistance(entity, propertyName, distance, shrinking) {
-    if (!shrinking) return distance
-
-    const minimum = getResizeMinimum(entity, propertyName)
-    return Math.max(0, Math.min(distance, entity[propertyName] - minimum))
-}
-
-function getOppositeDirection(direction) {
-    return {
-        x: -direction.x,
-        y: -direction.y
-    }
+    return Object.entries(property.depends).every(([propertyName, expectedValue]) => {
+        const dependencyProperty = properties.find(candidate => candidate.name === propertyName)
+        const dependencyValue = dependencyProperty
+            ? (dependencyProperty.get ? dependencyProperty.get(entity) : entity[dependencyProperty.name])
+            : entity[propertyName]
+        return propertyValuesMatch(dependencyValue, expectedValue)
+    })
 }
 
 function appendPropertyEditorField(form, entity, property) {
@@ -316,11 +250,16 @@ function appendPropertyEditorField(form, entity, property) {
     const id = `property-${property.name}`
     const label = document.createElement('label')
     label.setAttribute('for', id)
-    label.textContent = property.label ?? camelToTitle(property.name)
+    const fallbackLabel = property.name
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/^./, c => c.toUpperCase())
+    label.textContent = property.label ?? fallbackLabel
     div.appendChild(label)
 
-    const currentValue = getPropertyValue(entity, property)
-    const formValue = valueToFormValue(currentValue)
+    const currentValue = property.get ? property.get(entity) : entity[property.name]
+    const formValue = currentValue instanceof Color
+        ? currentValue.name
+        : String(currentValue ?? '')
     const input = createPropertyInput(property, formValue)
     input.setAttribute('id', id)
     input.setAttribute('name', id)
@@ -330,16 +269,32 @@ function appendPropertyEditorField(form, entity, property) {
         ? 'change'
         : 'input'
     input.addEventListener(eventName, (event) => {
+        const controlsDependencies = getEditableProperties(entity, true)
+            .some(candidate => candidate.depends && Object.prototype.hasOwnProperty.call(candidate.depends, property.name))
+        const previousPropertyNames = controlsDependencies
+            ? getEditableProperties(entity).map(candidate => candidate.name)
+            : null
         const value = readFormValue(event, property)
         if (value == null && property.type === 'number') return
         setPropertyValue(entity, property, value)
+        if (controlsDependencies) {
+            const nextPropertyNames = getEditableProperties(entity).map(candidate => candidate.name)
+            const propertyListChanged = previousPropertyNames.length !== nextPropertyNames.length
+                || previousPropertyNames.some((name, index) => name !== nextPropertyNames[index])
+            if (propertyListChanged) {
+                populatePropertyEditor(entity)
+            }
+        }
     })
 
     if (property.type === 'number') {
         input.addEventListener('change', () => {
             const value = readFormValue({ target: input }, property)
             if (value != null) setPropertyValue(entity, property, value)
-            input.value = valueToFormValue(getPropertyValue(entity, property))
+            const currentValue = property.get ? property.get(entity) : entity[property.name]
+            input.value = currentValue instanceof Color
+                ? currentValue.name
+                : String(currentValue ?? '')
         })
     }
 }
@@ -405,20 +360,13 @@ function createPropertyInput(property, value) {
     }
 
     if (property.type === 'number') {
-        const step = getNumberPropertyStep(property)
+        const step = property.step ?? (gridSnappedNumberPropertyNames.has(property.name) ? editorGridSize : null)
         if (step != null) input.setAttribute('step', step)
         if (property.min != null) input.setAttribute('min', property.min)
     }
     input.value = value
 
     return input
-}
-
-function createEntityFromJSON(entityJSON) {
-    const maker = EntityCreator.registry.get(entityJSON.type)
-    if (!maker) return null
-
-    return maker(entityJSON)
 }
 
 function entityToJSON(entity) {
@@ -458,10 +406,6 @@ function getUnsupportedTypes(levelJSON) {
     )]
 }
 
-function copyLevelJSON(levelJSON) {
-    return JSON.parse(JSON.stringify(levelJSON))
-}
-
 function createStarterLevelJSON() {
     return {
         color: 'gray',
@@ -493,12 +437,6 @@ function downloadFile(name, contents, mime = 'text/plain') {
     a.click()
     a.remove()
     URL.revokeObjectURL(url)
-}
-
-function getLevelFileBaseName(name) {
-    const trimmedName = name.trim().replace(/\.json$/i, '')
-    const pathParts = trimmedName.split(/[\\/]/)
-    return pathParts[pathParts.length - 1]
 }
 
 async function writeLevelFile(name, levelJSON) {
@@ -554,6 +492,8 @@ export default class EditorArea {
         this.currentLevelCanOverwrite = false
         this.canOverwriteLevelFiles = false
 
+        this.editorLevelUIVisible = false
+        this.showingLevelUI = false
         this.playingLevel = false
         this.playSnapshot = null
         this.previewPlayer = null
@@ -564,7 +504,8 @@ export default class EditorArea {
         this.canvas = document.getElementById(this.canvasId)
         this.width = this.canvas.width
         this.height = this.canvas.height
-        this.setLevelUIVisible(false)
+        this.editorLevelUIVisible = false
+        this.setLevelUIVisible(this.editorLevelUIVisible)
 
         this.context = this.canvas.getContext('2d')
 
@@ -601,7 +542,7 @@ export default class EditorArea {
 
         const { context, rect } = this
 
-        this.clear()
+        context.clearRect(0, 0, this.canvas.width, this.canvas.height)
         if (this.playingLevel) {
             const level = this.playingLevel
             level.preparePhysics(delta)
@@ -635,20 +576,24 @@ export default class EditorArea {
             if (this.selectedSpawn) {
                 drawSelectionIndicator(context, getSpawnBox(this.spawn), false)
             } else if (this.selectedEntity) {
-                drawSelectionIndicator(context, this.selectedEntity, canResizeEntity(this.selectedEntity))
+                const showResizeOutline = getEditableProperties(this.selectedEntity)
+                    .some(property => property.name === 'width' || property.name === 'height')
+                drawSelectionIndicator(context, this.selectedEntity, showResizeOutline)
             }
+
+            this.drawLevelUIBoundary(context)
         }
 
         this.animationFrameId = requestAnimationFrame(nextNow => this.loop(nextNow))
     }
 
-    clear() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    }
-
     stop() {
-        if (!this.animationFrameId) return
-        cancelAnimationFrame(this.animationFrameId)
+        if (!this.animationFrameId) {
+            return
+        }
+
+        const animationFrameId = this.animationFrameId
+        cancelAnimationFrame(animationFrameId)
         this.animationFrameId = null
     }
 
@@ -685,19 +630,35 @@ export default class EditorArea {
         context.restore()
     }
 
-    round(value, gridSize = editorGridSize) {
-        return Math.round(value / gridSize) * gridSize
+    drawLevelUIBoundary(context) {
+        if (!this.showingLevelUI) return
+
+        context.save()
+        context.fillStyle = 'black'
+        context.fillRect(0, this.height, this.width, 1)
+        context.restore()
     }
 
     getRoundedPointerPosition(gridSize = editorGridSize) {
         return {
-            x: this.round(this.mouseInfo.position.x, gridSize),
-            y: this.round(this.mouseInfo.position.y, gridSize)
+            x: Math.round(this.mouseInfo.position.x / gridSize) * gridSize,
+            y: Math.round(this.mouseInfo.position.y / gridSize) * gridSize
         }
     }
 
     setLevelUIVisible(showingLevelUI) {
-        this.canvas.height = this.height + (showingLevelUI ? levelUiHeight : 0)
+        this.showingLevelUI = showingLevelUI
+        const visibleLevelUIHeight = showingLevelUI ? levelUiHeight : 0
+        this.canvas.height = this.height + visibleLevelUIHeight
+        this.syncLevelUIControl()
+    }
+
+    toggleEditorLevelUI() {
+        if (this.playingLevel) return
+
+        const nextEditorLevelUIVisible = !this.editorLevelUIVisible
+        this.editorLevelUIVisible = nextEditorLevelUIVisible
+        this.setLevelUIVisible(this.editorLevelUIVisible)
     }
 
     getVisiblePosition(box) {
@@ -705,23 +666,12 @@ export default class EditorArea {
         const height = Math.max(0, box.height ?? 0)
         const visibleWidth = Math.min(minimumVisibleDraggedPixels, width)
         const visibleHeight = Math.min(minimumVisibleDraggedPixels, height)
+        const editableHeight = this.height + (this.editorLevelUIVisible ? levelUiHeight : 0)
 
         return {
-            x: clamp(box.x, visibleWidth - width, this.width - visibleWidth),
-            y: clamp(box.y, visibleHeight - height, this.height - visibleHeight)
+            x: Math.min(Math.max(box.x, visibleWidth - width), this.width - visibleWidth),
+            y: Math.min(Math.max(box.y, visibleHeight - height), editableHeight - visibleHeight)
         }
-    }
-
-    keepBoxVisible(box) {
-        Object.assign(box, this.getVisiblePosition(box))
-    }
-
-    keepSpawnVisible() {
-        Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
-    }
-
-    getPointerId(event) {
-        return event.pointerId ?? 'mouse'
     }
 
     capturePointer(pointerId) {
@@ -760,13 +710,8 @@ export default class EditorArea {
         })
     }
 
-    findSpawnAt(point, event) {
-        const boundingBox = expandBox(getSpawnBox(this.spawn), getHitSlop(event))
-        return Physics.pointIntersectsBox(point, boundingBox) ? this.spawn : null
-    }
-
     findEntityAt(point, event) {
-        const hitSlop = getHitSlop(event)
+        const hitSlop = event?.pointerType === 'touch' ? touchHitSlop : 0
         for (let i = this.entities.length - 1; i >= 0; i--) {
             const entity = this.entities[i]
             const boundingBox = expandBox(Physics.boundingBox(entity, entity), hitSlop)
@@ -778,7 +723,7 @@ export default class EditorArea {
 
     getPlacementRect() {
         const position = this.getRoundedPointerPosition()
-        if (isSpawnTool(this.type)) {
+        if (this.type === 'Spawn') {
             return {
                 ...position,
                 width: 20, // PLAYER SIZE
@@ -787,8 +732,11 @@ export default class EditorArea {
             }
         }
 
-        const entity = createEntityFromJSON({ type: this.type, ...position, width: 0, height: 0 })
-        if (entity && !canResizeEntity(entity)) {
+        const makeEntity = EntityCreator.registry.get(this.type)
+        const entity = makeEntity?.({ type: this.type, ...position, width: 0, height: 0 }) ?? null
+        const entityIsResizable = entity
+            && getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
+        if (entity && !entityIsResizable) {
             return {
                 ...position,
                 width: entity.width,
@@ -796,7 +744,7 @@ export default class EditorArea {
                 fixed: true
             }
         }
-        const gridSize = entity && canResizeEntity(entity) ? resizableEntityCreationGridSize : editorGridSize
+        const gridSize = entityIsResizable ? resizableEntityCreationGridSize : editorGridSize
 
         return {
             ...this.getRoundedPointerPosition(gridSize),
@@ -809,7 +757,7 @@ export default class EditorArea {
     createDragInfo(target, pointerPosition, event) {
         return {
             target,
-            liftOffset: getDragLiftOffset(event),
+            liftOffset: event?.pointerType === 'touch' ? touchDragLiftOffset : noDragLiftOffset,
             grabOffset: {
                 x: pointerPosition.x - target.x,
                 y: pointerPosition.y - target.y
@@ -826,25 +774,17 @@ export default class EditorArea {
         }
     }
 
-    createPendingMoveAction(entity, spawn) {
-        if (entity) return this.createMoveAction('entity', entity)
-        if (spawn) return this.createMoveAction('spawn', this.spawn)
-
-        return null
-    }
-
-    createSelectedMoveAction() {
-        if (this.selectedEntity) return this.createMoveAction('entity', this.selectedEntity)
-        if (this.selectedSpawn) return this.createMoveAction('spawn', this.spawn)
-
-        return null
-    }
-
     ensurePendingMoveForTarget(target) {
         if (this.pendingMoveAction && this.pendingMoveAction.target === target) return
 
         this.commitPendingMove()
-        this.pendingMoveAction = this.createSelectedMoveAction()
+        if (this.selectedEntity) {
+            this.pendingMoveAction = this.createMoveAction('entity', this.selectedEntity)
+        } else if (this.selectedSpawn) {
+            this.pendingMoveAction = this.createMoveAction('spawn', this.spawn)
+        } else {
+            this.pendingMoveAction = null
+        }
     }
 
     commitPendingMove() {
@@ -873,14 +813,11 @@ export default class EditorArea {
         this.syncHistoryControls()
     }
 
-    canApplyMoveAction(action) {
-        if (action.targetType === 'spawn') return action.target === this.spawn
-
-        return this.entities.includes(action.target)
-    }
-
     applyMoveAction(action, position) {
-        if (!this.canApplyMoveAction(action)) return false
+        const canApply = action.targetType === 'spawn'
+            ? action.target === this.spawn
+            : this.entities.includes(action.target)
+        if (!canApply) return false
 
         Object.assign(action.target, position)
         this.selectedEntity = action.targetType === 'entity' ? action.target : null
@@ -942,17 +879,13 @@ export default class EditorArea {
         }
     }
 
-    getSelectedEntityDragTarget(pointerPosition) {
-        return this.getDragTarget(this.selectedEntity, pointerPosition)
-    }
-
-    moveSelectedEntity(mouse) {
-        const dragTarget = this.getSelectedEntityDragTarget(mouse.position)
+    moveDraggedTarget(target, mouse) {
+        const dragTarget = this.getDragTarget(target, mouse.position)
         if (dragTarget) {
-            const moved = this.selectedEntity.x !== dragTarget.x || this.selectedEntity.y !== dragTarget.y
+            const moved = target.x !== dragTarget.x || target.y !== dragTarget.y
             if (moved) {
                 this.selectedEntityMoved = true
-                Object.assign(this.selectedEntity, dragTarget)
+                Object.assign(target, dragTarget)
             }
             return
         }
@@ -961,31 +894,9 @@ export default class EditorArea {
         const dy = mouse.position.y - mouse.previous.y
         if (dx || dy) {
             this.selectedEntityMoved = true
-            Object.assign(this.selectedEntity, {
-                x: this.selectedEntity.x + dx,
-                y: this.selectedEntity.y + dy
-            })
-        }
-    }
-
-    moveSelectedSpawn(mouse) {
-        const dragTarget = this.getDragTarget(this.spawn, mouse.position)
-        if (dragTarget) {
-            const moved = this.spawn.x !== dragTarget.x || this.spawn.y !== dragTarget.y
-            if (moved) {
-                this.selectedEntityMoved = true
-                Object.assign(this.spawn, dragTarget)
-            }
-            return
-        }
-
-        const dx = mouse.position.x - mouse.previous.x
-        const dy = mouse.position.y - mouse.previous.y
-        if (dx || dy) {
-            this.selectedEntityMoved = true
-            Object.assign(this.spawn, {
-                x: this.spawn.x + dx,
-                y: this.spawn.y + dy
+            Object.assign(target, {
+                x: target.x + dx,
+                y: target.y + dy
             })
         }
     }
@@ -993,8 +904,8 @@ export default class EditorArea {
     moveFixedPlacementRect(mouse) {
         const dragTarget = this.getDragTarget(this.rect, mouse.position) ?? mouse.position
         Object.assign(this.rect, {
-            x: this.round(dragTarget.x),
-            y: this.round(dragTarget.y)
+            x: Math.round(dragTarget.x / editorGridSize) * editorGridSize,
+            y: Math.round(dragTarget.y / editorGridSize) * editorGridSize
         })
     }
 
@@ -1010,10 +921,10 @@ export default class EditorArea {
         })
 
         if (this.selectedEntity) {
-            this.keepBoxVisible(this.selectedEntity)
+            Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
             populatePropertyEditor(this.selectedEntity)
         } else {
-            this.keepSpawnVisible()
+            Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
             this.syncPropertyEditor()
         }
 
@@ -1026,12 +937,19 @@ export default class EditorArea {
     }
 
     resizeSelectedEntity(direction, distance, shrinking = false) {
-        if (this.playingLevel || !this.selectedEntity || !canResizeEntity(this.selectedEntity)) return false
+        if (this.playingLevel || !this.selectedEntity) return false
+        const canResizeSelection = getEditableProperties(this.selectedEntity)
+            .some(property => property.name === 'width' || property.name === 'height')
+        if (!canResizeSelection) return false
         if (!Number.isFinite(this.selectedEntity.width) || !Number.isFinite(this.selectedEntity.height)) return false
 
         const target = this.selectedEntity
         const sizeProperty = direction.x ? 'width' : 'height'
-        const resizeDistance = getResizeDistance(target, sizeProperty, distance, shrinking)
+        const sizePropertyMetadata = getEditableProperties(target).find(candidate => candidate.name === sizeProperty)
+        const minimumSize = Number.isFinite(sizePropertyMetadata?.min) ? sizePropertyMetadata.min : editorGridSize
+        const resizeDistance = shrinking
+            ? Math.max(0, Math.min(distance, target[sizeProperty] - minimumSize))
+            : distance
         if (!resizeDistance) return false
 
         if (direction.x < 0) {
@@ -1050,7 +968,7 @@ export default class EditorArea {
             target.height += shrinking ? -resizeDistance : resizeDistance
         }
 
-        this.keepBoxVisible(target)
+        Object.assign(target, this.getVisiblePosition(target))
         populatePropertyEditor(target)
         this.rect = false
         this.dragInfo = null
@@ -1066,7 +984,7 @@ export default class EditorArea {
 
         event.preventDefault()
         this.commitPendingMove()
-        this.activePointerId = this.getPointerId(event)
+        this.activePointerId = event.pointerId ?? 'mouse'
         this.capturePointer(this.activePointerId)
         this.updatePointerPosition(event)
         Object.assign(this.mouseInfo, {
@@ -1075,12 +993,20 @@ export default class EditorArea {
         const mouse = this.mouseInfo
         const hadSelection = !!this.selectedEntity || this.selectedSpawn
         const entity = this.findEntityAt(mouse.position, event)
-        const spawn = entity ? null : this.findSpawnAt(mouse.position, event)
+        const spawnHitSlop = event?.pointerType === 'touch' ? touchHitSlop : 0
+        const spawnBox = expandBox(getSpawnBox(this.spawn), spawnHitSlop)
+        const spawn = !entity && Physics.pointIntersectsBox(mouse.position, spawnBox) ? this.spawn : null
 
         this.selectedEntity = entity
         this.selectedSpawn = !!spawn
         this.selectedEntityMoved = false
-        this.pendingMoveAction = this.createPendingMoveAction(entity, spawn)
+        if (entity) {
+            this.pendingMoveAction = this.createMoveAction('entity', entity)
+        } else if (spawn) {
+            this.pendingMoveAction = this.createMoveAction('spawn', this.spawn)
+        } else {
+            this.pendingMoveAction = null
+        }
         if (entity?.type) this.setActiveEntityType(entity.type)
         if (spawn) this.setActiveEntityType('Spawn')
         if (entity) {
@@ -1103,7 +1029,7 @@ export default class EditorArea {
     }
 
     onPointerMove(event) {
-        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+        if (this.activePointerId !== null && (event.pointerId ?? 'mouse') !== this.activePointerId) return
         if (this.activePointerId !== null) event.preventDefault()
 
         this.updatePointerPosition(event)
@@ -1113,30 +1039,30 @@ export default class EditorArea {
 
         if (mouse.held) {
             if (this.selectedEntity) {
-                this.moveSelectedEntity(mouse)
+                this.moveDraggedTarget(this.selectedEntity, mouse)
             } else if (this.selectedSpawn) {
-                this.moveSelectedSpawn(mouse)
+                this.moveDraggedTarget(this.spawn, mouse)
             } else if (this.rect?.fixed) {
                 this.moveFixedPlacementRect(mouse)
             } else if (this.rect) {
                 const gridSize = this.rect.gridSize ?? editorGridSize
                 Object.assign(this.rect, {
-                    width: this.round(mouse.position.x - this.rect.x, gridSize),
-                    height: this.round(mouse.position.y - this.rect.y, gridSize)
+                    width: Math.round((mouse.position.x - this.rect.x) / gridSize) * gridSize,
+                    height: Math.round((mouse.position.y - this.rect.y) / gridSize) * gridSize
                 })
             }
         }
     }
 
     onPointerUp(event) {
-        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+        if (this.activePointerId !== null && (event.pointerId ?? 'mouse') !== this.activePointerId) return
 
         event.preventDefault()
         this.updatePointerPosition(event)
         this.releasePointer(this.activePointerId)
         this.activePointerId = null
-        if (this.selectedEntity && this.selectedEntityMoved) this.moveSelectedEntity(this.mouseInfo)
-        if (this.selectedSpawn && this.selectedEntityMoved) this.moveSelectedSpawn(this.mouseInfo)
+        if (this.selectedEntity && this.selectedEntityMoved) this.moveDraggedTarget(this.selectedEntity, this.mouseInfo)
+        if (this.selectedSpawn && this.selectedEntityMoved) this.moveDraggedTarget(this.spawn, this.mouseInfo)
         if (!this.selectedEntity && this.rect?.fixed) this.moveFixedPlacementRect(this.mouseInfo)
         Object.assign(this.mouseInfo, {
             held: false
@@ -1147,23 +1073,23 @@ export default class EditorArea {
         if (this.selectedEntity) {
             if (this.selectedEntityMoved) {
                 Object.assign(this.selectedEntity, {
-                    x: this.round(this.selectedEntity.x),
-                    y: this.round(this.selectedEntity.y)
+                    x: Math.round(this.selectedEntity.x / editorGridSize) * editorGridSize,
+                    y: Math.round(this.selectedEntity.y / editorGridSize) * editorGridSize
                 })
-                this.keepBoxVisible(this.selectedEntity)
+                Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
                 populatePropertyEditor(this.selectedEntity)
             }
         } else if (this.selectedSpawn) {
             if (this.selectedEntityMoved) {
                 Object.assign(this.spawn, {
-                    x: this.round(this.spawn.x),
-                    y: this.round(this.spawn.y)
+                    x: Math.round(this.spawn.x / editorGridSize) * editorGridSize,
+                    y: Math.round(this.spawn.y / editorGridSize) * editorGridSize
                 })
-                this.keepSpawnVisible()
+                Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
                 this.syncPropertyEditor()
             }
         } else if (this.rect) {
-            if (this.rect.fixed) this.keepBoxVisible(this.rect)
+            if (this.rect.fixed) Object.assign(this.rect, this.getVisiblePosition(this.rect))
             const shouldCreate = this.rect.fixed || (this.rect.width && this.rect.height)
             if (shouldCreate) this.createEntity()
         }
@@ -1176,7 +1102,7 @@ export default class EditorArea {
     }
 
     onPointerCancel(event) {
-        if (this.activePointerId !== null && this.getPointerId(event) !== this.activePointerId) return
+        if (this.activePointerId !== null && (event.pointerId ?? 'mouse') !== this.activePointerId) return
 
         event.preventDefault()
         this.releasePointer(this.activePointerId)
@@ -1186,18 +1112,18 @@ export default class EditorArea {
         })
         if (this.selectedEntity && this.selectedEntityMoved) {
             Object.assign(this.selectedEntity, {
-                x: this.round(this.selectedEntity.x),
-                y: this.round(this.selectedEntity.y)
+                x: Math.round(this.selectedEntity.x / editorGridSize) * editorGridSize,
+                y: Math.round(this.selectedEntity.y / editorGridSize) * editorGridSize
             })
-            this.keepBoxVisible(this.selectedEntity)
+            Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
             populatePropertyEditor(this.selectedEntity)
         }
         if (this.selectedSpawn && this.selectedEntityMoved) {
             Object.assign(this.spawn, {
-                x: this.round(this.spawn.x),
-                y: this.round(this.spawn.y)
+                x: Math.round(this.spawn.x / editorGridSize) * editorGridSize,
+                y: Math.round(this.spawn.y / editorGridSize) * editorGridSize
             })
-            this.keepSpawnVisible()
+            Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
             this.syncPropertyEditor()
         }
         this.commitPendingMove()
@@ -1210,8 +1136,11 @@ export default class EditorArea {
     createEntity() {
         const normRect = Physics.getNormalizedBox(this.rect)
         this.clearMoveHistory()
-        if (isSpawnTool(this.type)) {
-            this.spawn = copySpawn(normRect)
+        if (this.type === 'Spawn') {
+            this.spawn = {
+                x: normRect.x,
+                y: normRect.y
+            }
             this.selectedEntity = null
             this.selectedSpawn = true
             this.syncPropertyEditor()
@@ -1219,7 +1148,8 @@ export default class EditorArea {
             return
         }
 
-        const entity = createEntityFromJSON({ type: this.type, ...normRect })
+        const makeEntity = EntityCreator.registry.get(this.type)
+        const entity = makeEntity?.({ type: this.type, ...normRect }) ?? null
         if (!entity) return
 
         this.entities.push(entity)
@@ -1249,7 +1179,10 @@ export default class EditorArea {
             const button = document.createElement('button')
             button.classList.add('button-entity')
             button.dataset.type = type
-            button.textContent = getEntityToolLabel(type)
+            const fallbackLabel = type
+                .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+                .replace(/^./, c => c.toUpperCase())
+            button.textContent = type === 'Spawn' ? 'Spawn Point' : fallbackLabel
             toolbar.appendChild(button)
         }
     }
@@ -1269,7 +1202,7 @@ export default class EditorArea {
             return
         }
 
-        if (this.selectedSpawn || isSpawnTool(this.type)) {
+        if (this.selectedSpawn || this.type === 'Spawn') {
             populateSpawnPropertyEditor(this)
             return
         }
@@ -1301,6 +1234,21 @@ export default class EditorArea {
         if (redoButton) redoButton.disabled = !canEditHistory || !this.redoStack.length
     }
 
+    syncLevelUIControl() {
+        const button = document.getElementById('button-level-ui-toggle')
+        if (!button) return
+
+        button.disabled = !!this.playingLevel
+        button.setAttribute('aria-pressed', this.showingLevelUI ? 'true' : 'false')
+        if (this.playingLevel) {
+            button.title = 'The bottom 95px helper text space is always shown while playing.'
+        } else {
+            button.title = this.editorLevelUIVisible
+                ? 'Hide bottom 95px helper text space'
+                : 'Show bottom 95px helper text space'
+        }
+    }
+
     loadUsedLevels() {
         if (this.levelLoadingPromise) return this.levelLoadingPromise
 
@@ -1330,8 +1278,8 @@ export default class EditorArea {
         if (storedLevelName && storedLevelIndex === -1) {
             try {
                 const storedLevelJSON = await fetchLevelJSON(storedLevelName)
-                this.levelJSONByName.set(storedLevelName, copyLevelJSON(storedLevelJSON))
-                await this.loadLevelJSON(copyLevelJSON(storedLevelJSON), storedLevelName, { canOverwrite: true })
+                this.levelJSONByName.set(storedLevelName, JSON.parse(JSON.stringify(storedLevelJSON)))
+                await this.loadLevelJSON(JSON.parse(JSON.stringify(storedLevelJSON)), storedLevelName, { canOverwrite: true })
                 return
             } catch (err) {
                 storeCurrentLevelName(null)
@@ -1348,7 +1296,8 @@ export default class EditorArea {
         const name = this.levelNames[this.currentLevelIndex]
         if (!name) return
 
-        this.levelJSONByName.set(name, this.getLevelJSON())
+        const levelJSON = this.getLevelJSON()
+        this.levelJSONByName.set(name, levelJSON)
     }
 
     async loadCachedLevelAt(index, saveCurrent = true) {
@@ -1359,7 +1308,7 @@ export default class EditorArea {
         const levelJSON = this.levelJSONByName.get(name)
         if (!levelJSON) throw new Error(`Level ${name} was not preloaded.`)
 
-        await this.loadLevelJSON(copyLevelJSON(levelJSON), name)
+        await this.loadLevelJSON(JSON.parse(JSON.stringify(levelJSON)), name)
     }
 
     async handleLevelNavigation(offset) {
@@ -1371,14 +1320,6 @@ export default class EditorArea {
         } catch (err) {
             dialog('There was an error loading levels:', err.message)
         }
-    }
-
-    handlePreviousLevelClick() {
-        return this.handleLevelNavigation(-1)
-    }
-
-    handleNextLevelClick() {
-        return this.handleLevelNavigation(1)
     }
 
     async checkOverwriteSupport() {
@@ -1428,7 +1369,7 @@ export default class EditorArea {
         )
 
         for (const [name, levelJSON] of levelEntries) {
-            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+            this.levelJSONByName.set(name, JSON.parse(JSON.stringify(levelJSON)))
         }
     }
 
@@ -1471,7 +1412,8 @@ export default class EditorArea {
         if (this.playingLevel) return
         if (type !== 'json') return
 
-        copyableDialog('Level JSON', JSON.stringify(this.getLevelJSON(), null, 3))
+        const levelJSON = JSON.stringify(this.getLevelJSON(), null, 3)
+        copyableDialog('Level JSON', levelJSON)
     }
 
     handlePlayClick(event) {
@@ -1523,7 +1465,7 @@ export default class EditorArea {
             const levelJSON = this.getLevelJSON()
             const result = await writeLevelFile(name, levelJSON)
             const savedPath = result.path ?? `resources/levels/${name}.json`
-            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+            this.levelJSONByName.set(name, JSON.parse(JSON.stringify(levelJSON)))
             dialog('Level saved:', `Overwrote ${savedPath}.`)
         } catch (err) {
             dialog('There was an error saving your level:', err.message)
@@ -1536,7 +1478,9 @@ export default class EditorArea {
         const name = await promptInput('Save as new level', 'Level Name or JSON Path:')
         if (!name) return
 
-        const fileBaseName = getLevelFileBaseName(name)
+        const trimmedName = name.trim().replace(/\.json$/i, '')
+        const pathParts = trimmedName.split(/[\\/]/)
+        const fileBaseName = pathParts[pathParts.length - 1]
         if (!fileBaseName) return
 
         const append = this.canOverwriteLevelFiles && await confirmDialog(
@@ -1562,7 +1506,7 @@ export default class EditorArea {
 
         const levelResult = await writeLevelFile(fileBaseName, levelJSON)
         const savedPath = levelResult.path ?? `resources/levels/${fileBaseName}.json`
-        this.levelJSONByName.set(fileBaseName, copyLevelJSON(levelJSON))
+        this.levelJSONByName.set(fileBaseName, JSON.parse(JSON.stringify(levelJSON)))
 
         levelOrderJSON.levelOrder.push(fileBaseName)
 
@@ -1581,7 +1525,9 @@ export default class EditorArea {
         if (nudgeDirection) {
             event.preventDefault()
             if (event.shiftKey) {
-                const resizeDirection = event.metaKey ? getOppositeDirection(nudgeDirection) : nudgeDirection
+                const resizeDirection = event.metaKey
+                    ? { x: -nudgeDirection.x, y: -nudgeDirection.y }
+                    : nudgeDirection
                 this.resizeSelectedEntity(resizeDirection, keyboardNudgePixels, event.metaKey)
             } else {
                 const distance = event.metaKey ? commandKeyboardNudgePixels : keyboardNudgePixels
@@ -1623,7 +1569,10 @@ export default class EditorArea {
     }
 
     handleKeyRelease(event) {
-        if (!keyboardNudgeDirections[event.key]) return
+        const isNudgeKey = !!keyboardNudgeDirections[event.key]
+        if (!isNudgeKey) {
+            return
+        }
 
         this.commitPendingMove()
     }
@@ -1648,7 +1597,9 @@ export default class EditorArea {
         const entityJSON = entityToJSON(this.selectedEntity)
         if (!entityJSON) return
 
-        const entity = createEntityFromJSON(offsetEntityJSON(entityJSON, 10, 10))
+        const offsetEntity = offsetEntityJSON(entityJSON, 10, 10)
+        const makeEntity = EntityCreator.registry.get(offsetEntity.type)
+        const entity = makeEntity?.(offsetEntity) ?? null
         if (!entity) return
 
         this.entities.push(entity)
@@ -1773,7 +1724,10 @@ export default class EditorArea {
     getLevelJSON() {
         return {
             color: this.levelColor,
-            spawn: copySpawn(this.spawn),
+            spawn: {
+                x: this.spawn.x,
+                y: this.spawn.y
+            },
             entities: this.entities.map(entityToJSON).filter(Boolean)
         }
     }
@@ -1785,7 +1739,10 @@ export default class EditorArea {
         const canOverwriteCurrentLevel = options.canOverwrite === true || levelIndex !== -1
 
         this.levelColor = level.color.toString()
-        this.spawn = copySpawn(level.spawn)
+        this.spawn = {
+            x: level.spawn.x,
+            y: level.spawn.y
+        }
         this.entities = [...level.entities, ...level.texts]
         this.selectedEntity = null
         this.selectedSpawn = false
@@ -1795,7 +1752,7 @@ export default class EditorArea {
         this.currentLevelIndex = levelIndex
         this.currentLevelCanOverwrite = canOverwriteCurrentLevel
         if (canOverwriteCurrentLevel) {
-            this.levelJSONByName.set(name, copyLevelJSON(levelJSON))
+            this.levelJSONByName.set(name, JSON.parse(JSON.stringify(levelJSON)))
             storeCurrentLevelName(name)
         } else {
             storeCurrentLevelName(null)
@@ -1812,29 +1769,21 @@ export default class EditorArea {
         }
     }
 
-    getPreviewPlayer() {
-        if (!this.previewPlayer) this.previewPlayer = new Player(0, 0)
-
-        return this.previewPlayer
-    }
-
-    getCurrentPlayer() {
-        return this.playingLevel?.player ?? null
-    }
-
-    resetFrameClock() {
-        this.lastTime = performance.now()
-    }
-
     createPlayableLevel(levelJSON) {
         if (!levelJSON.spawn) {
             throw new Error('Add a Spawn before playing the level.')
         }
 
-        const entities = levelJSON.entities.map(createEntityFromJSON).filter(Boolean)
+        const entities = levelJSON.entities
+            .map((entityJSON) => {
+                const makeEntity = EntityCreator.registry.get(entityJSON.type)
+                return makeEntity?.(entityJSON) ?? null
+            })
+            .filter(Boolean)
         const level = new Level('editor-preview', levelJSON.spawn, Color.getColor(levelJSON.color), entities)
         level.levelManager = this
-        level.setPlayer(this.getPreviewPlayer())
+        if (!this.previewPlayer) this.previewPlayer = new Player(0, 0)
+        level.setPlayer(this.previewPlayer)
         level.respawnPlayer()
 
         return level
@@ -1851,7 +1800,7 @@ export default class EditorArea {
         if (this.playingLevel) this.playingLevel.setPlayer(null)
         this.playingLevel = false
         this.playSnapshot = null
-        this.setLevelUIVisible(false)
+        this.setLevelUIVisible(this.editorLevelUIVisible)
         this.editorElement?.classList.remove('editor-playing')
         document.querySelectorAll('#editor-play-controls .mobile-control-button.is-pressed')
             .forEach(button => button.classList.remove('is-pressed'))
