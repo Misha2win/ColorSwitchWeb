@@ -52,7 +52,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 60,
+         "y": 90,
          "width": 690,
          "height": 20,
          "text": "Use ARROW BUTTONS to MOVE",
@@ -63,7 +63,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 90,
+         "y": 120,
          "width": 690,
          "height": 20,
          "text": "Use COLOR BUTTONS to ADD to your color",
@@ -74,7 +74,7 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 470,
+         "y": 465,
          "width": 690,
          "height": 20,
          "text": "Your objective is to get to the GOAL and match its COLOR",
@@ -85,65 +85,10 @@
       {
          "type": "Text",
          "x": 30,
-         "y": 490,
+         "y": 495,
          "width": 690,
          "height": 20,
          "text": "The GOAL is the UNDULATING circle on the right. Good luck!",
-         "fontSize": 20,
-         "color": "white",
-         "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 140,
-         "y": 615,
-         "width": 360,
-         "height": 21,
-         "text": "← Your color inventory (1, 2 or 3 to USE)",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 50,
-         "y": 660,
-         "width": 300,
-         "height": 21,
-         "text": "← Your item inventory (E to USE)",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 440,
-         "y": 660,
-         "width": 220,
-         "height": 21,
-         "text": "Color mixing diagram →",
-         "fontSize": 20,
-         "color": "black",
-         "background": "white"
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 120,
-         "width": 690,
-         "height": 20,
-         "text": "Use SHIFT to SUBTRACT from your color instead of adding",
-         "fontSize": 20,
-         "color": "white",
-         "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 30,
-         "y": 150,
-         "width": 690,
-         "height": 20,
-         "text": "Special items will appear in your right most ITEM BUTTON",
          "fontSize": 20,
          "color": "white",
          "background": ""

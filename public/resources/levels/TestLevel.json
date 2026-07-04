@@ -460,21 +460,8 @@
          "persistOnce": true
       },
       {
-         "type": "Teleporter",
-         "x": 120,
-         "y": 520,
-         "hasDestination": false,
-         "endX": -1,
-         "endY": -1
-      },
-      {
-         "type": "SuperJump",
-         "x": 160,
-         "y": 520
-      },
-      {
          "type": "Painter",
-         "x": 200,
+         "x": 120,
          "y": 520
       },
       {

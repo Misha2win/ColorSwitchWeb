@@ -63,6 +63,17 @@
          "x": 440,
          "y": 285,
          "color": "blue"
+      },
+      {
+         "type": "Text",
+         "x": 50,
+         "y": 660,
+         "width": 300,
+         "height": 20,
+         "text": "← Your item inventory (E to USE)",
+         "fontSize": 20,
+         "color": "black",
+         "background": ""
       }
    ]
 }
