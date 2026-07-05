@@ -9,49 +9,35 @@ export default class Goal extends Entity {
       super(x, y, 20, 20)
       this.color = color
 
-      this.shiftTimer = 0
-
-      this.drawX = x
-      this.drawY = y
-      this.drawWidth = 20
-      this.drawHeight = 20
+      this.rotation = 0
    }
 
    update(delta) {
-      this.shiftTimer += delta
-
-      const amp = 0.5
-      const per = 10
-
-      const sin = amp * (Math.sin(this.shiftTimer * per) + 1)
-      const cos = amp * (Math.cos(this.shiftTimer * per) + 1)
-
-      this.drawWidth = this.width - cos * 2
-      this.drawHeight = this.height - sin * 2
+      this.rotation = (this.rotation + delta) % (Math.PI * 2)
    }
 
    draw(context) {
+      context.save()
+
+      context.translate(this.x + this.width / 2, this.y + this.height / 2)
+
       context.fillStyle = this.color.hasPoorVisibility() ? 'black' : darkenHex(this.color.drawColor, 0.5)
-      context.beginPath()
-      context.ellipse(
-         this.x + this.width / 2,
-         this.y + this.height / 2,
-         this.drawWidth / 2,
-         this.drawHeight / 2,
-         0, 0, Math.PI * 2
-      )
-      context.fill()
+
+      const offset = 2
+
+      context.rotate(this.rotation)
+      context.fillRect(-7, -7, 14, 14)
+      context.rotate(-offset * this.rotation)
+      context.fillRect(-7, -7, 14, 14)
 
       context.fillStyle = this.color.drawColor
-      context.beginPath()
-      context.ellipse(
-         this.x + this.width / 2,
-         this.y + this.height / 2,
-         this.drawWidth / 2 - 1,
-         this.drawHeight / 2 - 1,
-         0, 0, Math.PI * 2
-      )
-      context.fill()
+
+      context.rotate(offset * this.rotation)
+      context.fillRect(-6 , -6, 12, 12)
+      context.rotate(-offset * this.rotation)
+      context.fillRect(-6, -6, 12, 12)
+
+      context.restore()
    }
 
    canCollideWith(other) {

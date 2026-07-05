@@ -15,6 +15,7 @@ export default class Beam extends Entity {
       this.color = Color.BLACK
       this.direction = source.direction
       this.index = index
+      this.positionOverride = null
    }
 
    resetBeam() {
@@ -24,36 +25,69 @@ export default class Beam extends Entity {
          return
       }
 
-      const prevBeam = this.source.beams[this.index - 1]
+      if (this.positionOverride) {
+         switch (this.direction) {
+            case Direction.UP: {
+                  this.x = this.positionOverride.x - Beam.BEAM_WIDTH / 2
+                  this.y = this.positionOverride.y - Beam.MAX_LENGTH
+                  this.width = Beam.BEAM_WIDTH
+                  this.height = Beam.MAX_LENGTH
+                  break
+            }
+            case Direction.RIGHT: {
+                  this.x = this.positionOverride.x
+                  this.y = this.positionOverride.y - Beam.BEAM_WIDTH / 2
+                  this.width = Beam.MAX_LENGTH
+                  this.height = Beam.BEAM_WIDTH
+                  break
+            }
+            case Direction.DOWN: {
+                  this.x = this.positionOverride.x - Beam.BEAM_WIDTH / 2
+                  this.y = this.positionOverride.y
+                  this.width = Beam.BEAM_WIDTH
+                  this.height = Beam.MAX_LENGTH
+                  break
+            }
+            case Direction.LEFT: {
+                  this.x = this.positionOverride.x - Beam.MAX_LENGTH
+                  this.y = this.positionOverride.y - Beam.BEAM_WIDTH / 2
+                  this.width = Beam.MAX_LENGTH
+                  this.height = Beam.BEAM_WIDTH
+                  break
+            }
+         }
+      } else {
+         const prevBeam = this.source.beams[this.index - 1]
 
-      switch (this.direction) {
-         case Direction.UP: {
-               this.x = this.source.x + this.source.width / 2 - Beam.BEAM_WIDTH / 2
-               this.y = (prevBeam ? prevBeam.y : this.source.y) - Beam.MAX_LENGTH
-               this.width = Beam.BEAM_WIDTH
-               this.height = Beam.MAX_LENGTH
-               break
-         }
-         case Direction.RIGHT: {
-               this.x = (prevBeam ? prevBeam.x + prevBeam.width : this.source.x + this.source.width)
-               this.y = this.source.y + this.source.height / 2 - Beam.BEAM_WIDTH / 2
-               this.width = Beam.MAX_LENGTH
-               this.height = Beam.BEAM_WIDTH
-               break
-         }
-         case Direction.DOWN: {
-               this.x = this.source.x + this.source.width / 2 - Beam.BEAM_WIDTH / 2
-               this.y = (prevBeam ? prevBeam.y + prevBeam.height : this.source.y + this.source.height)
-               this.width = Beam.BEAM_WIDTH
-               this.height = Beam.MAX_LENGTH
-               break
-         }
-         case Direction.LEFT: {
-               this.x = (prevBeam ? prevBeam.x : this.source.x) - Beam.MAX_LENGTH
-               this.y = this.source.y + this.source.height / 2 - Beam.BEAM_WIDTH / 2
-               this.width = Beam.MAX_LENGTH
-               this.height = Beam.BEAM_WIDTH
-               break
+         switch (this.direction) {
+            case Direction.UP: {
+                  this.x = this.source.x + this.source.width / 2 - Beam.BEAM_WIDTH / 2
+                  this.y = (prevBeam ? prevBeam.y : this.source.y) - Beam.MAX_LENGTH
+                  this.width = Beam.BEAM_WIDTH
+                  this.height = Beam.MAX_LENGTH
+                  break
+            }
+            case Direction.RIGHT: {
+                  this.x = (prevBeam ? prevBeam.x + prevBeam.width : this.source.x + this.source.width)
+                  this.y = this.source.y + this.source.height / 2 - Beam.BEAM_WIDTH / 2
+                  this.width = Beam.MAX_LENGTH
+                  this.height = Beam.BEAM_WIDTH
+                  break
+            }
+            case Direction.DOWN: {
+                  this.x = this.source.x + this.source.width / 2 - Beam.BEAM_WIDTH / 2
+                  this.y = (prevBeam ? prevBeam.y + prevBeam.height : this.source.y + this.source.height)
+                  this.width = Beam.BEAM_WIDTH
+                  this.height = Beam.MAX_LENGTH
+                  break
+            }
+            case Direction.LEFT: {
+                  this.x = (prevBeam ? prevBeam.x : this.source.x) - Beam.MAX_LENGTH
+                  this.y = this.source.y + this.source.height / 2 - Beam.BEAM_WIDTH / 2
+                  this.width = Beam.MAX_LENGTH
+                  this.height = Beam.BEAM_WIDTH
+                  break
+            }
          }
       }
    }
@@ -101,11 +135,12 @@ export default class Beam extends Entity {
       other.color = this.color.add(other.color)
    }
 
-   partition(color) {
+   partition(color, positionOverride = null) {
       if (this.index + 1 >= Prism.MAX_BEAMS) return
 
       const beamNext = this.source.beams[this.index + 1]
       beamNext.color = color
+      beamNext.positionOverride = positionOverride
    }
 
    onPlayerColorChange(old, current) {

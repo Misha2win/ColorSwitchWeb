@@ -11,6 +11,7 @@ import Player from "../Player.js"
 import Element from "./Element.js"
 import Obstacle from "./Obstacle.js"
 import Beam, { Direction }  from "./Beam.js"
+import Portal from "./Portal.js"
 
 export default class Prism extends Obstacle {
 
@@ -109,6 +110,8 @@ export default class Prism extends Obstacle {
                 return beam.color.collidesWith(entity.color)
             } else if (entity instanceof Prism) {
                 return true
+            } else if (entity instanceof Portal) {
+                return entity.destination !== null && !boxesIntersect({x: beam.x, y: beam.y, width: 1, height: 1}, entity)
             }
 
             return false
@@ -149,6 +152,10 @@ export default class Prism extends Obstacle {
                     if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.color !== Color.GRAY) beam.partition(filtered)
                 } else if (closest instanceof Prism) {
                     beam.shorten(closest)
+                } else if (closest instanceof Portal) {
+                    beam.shorten({ x: closest.x + closest.width / 2, y: closest.y + closest.height / 2, width: 0, height: 0 })
+                    const destination = closest.destination
+                    beam.partition(beam.color, { x: destination.x + destination.width / 2, y: destination.y + destination.height / 2 })
                 }
             }
         }

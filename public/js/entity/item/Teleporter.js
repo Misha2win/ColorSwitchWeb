@@ -5,15 +5,29 @@ import Entity from "../Entity.js";
 import Player from "../Player.js";
 import Item from "./Item.js";
 import Color from "../Color.js";
+import Portal from "../obstacle/Portal.js";
 
 export default class Teleporter extends Item {
 
-   constructor(x, y, hasDestination = false, endX = -1, endY = -1) {
+   constructor(x, y) {
       super(x, y)
 
-      this.hasDestination = hasDestination
-      this.endX = endX
-      this.endY = endY
+      this.placed = false
+      this.link = null
+   }
+
+   update(delta) {
+      super.update(delta)
+
+      if (this.level && this.link === null) {
+         let link = 0
+         this.level.triggers.forEach(entity => {
+            if (entity instanceof Teleporter) {
+               if (entity.link >= link) link = entity.link + 1
+            }
+         })
+         this.link = link
+      }
    }
 
    draw(context) {
@@ -33,13 +47,6 @@ export default class Teleporter extends Item {
 
       this.drawSplitOval(context, centerX, centerY, radiusX, radiusY, angle, colorA, colorB)
       this.drawSplitOval(context, centerX, centerY, radiusX - 3, radiusY - 3, angle, lightenHex(colorA), lightenHex(colorB))
-
-      if (this.hasDestination) {
-         context.fillStyle = 'purple'
-         context.beginPath()
-         context.ellipse(this.endX + 10, this.endY + 10, 10, 10, 0, 0, Math.PI * 2)
-         context.fill()
-      }
    }
 
    drawSplitOval(context, centerX, centerY, radiusX, radiusY, splitAngle, colorA, colorB) {
@@ -56,15 +63,17 @@ export default class Teleporter extends Item {
 
    onUse(user) {
       if (!(user instanceof Player)) return
+      if (!this.link) return
+      if (!this.level) return
 
-      if (this.hasDestination) {
-         user.x = this.endX
-         user.y = this.endY
+      const portal = new Portal(user.x, user.y, this.link)
+      this.level.add(portal)
+
+      if (this.placed) {
+         portal.cooldown = user
          user.removeItem()
       } else {
-         this.hasDestination = true
-         this.endX = user.x
-         this.endY = user.y
+         this.placed = true
       }
    }
 
@@ -72,10 +81,7 @@ export default class Teleporter extends Item {
       return {
          type: this.type,
          x: this.x,
-         y: this.y,
-         hasDestination: this.hasDestination,
-         endX: this.endX,
-         endY: this.endY
+         y: this.y
       }
    }
 
@@ -83,9 +89,6 @@ export default class Teleporter extends Item {
       return [
          { name: 'x', type: 'number' },
          { name: 'y', type: 'number' },
-         { name: 'hasDestination', type: 'boolean' },
-         { name: 'endX', type: 'number', depends: { hasDestination: true } },
-         { name: 'endY', type: 'number', depends: { hasDestination: true } }
       ]
    }
 

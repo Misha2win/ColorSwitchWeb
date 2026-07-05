@@ -17,6 +17,8 @@ export default class Color {
    static WHITE = Color.#create('white', 0b0_111, '#ffffff')
    static GRAY = Color.#create('gray', 0b1_000, '#808080')
 
+   static NAMES = Object.freeze(Object.keys(Color.#BY_NAME))
+
    #color
 
    constructor(token, name, color, drawColor) {

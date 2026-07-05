@@ -13,6 +13,7 @@ import FragilePlatform from '../entity/platform/FragilePlatform.js'
 import PhotonicPlatform from '../entity/platform/PhotonicPlatform.js'
 import Text from '../entity/Text.js'
 import Painter from '../entity/item/Painter.js'
+import Portal from '../entity/obstacle/Portal.js'
 
 export const registry = new Map()
 const getColor = (name, fallbackName) => Color.getColor(name ?? fallbackName)
@@ -30,6 +31,8 @@ registry.set('SuperJump', (obj) => new SuperJump(obj.x, obj.y))
 
 registry.set('Prism', (obj) => new Prism(obj.x, obj.y, getColor(obj.color, 'red'), obj.direction))
 registry.set('Element', (obj) => new Element(obj.x, obj.y, obj.width, obj.height, getColor(obj.color, 'red'), obj.health))
+
+registry.set('Portal', (obj) => new Portal(obj.x, obj.y, obj.link))
 
 registry.set('Goal', (obj) => new Goal(obj.x, obj.y, getColor(obj.color, 'green')))
 

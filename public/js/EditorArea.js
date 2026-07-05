@@ -11,17 +11,6 @@ import {
 import * as Physics from './math/PhysicsEngine.js'
 import { promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
 
-const colorChoices = [
-    'black',
-    'red',
-    'green',
-    'blue',
-    'yellow',
-    'magenta',
-    'cyan',
-    'white',
-    'gray'
-]
 const editorCurrentLevelStorageKey = 'colorswitch.editor.currentLevelName'
 const touchDragLiftOffset = { x: 0, y: -120 }
 const noDragLiftOffset = { x: 0, y: 0 }
@@ -45,6 +34,7 @@ const spawnPositionProperties = [
     { name: 'x', type: 'number' },
     { name: 'y', type: 'number' }
 ]
+
 function setPropertyValue(entity, property, value) {
     if (property.set) {
         property.set(entity, value)
@@ -336,7 +326,7 @@ function populateSpawnPropertyEditor(editor) {
     label.textContent = 'Start Color'
     div.appendChild(label)
 
-    const select = createSelect(colorChoices, editor.levelColor)
+    const select = createSelect(Color.NAMES, editor.levelColor)
     select.setAttribute('id', 'property-level-color')
     select.setAttribute('name', 'property-level-color')
     select.addEventListener('change', event => editor.setLevelColor(event.target.value))
@@ -344,7 +334,7 @@ function populateSpawnPropertyEditor(editor) {
 }
 
 function createPropertyInput(property, value) {
-    if (property.type === 'color') return createSelect(colorChoices, value)
+    if (property.type === 'color') return createSelect(Color.NAMES, value)
     if (property.type === 'select') return createSelect(property.options ?? [], value)
     if (property.type === 'textarea') {
         const textarea = document.createElement('textarea')
