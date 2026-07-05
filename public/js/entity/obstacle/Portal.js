@@ -6,9 +6,9 @@ import { darkenHex } from "../../utility/Util.js"
 
 export default class Portal extends Obstacle {
 
-    constructor(x, y, link = 0) {
+    constructor(x, y, color = Color.GRAY, link = 0) {
         super(x, y, 20, 20)
-        this.color = Color.GRAY
+        this.color = color
 
         this.link = link
 
@@ -85,6 +85,7 @@ export default class Portal extends Obstacle {
 
         other.x = this.destination.x
         other.y = this.destination.y
+        if (this.destination.color !== Color.GRAY) other.color = this.destination.color
     }
 
     toJSON() {
@@ -92,6 +93,7 @@ export default class Portal extends Obstacle {
             type: this.type,
             x: this.x,
             y: this.y,
+            color: this.color,
             link: this.link
         }
     }
@@ -100,7 +102,8 @@ export default class Portal extends Obstacle {
         return [
             { name: 'x', type: 'number' },
             { name: 'y', type: 'number' },
-            { name: 'link', type: 'number' },
+            { name: 'color', type: 'color' },
+            { name: 'link', type: 'number' }
         ]
     }
 
