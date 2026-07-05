@@ -74,6 +74,17 @@
          "fontSize": 20,
          "color": "black",
          "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 20,
+         "y": 100,
+         "width": 710,
+         "height": 20,
+         "text": "Special items will go into your item inventory",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
       }
    ]
 }

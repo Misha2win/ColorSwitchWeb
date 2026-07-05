@@ -88,7 +88,7 @@
          "y": 490,
          "width": 690,
          "height": 20,
-         "text": "The GOAL is the UNDULATING circle on the right. Good luck!",
+         "text": "The GOAL is the MORPHING square on the right. Good luck!",
          "fontSize": 20,
          "color": "white",
          "background": ""
@@ -102,7 +102,7 @@
          "text": "← Your color inventory (1, 2 or 3 to USE)",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -113,7 +113,7 @@
          "text": "← Your item inventory (E to USE)",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       },
       {
          "type": "Text",
@@ -124,7 +124,7 @@
          "text": "Color mixing diagram →",
          "fontSize": 20,
          "color": "black",
-         "background": "white"
+         "background": null
       }
    ]
 }
