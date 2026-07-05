@@ -32,7 +32,7 @@ registry.set('SuperJump', (obj) => new SuperJump(obj.x, obj.y))
 registry.set('Prism', (obj) => new Prism(obj.x, obj.y, getColor(obj.color, 'red'), obj.direction))
 registry.set('Element', (obj) => new Element(obj.x, obj.y, obj.width, obj.height, getColor(obj.color, 'red'), obj.health))
 
-registry.set('Portal', (obj) => new Portal(obj.x, obj.y, obj.link))
+registry.set('Portal', (obj) => new Portal(obj.x, obj.y, getColor(obj.color, 'gray'), obj.link))
 
 registry.set('Goal', (obj) => new Goal(obj.x, obj.y, getColor(obj.color, 'green')))
 
