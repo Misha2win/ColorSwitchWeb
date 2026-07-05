@@ -66,7 +66,7 @@ export default class Teleporter extends Item {
       if (!this.link) return
       if (!this.level) return
 
-      const portal = new Portal(user.x, user.y, this.link)
+      const portal = new Portal(user.x, user.y, user.color, this.link)
       this.level.add(portal)
 
       if (this.placed) {
