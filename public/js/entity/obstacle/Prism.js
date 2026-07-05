@@ -154,7 +154,9 @@ export default class Prism extends Obstacle {
                     beam.shorten(closest)
                 } else if (closest instanceof Portal) {
                     beam.shorten({ x: closest.x + closest.width / 2, y: closest.y + closest.height / 2, width: 0, height: 0 })
+                    closest.color = beam.color
                     const destination = closest.destination
+                    destination.color = beam.color
                     beam.partition(beam.color, { x: destination.x + destination.width / 2, y: destination.y + destination.height / 2 })
                 }
             }
