@@ -4,9 +4,10 @@
       "ColorChanger1",
       "Prism1",
       "Prism4",
-      "Obstacle1",
+      "Prism12",
       "Obstacle2",
       "PhotonicPlatform1",
+      "Prism11",
       "Mirror6",
       "Mirror2",
       "Mirror9",
@@ -60,6 +61,8 @@
       "Prism8",
       "Painter2",
       "Prism5",
-      "PhotonicPlatform2"
+      "PhotonicPlatform2",
+      "Test",
+      "Obstacle1"
    ]
 }

@@ -179,9 +179,9 @@
       {
          "type": "Element",
          "x": 595,
-         "y": 40,
+         "y": 20,
          "width": 10,
-         "height": 90,
+         "height": 130,
          "color": "cyan"
       },
       {
@@ -195,7 +195,7 @@
          "type": "Element",
          "x": 160,
          "y": 185,
-         "width": 160,
+         "width": 180,
          "height": 10,
          "color": "yellow"
       },
@@ -210,7 +210,7 @@
          "type": "Element",
          "x": 200,
          "y": 285,
-         "width": 120,
+         "width": 140,
          "height": 10,
          "color": "cyan"
       },
@@ -218,32 +218,32 @@
          "type": "Element",
          "x": 260,
          "y": 385,
-         "width": 60,
+         "width": 80,
          "height": 10,
          "color": "magenta"
       },
       {
          "type": "Element",
          "x": 495,
-         "y": 200,
+         "y": 180,
          "width": 10,
-         "height": 180,
+         "height": 200,
          "color": "yellow"
       },
       {
          "type": "Element",
          "x": 555,
-         "y": 200,
+         "y": 180,
          "width": 10,
-         "height": 80,
+         "height": 100,
          "color": "magenta"
       },
       {
          "type": "Element",
          "x": 415,
-         "y": 200,
+         "y": 180,
          "width": 10,
-         "height": 280,
+         "height": 300,
          "color": "cyan"
       },
       {

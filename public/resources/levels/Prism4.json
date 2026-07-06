@@ -76,24 +76,10 @@
       },
       {
          "type": "Prism",
-         "x": 290,
-         "y": 340,
-         "color": "blue",
-         "direction": "LEFT"
-      },
-      {
-         "type": "Prism",
          "x": 620,
          "y": 240,
          "color": "red",
          "direction": "LEFT"
-      },
-      {
-         "type": "Prism",
-         "x": 440,
-         "y": 240,
-         "color": "red",
-         "direction": "RIGHT"
       },
       {
          "type": "ColorChanger",
