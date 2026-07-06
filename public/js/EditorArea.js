@@ -11,7 +11,6 @@ import {
 import * as Physics from './math/PhysicsEngine.js'
 import { promptInput, dialog, copyableDialog, confirmDialog } from './utility/Prompt.js'
 
-const editorCurrentLevelStorageKey = 'colorswitch.editor.currentLevelName'
 const touchDragLiftOffset = { x: 0, y: -120 }
 const noDragLiftOffset = { x: 0, y: 0 }
 const touchHitSlop = 12
@@ -21,6 +20,7 @@ const draftLevelSelectValue = '__editor-draft-level__'
 const spawnSize = 20
 const editorGridSize = 5
 const resizableEntityCreationGridSize = 10
+const levelNamePattern = /^[A-Za-z0-9_-]+$/
 const keyboardNudgePixels = editorGridSize
 const commandKeyboardNudgePixels = editorGridSize * 2
 const keyboardNudgeDirections = {
@@ -130,23 +130,23 @@ function getSpawnBox(spawn) {
     }
 }
 
-function readStoredCurrentLevelName() {
-    try {
-        return localStorage.getItem(editorCurrentLevelStorageKey)
-    } catch {
-        return null
-    }
+function readUrlLevelName() {
+    const name = new URLSearchParams(window.location.search).get('level')
+    return levelNamePattern.test(name ?? '') ? name : null
 }
 
-function storeCurrentLevelName(name) {
+function syncUrlLevelName(name) {
+    const url = new URL(window.location.href)
+    if (name && levelNamePattern.test(name)) {
+        url.searchParams.set('level', name)
+    } else {
+        url.searchParams.delete('level')
+    }
+
     try {
-        if (name) {
-            localStorage.setItem(editorCurrentLevelStorageKey, name)
-        } else {
-            localStorage.removeItem(editorCurrentLevelStorageKey)
-        }
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`)
     } catch {
-        // Ignore storage errors so the editor still works in private or restricted contexts.
+        // The editor should still work if the browser refuses history updates.
     }
 }
 
@@ -1263,21 +1263,21 @@ export default class EditorArea {
             return
         }
 
-        const storedLevelName = readStoredCurrentLevelName()
-        const storedLevelIndex = storedLevelName ? this.levelNames.indexOf(storedLevelName) : -1
-        if (storedLevelName && storedLevelIndex === -1) {
+        const requestedLevelName = readUrlLevelName()
+        const requestedLevelIndex = requestedLevelName ? this.levelNames.indexOf(requestedLevelName) : -1
+        if (requestedLevelName && requestedLevelIndex === -1) {
             try {
-                const storedLevelJSON = await fetchLevelJSON(storedLevelName)
-                this.levelJSONByName.set(storedLevelName, JSON.parse(JSON.stringify(storedLevelJSON)))
-                await this.loadLevelJSON(JSON.parse(JSON.stringify(storedLevelJSON)), storedLevelName, { canOverwrite: true })
+                const requestedLevelJSON = await fetchLevelJSON(requestedLevelName)
+                this.levelJSONByName.set(requestedLevelName, JSON.parse(JSON.stringify(requestedLevelJSON)))
+                await this.loadLevelJSON(JSON.parse(JSON.stringify(requestedLevelJSON)), requestedLevelName, { canOverwrite: true })
                 return
             } catch (err) {
-                storeCurrentLevelName(null)
                 console.error(err)
+                dialog('Linked level not found:', `${requestedLevelName}.json could not be loaded.`)
             }
         }
 
-        const initialLevelIndex = storedLevelIndex === -1 ? 0 : storedLevelIndex
+        const initialLevelIndex = requestedLevelIndex === -1 ? 0 : requestedLevelIndex
 
         await this.loadCachedLevelAt(initialLevelIndex, false)
     }
@@ -1371,11 +1371,7 @@ export default class EditorArea {
             : -1
         this.levelLoadingPromise = null
 
-        if (this.currentLevelIndex === -1) {
-            storeCurrentLevelName(null)
-        } else {
-            storeCurrentLevelName(this.currentLevelName)
-        }
+        syncUrlLevelName(this.currentLevelCanOverwrite ? this.currentLevelName : null)
 
         this.syncLevelNavigationControls()
     }
@@ -1743,9 +1739,9 @@ export default class EditorArea {
         this.currentLevelCanOverwrite = canOverwriteCurrentLevel
         if (canOverwriteCurrentLevel) {
             this.levelJSONByName.set(name, JSON.parse(JSON.stringify(levelJSON)))
-            storeCurrentLevelName(name)
+            syncUrlLevelName(name)
         } else {
-            storeCurrentLevelName(null)
+            syncUrlLevelName(null)
         }
         this.syncLevelNavigationControls()
         this.syncPropertyEditor()

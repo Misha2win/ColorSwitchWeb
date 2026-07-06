@@ -495,6 +495,11 @@ nav a:hover {
     display: none;
 }
 
+#editor-view-toolbar,
+#level-jump-toolbar {
+    display: contents;
+}
+
 #button-undo-move,
 #button-redo-move,
 #button-duplicate-selected,
@@ -1165,6 +1170,30 @@ nav a:hover {
         justify-content: flex-start;
         column-gap: 6px;
         row-gap: 6px;
+    }
+
+    #editor-view-toolbar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0px, 1fr));
+        gap: 6px;
+        width: 100%;
+    }
+
+    #editor-view-toolbar button {
+        width: 100%;
+        min-width: 0px;
+    }
+
+    #button-level-ui-toggle {
+        margin-right: 0px;
+    }
+
+    #level-jump-toolbar {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
     }
 
     #current-level-label {

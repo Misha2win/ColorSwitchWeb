@@ -46,13 +46,17 @@
                         <button onclick="this.blur()" id="button-undo-move" disabled title="Undo last move">Undo</button>
                         <button onclick="this.blur()" id="button-redo-move" disabled title="Redo last move">Redo</button>
                     </div>
-                    <button onclick="this.blur()" id="button-debug-toggle" type="button" aria-pressed="true">Debug</button>
-                    <button onclick="this.blur()" id="button-level-ui-toggle" type="button" aria-pressed="false" title="Show bottom 95px helper text space">UI Space</button>
-                    <select id="current-level-label" aria-label="Current level" disabled>
-                        <option>Loading levels...</option>
-                    </select>
-                    <button id="button-previous-level" disabled>←</button>
-                    <button id="button-next-level" disabled>→</button>
+                    <div id="editor-view-toolbar">
+                        <button onclick="this.blur()" id="button-debug-toggle" type="button" aria-pressed="true">Debug</button>
+                        <button onclick="this.blur()" id="button-level-ui-toggle" type="button" aria-pressed="false" title="Show bottom 95px helper text space">UI Space</button>
+                    </div>
+                    <div id="level-jump-toolbar">
+                        <select id="current-level-label" aria-label="Current level" disabled>
+                            <option>Loading levels...</option>
+                        </select>
+                        <button id="button-previous-level" disabled>←</button>
+                        <button id="button-next-level" disabled>→</button>
+                    </div>
                 </div>
             </div>
             <div id="editor-play-controls" class="editor-play-controls" aria-label="Touch play controls">

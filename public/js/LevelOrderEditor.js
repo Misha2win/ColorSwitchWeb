@@ -8,7 +8,6 @@ import {
 } from './level/LevelOrderApi.js'
 import { dialog, promptChoices } from './utility/Prompt.js'
 
-const editorCurrentLevelStorageKey = 'colorswitch.editor.currentLevelName'
 const levelWidth = 750
 const levelHeight = 600
 const previewWidth = 150
@@ -695,13 +694,7 @@ async function saveOrder() {
 function editSelectedLevel() {
     if (!selectedCard) return
 
-    try {
-        localStorage.setItem(editorCurrentLevelStorageKey, selectedCard.dataset.levelName)
-    } catch {
-        // The editor can still fall back to its default level if storage is unavailable.
-    }
-
-    window.location.href = 'editor.html'
+    window.location.href = `editor.html?level=${encodeURIComponent(selectedCard.dataset.levelName)}`
 }
 
 async function renderPreview(name, canvas) {
