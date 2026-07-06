@@ -92,13 +92,22 @@ export default class Beam extends Entity {
       }
    }
 
-   shorten(entity) {
+   shorten(entity, center = false) {
       const beams = this.source.beams
       beams.slice(this.index + 1).forEach(beam => {
          beam.color = Color.BLACK
          beam.width = 0
          beam.height = 0
       })
+
+      if (center) {
+         entity = {
+            x: entity.x + entity.width / 2,
+            y: entity.y + entity.height / 2,
+            width: 0,
+            height: 0
+         }
+      }
 
       const prevBeam = beams[this.index - 1]
 

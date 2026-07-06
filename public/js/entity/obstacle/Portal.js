@@ -9,7 +9,6 @@ export default class Portal extends Obstacle {
     constructor(x, y, color = Color.GRAY, link = 0) {
         super(x, y, 20, 20)
         this.color = color
-
         this.link = link
 
         this.destination = null
@@ -48,6 +47,15 @@ export default class Portal extends Obstacle {
     }
 
     draw(context) {
+        if (this.destination) {
+            context.strokeStyle = 'gray'
+            context.lineWidth = 0.25
+            context.beginPath()
+            context.moveTo(this.x + this.width / 2, this.y + this.height / 2)
+            context.lineTo(this.destination.x + this.destination.width / 2, this.destination.y + this.destination.height / 2)
+            context.stroke()
+        }
+
         context.fillStyle = this.color.hasPoorVisibility() ? 'black' : darkenHex(this.color.drawColor, 0.5)
         context.beginPath()
         context.ellipse(
@@ -93,7 +101,7 @@ export default class Portal extends Obstacle {
             type: this.type,
             x: this.x,
             y: this.y,
-            color: this.color,
+            color: this.color.name,
             link: this.link
         }
     }
