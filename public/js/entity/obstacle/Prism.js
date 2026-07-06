@@ -60,12 +60,15 @@ export default class Prism extends Obstacle {
     }
 
     canCollideWith(other) {
-        return false
+        return other instanceof Player
     }
 
     preparePhysics(delta) {}
 
-    onCollide(other) {}
+    onCollide(other) {
+        if (this.color == Color.BLACK || this.color === Color.GRAY) return
+        other.color = this.color
+    }
 
     onPlayerColorChange(old, current) {
         if (!boxesIntersect(this, this.level?.player)) return
@@ -103,7 +106,7 @@ export default class Prism extends Obstacle {
             if (entity instanceof Beam) {
                 return beam.prism !== entity.prism && beam.color != entity.color
             } else if (entity instanceof Platform) {
-                return entity.canCollideWith(beam)
+                return !entity.color.collidesWith(beam.color) || entity.color === Color.BLACK
             } else if (entity instanceof ColorChanger) {
                 return beam.color != entity.color
             } else if (entity instanceof Element) {
