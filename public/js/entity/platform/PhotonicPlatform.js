@@ -57,23 +57,12 @@ export default class PhotonicPlatform extends Platform {
    preparePhysics() {
       this.color = Color.GRAY
 
-      const beams = []
-      const photonics = []
-
-      for (const entity of this.level?.entities) {
-         if (entity === this) continue
-         if (!(entity instanceof Beam) && !(entity instanceof PhotonicPlatform)) continue
-         if (entity.color === Color.GRAY) continue
-         if (!boxesIntersect(entity, this)) continue
-
-         if (entity instanceof Beam)
-            beams.push(entity)
-         else if (entity instanceof PhotonicPlatform)
-            photonics.push(entity)
-      }
+      const beams = this.level.getEntities(Beam)
+         .filter((beam) => beam.color !== Color.GRAY && boxesIntersect(beam, this))
+      const photonics = this.level.getEntities(PhotonicPlatform)
+         .filter((plat) => plat !== this && plat.color !== Color.GRAY && boxesIntersect(plat, this))
 
       this.chargers = []
-
       for (const beam of beams) {
          this.chargers.push(beam)
          this.color = this.color.add(beam.color)
@@ -88,8 +77,6 @@ export default class PhotonicPlatform extends Platform {
             this.color = this.color.add(photonic.color)
          }
       }
-
-
    }
 
    toJSON() {
@@ -103,12 +90,7 @@ export default class PhotonicPlatform extends Platform {
    }
 
    getProperties() {
-      return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
-         { name: 'width', type: 'number', min: 10 },
-         { name: 'height', type: 'number', min: 10 }
-      ]
+      return this.getBoxProps()
    }
 
 }

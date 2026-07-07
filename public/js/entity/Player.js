@@ -1,5 +1,4 @@
-import { boxesIntersect } from '../math/PhysicsEngine.js'
-import { darkenHex } from '../utility/Util.js'
+import { darkenHex, desaturateHex } from '../utility/Util.js'
 import Color from './Color.js'
 import Entity from './Entity.js'
 
@@ -162,9 +161,14 @@ export default class Player extends Entity {
         const drawColor = (context, x, y, color, count) => {
             context.save()
 
-            context.fillStyle = darkenHex(color.drawColor)
+            if (count <= 0) {
+                context.fillStyle = '#ffcccc'
+                context.fillRect(x - 5, y - 5, 40, 40)
+            }
+
+            context.fillStyle = count > 0 ? darkenHex(color.drawColor) : desaturateHex(darkenHex(color.drawColor), 0.5)
             context.fillRect(x, y , 30, 30)
-            context.fillStyle = color.drawColor
+            context.fillStyle = count > 0 ? color.drawColor : desaturateHex(color.drawColor, 0.5)
             context.fillRect(x + 5, y + 5, 20, 20)
 
             const centerX = x + 15
@@ -187,14 +191,16 @@ export default class Player extends Entity {
             context.strokeStyle = 'white'
             context.stroke()
 
-            context.font = '20px sans-serif'
-            context.textAlign = 'center'
-            context.textBaseline = 'middle'
-            context.fillStyle = 'white'
-            context.lineWidth = 3
-            context.strokeStyle = 'black'
-            context.strokeText(count, x + 25, y + 25)
-            context.fillText(count, x + 25, y + 25)
+            if (count > 0) {
+                context.font = '20px sans-serif'
+                context.textAlign = 'center'
+                context.textBaseline = 'middle'
+                context.fillStyle = 'white'
+                context.lineWidth = 3
+                context.strokeStyle = 'black'
+                context.strokeText(count, x + 25, y + 25)
+                context.fillText(count, x + 25, y + 25)
+            }
 
             context.restore()
         }
@@ -349,14 +355,6 @@ export default class Player extends Entity {
     }
 
     update(delta) {
-        const width = this.level?.levelManager?.width
-        const height = this.level?.levelManager?.height
-        const gameBox = { x: 0, y: 0, width, height }
-
-        if (!boxesIntersect(this, gameBox)) {
-            this.requestRestart = true
-        }
-
         if (this.requestUseItem) {
             this.requestUseItem = false
             this.useItem()

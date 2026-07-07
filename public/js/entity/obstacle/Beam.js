@@ -2,7 +2,11 @@ import Color from "../Color.js"
 import Entity from "../Entity.js"
 import Prism from "./Prism.js"
 import Player from "../Player.js"
-import { boxesIntersect } from "../../math/PhysicsEngine.js"
+import { boxesIntersect, pointIntersectsBox } from "../../math/PhysicsEngine.js"
+import Platform from "../platform/Platform.js"
+import ColorChanger from "../item/ColorChanger.js"
+import Element from "./Element.js"
+import Portal from "./Portal.js"
 
 export default class Beam extends Entity {
    static BEAM_WIDTH = 5
@@ -18,7 +22,14 @@ export default class Beam extends Entity {
       this.positionOverride = null
    }
 
-   resetBeam() {
+   clearDownstreamBeams() {
+      for (let i = this.index + 1; i < this.beams.length; i++) {
+         beam[i].color = Color.BLACK
+         beam[i].reset()
+      }
+   }
+
+   reset() {
       if (this.color === Color.BLACK) {
          this.width = 0
          this.height = 0
@@ -134,14 +145,52 @@ export default class Beam extends Entity {
    }
 
    canCollideWith(other) {
+      if (other instanceof Beam) {
+            return this.prism !== other.prism && this.color != other.color
+      } else if (other instanceof Platform) {
+            return !other.color.collidesWith(this.color) || other.color === Color.BLACK
+      } else if (other instanceof ColorChanger) {
+            return this.color != other.color
+      } else if (other instanceof Element) {
+            return this.color.collidesWith(other.color)
+      } else if (other instanceof Prism) {
+            return true
+      } else if (other instanceof Portal) {
+            return other.destination !== null && !pointIntersectsBox(this, other) // FIXME
+      }
+
       return other instanceof Player
    }
 
    onCollide(other) {
-      if (this.color === Color.GRAY || this.color === Color.BLACK) return
-      if (!(other instanceof Player)) return
+      if (this.color === Color.BLACK) return
 
-      other.color = this.color.add(other.color)
+      if (other instanceof Platform) {
+         const mixed = this.color.add(other.color)
+         if (this.color !== mixed) {
+            this.shorten(other)
+            this.partition(mixed)
+         } else if (other.color === Color.BLACK) {
+            this.shorten(other)
+         }
+      } else if (other instanceof ColorChanger) {
+         this.shorten(other)
+         this.partition(other.color)
+      } else if (other instanceof Element) {
+         this.shorten(other)
+         const filtered = this.color === Color.BLACK ? Color.BLACK : this.color.subtract(other.color)
+         if (filtered !== Color.BLACK && other.color !== Color.BLACK && other.color !== Color.GRAY) this.partition(filtered)
+      } else if (other instanceof Prism) {
+         this.shorten(other)
+      } else if (other instanceof Portal) {
+         this.shorten(other, true)
+         const destination = other.destination
+         this.partition(this.color, { x: destination.x + destination.width / 2, y: destination.y + destination.height / 2 })
+         other.color = this.color
+         destination.color = this.color
+      } else if (other instanceof Player) {
+         other.color = this.color.add(other.color)
+      }
    }
 
    partition(color, positionOverride = null) {
@@ -150,6 +199,7 @@ export default class Beam extends Entity {
       const beamNext = this.source.beams[this.index + 1]
       beamNext.color = color
       beamNext.positionOverride = positionOverride
+      beamNext.reset()
    }
 
    onPlayerColorChange(old, current) {

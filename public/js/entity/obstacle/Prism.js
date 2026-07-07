@@ -19,42 +19,26 @@ export default class Prism extends Obstacle {
 
     constructor(x, y, color = Color.RED, direction = 'RIGHT') {
         super(x, y, 20, 20, color)
-
         this.direction = Direction.fromString(direction)
 
-        this.point = (() => {
-            switch (this.direction) {
-                case Direction.UP: {
-                    return new Vector(this.x + this.width / 2, this.y + this.height + 5)
-                }
-                case Direction.RIGHT: {
-                    return new Vector(this.x - 5, this.y + this.height / 2)
-                }
-                case Direction.DOWN: {
-                    return new Vector(this.x + this.width / 2, this.y - 5)
-                }
-                case Direction.LEFT: {
-                    return new Vector(this.x + this.width + 5, this.y + this.height / 2)
-                }
+        switch (this.direction) {
+            case Direction.UP: {
+                this.point = new Vector(this.x + this.width / 2, this.y + this.height + 5)
+                break
             }
-        })()
-
-        this.distanceComparer = (() => {
-            switch (this.direction) {
-                case Direction.UP: {
-                    return (a, b) => (b.y + b.height) - (a.y + a.height)
-                }
-                case Direction.RIGHT: {
-                    return (a, b) => a.x - b.x
-                }
-                case Direction.DOWN: {
-                    return (a, b) => a.y - b.y
-                }
-                case Direction.LEFT: {
-                    return (a, b) => (b.x + b.width) - (a.x + a.width)
-                }
+            case Direction.RIGHT: {
+                this.point = new Vector(this.x - 5, this.y + this.height / 2)
+                break
             }
-        })()
+            case Direction.DOWN: {
+                this.point = new Vector(this.x + this.width / 2, this.y - 5)
+                break
+            }
+            case Direction.LEFT: {
+                this.point = new Vector(this.x + this.width + 5, this.y + this.height / 2)
+                break
+            }
+        }
 
         this.beams = []
     }
@@ -62,8 +46,6 @@ export default class Prism extends Obstacle {
     canCollideWith(other) {
         return other instanceof Player
     }
-
-    preparePhysics(delta) {}
 
     onCollide(other) {
         if (this.color == Color.BLACK || this.color === Color.GRAY) return
@@ -77,93 +59,6 @@ export default class Prism extends Obstacle {
         const removed = old.subtract(current)
 
         this.color = this.color.add(added).subtract(removed)
-    }
-
-    resolvePhysics() {
-        if (this.point) {
-            for (const platform of this.level.blockers) {
-                if (!(platform instanceof PhotonicPlatform)) continue
-                if (!pointIntersectsBox(this.point, platform)) continue
-
-                if (platform.color === Color.GRAY) {
-                    this.color = Color.BLACK
-                } else {
-                    this.color = platform.color
-                }
-            }
-        }
-
-        if (this.beams[0]) {
-            this.beams[0].color = this.color
-            this.beams.slice(1).forEach(beam => {
-                beam.color = Color.BLACK
-                beam.width = 0
-                beam.height = 0
-            })
-        }
-
-        const canCollideWith = (beam, entity) => {
-            if (entity instanceof Beam) {
-                return beam.prism !== entity.prism && beam.color != entity.color
-            } else if (entity instanceof Platform) {
-                return !entity.color.collidesWith(beam.color) || entity.color === Color.BLACK
-            } else if (entity instanceof ColorChanger) {
-                return beam.color != entity.color
-            } else if (entity instanceof Element) {
-                return beam.color.collidesWith(entity.color)
-            } else if (entity instanceof Prism) {
-                return true
-            } else if (entity instanceof Portal) {
-                return entity.destination !== null && !boxesIntersect({x: beam.x, y: beam.y, width: 1, height: 1}, entity)
-            }
-
-            return false
-        }
-
-        for (let i = 0; i < this.beams.length; i++) {
-            const beam = this.beams[i]
-            if (!beam) break
-            beam.resetBeam()
-            if (beam.color === Color.BLACK) break
-
-            const entities = [...this.level.entities]
-            entities.splice(entities.indexOf(beam), 1)
-            for (const closest of entities.sort(this.distanceComparer)) {
-                if (!canCollideWith(beam, closest)) continue
-                if (!boxesIntersect(beam, closest)) continue
-
-                if (closest instanceof Platform && !(closest instanceof PhotonicPlatform)) {
-                    const mixed = beam.color.add(closest.color)
-                    if (beam.color !== mixed) {
-                        beam.shorten(closest)
-                        beam.partition(mixed)
-                    } else if (closest.color === Color.BLACK) {
-                        beam.shorten(closest)
-                    }
-                } else if (closest instanceof Beam) {
-                    const mixed = beam.color.add(closest.color)
-                    if (beam.color !== mixed) {
-                        beam.shorten(closest)
-                        beam.partition(mixed)
-                    }
-                } else if (closest instanceof ColorChanger) {
-                    beam.shorten(closest)
-                    beam.partition(closest.color)
-                } else if (closest instanceof Element) {
-                    beam.shorten(closest)
-                    const filtered = beam.color === Color.BLACK ? Color.BLACK : beam.color.subtract(closest.color)
-                    if (filtered !== Color.BLACK && closest.color !== Color.BLACK && closest.color !== Color.GRAY) beam.partition(filtered)
-                } else if (closest instanceof Prism) {
-                    beam.shorten(closest)
-                } else if (closest instanceof Portal) {
-                    beam.shorten(closest, true)
-                    const destination = closest.destination
-                    beam.partition(beam.color, { x: destination.x + destination.width / 2, y: destination.y + destination.height / 2 })
-                    closest.color = beam.color
-                    destination.color = beam.color
-                }
-            }
-        }
     }
 
     update(delta) {
@@ -244,8 +139,7 @@ export default class Prism extends Obstacle {
 
     getProperties() {
         return [
-            { name: 'x', type: 'number' },
-            { name: 'y', type: 'number' },
+            ...this.getPositionProps(),
             { name: 'color', type: 'color' },
             { name: 'direction', type: 'select', options: ['UP', 'RIGHT', 'DOWN', 'LEFT'], get: entity => Direction.toString(entity.direction), set: (entity, value) => { entity.direction = Direction.fromString(value) } }
         ]

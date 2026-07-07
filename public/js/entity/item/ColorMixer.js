@@ -66,8 +66,7 @@ export default class ColorMixer extends Item {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
+         ...this.getPositionProps(),
          { name: 'color', type: 'color' },
          { name: 'additive', type: 'boolean' }
       ]

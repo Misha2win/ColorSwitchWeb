@@ -9,17 +9,17 @@ import Portal from "../obstacle/Portal.js";
 
 export default class Teleporter extends Item {
 
-   constructor(x, y) {
+   constructor(x, y, link = 0) {
       super(x, y)
 
       this.placed = false
-      this.link = null
+      this.link = 0
    }
 
    update(delta) {
       super.update(delta)
 
-      if (this.level && this.link === null) {
+      if (this.level && this.link === 0) {
          let link = 0
          this.level.triggers.forEach(entity => {
             if (entity instanceof Teleporter) {
@@ -45,8 +45,13 @@ export default class Teleporter extends Item {
       const colorA = '#ff5d00'
       const colorB = '#0065ff'
 
-      this.drawSplitOval(context, centerX, centerY, radiusX, radiusY, angle, colorA, colorB)
-      this.drawSplitOval(context, centerX, centerY, radiusX - 3, radiusY - 3, angle, lightenHex(colorA), lightenHex(colorB))
+      if (!this.placed) {
+         this.drawSplitOval(context, centerX, centerY, radiusX, radiusY, angle, colorA, colorB)
+         this.drawSplitOval(context, centerX, centerY, radiusX - 3, radiusY - 3, angle, lightenHex(colorA), lightenHex(colorB))
+      } else {
+         this.drawSplitOval(context, centerX, centerY, radiusX, radiusY, angle, colorA, colorA)
+         this.drawSplitOval(context, centerX, centerY, radiusX - 3, radiusY - 3, angle, lightenHex(colorA), lightenHex(colorA))
+      }
    }
 
    drawSplitOval(context, centerX, centerY, radiusX, radiusY, splitAngle, colorA, colorB) {
@@ -63,7 +68,7 @@ export default class Teleporter extends Item {
 
    onUse(user) {
       if (!(user instanceof Player)) return
-      if (!this.link) return
+      if (this.link === 0) return
       if (!this.level) return
 
       const portal = new Portal(user.x, user.y, user.color, this.link)
@@ -87,8 +92,8 @@ export default class Teleporter extends Item {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
+         ...this.getPositionProps(),
+         { name: 'link', type: 'number' }
       ]
    }
 

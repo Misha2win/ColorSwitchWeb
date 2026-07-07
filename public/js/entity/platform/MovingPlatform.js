@@ -1,6 +1,7 @@
+import Element from "../obstacle/Element.js";
 import Platform from "./Platform.js";
 
-export default class MovingPlatform extends Platform {
+export default class MovingPlatform extends Element {
 
    constructor(x, y, width, height, color, x1 = x, y1 = y, x2 = x + 100, y2 = y) {
       super(x, y, width, height, color)

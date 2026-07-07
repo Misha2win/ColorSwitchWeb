@@ -108,8 +108,7 @@ export default class Portal extends Obstacle {
 
     getProperties() {
         return [
-            { name: 'x', type: 'number' },
-            { name: 'y', type: 'number' },
+            ...this.getPositionProps(),
             { name: 'color', type: 'color' },
             { name: 'link', type: 'number' }
         ]

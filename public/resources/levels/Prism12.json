@@ -46,9 +46,9 @@
       {
          "type": "Prism",
          "x": 365,
-         "y": 110,
+         "y": 470,
          "color": "blue",
-         "direction": "DOWN"
+         "direction": "UP"
       },
       {
          "type": "Platform",

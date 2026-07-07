@@ -31,6 +31,21 @@ export default class Entity {
     toJSON() { abstractError('Entity.toJSON', this.#type) }
     getProperties() { abstractError('Entity.getProperties ', this.#type) }
 
+    getPositionProps() {
+        return [
+            { name: 'x', type: 'number' },
+            { name: 'y', type: 'number' },
+        ]
+    }
+
+    getBoxProps() {
+        return [
+            ...this.getPositionProps(),
+            { name: 'width', type: 'number', min: 10 },
+            { name: 'height', type: 'number', min: 10 }
+        ]
+    }
+
     get type() { return this.#type }
 
 }

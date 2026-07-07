@@ -54,7 +54,7 @@
       {
          "type": "Platform",
          "x": 440,
-         "y": 260,
+         "y": 250,
          "width": 200,
          "height": 100,
          "color": "red"
@@ -62,42 +62,56 @@
       {
          "type": "Platform",
          "x": 110,
-         "y": 240,
+         "y": 250,
          "width": 200,
          "height": 100,
          "color": "blue"
       },
       {
          "type": "Prism",
-         "x": 110,
-         "y": 340,
+         "x": 290,
+         "y": 350,
          "color": "blue",
-         "direction": "RIGHT"
+         "direction": "LEFT"
       },
       {
          "type": "Prism",
-         "x": 620,
-         "y": 240,
+         "x": 440,
+         "y": 230,
          "color": "red",
-         "direction": "LEFT"
+         "direction": "RIGHT"
       },
       {
          "type": "ColorChanger",
          "x": 525,
-         "y": 190,
+         "y": 180,
          "color": "red"
       },
       {
          "type": "ColorChanger",
          "x": 195,
-         "y": 380,
+         "y": 390,
          "color": "blue"
       },
       {
          "type": "ColorChanger",
          "x": 195,
          "y": 50,
-         "color": "green"
+         "color": "white"
+      },
+      {
+         "type": "Prism",
+         "x": 440,
+         "y": 350,
+         "color": "red",
+         "direction": "RIGHT"
+      },
+      {
+         "type": "Prism",
+         "x": 290,
+         "y": 230,
+         "color": "blue",
+         "direction": "LEFT"
       }
    ]
 }

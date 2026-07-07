@@ -8,8 +8,11 @@ import Prism from "../entity/obstacle/Prism.js"
 import Beam from "../entity/obstacle/Beam.js"
 import Element from "../entity/obstacle/Element.js"
 import Text from "../entity/Text.js"
+import { boxesIntersect } from "../math/PhysicsEngine.js"
 
 export default class Level {
+
+    #entitiesByType
 
     constructor(name, spawn, color, entities) {
         this.name = name
@@ -29,6 +32,8 @@ export default class Level {
         this.ghostBlockers = []
         this.ghostTriggers = []
         this.ghostItems = []
+
+        this.#entitiesByType = new Map()
 
         // Tell entity it is in this level
         for (const entity of entities) {
@@ -116,7 +121,16 @@ export default class Level {
             }
         }
 
-        this.player?.update(delta)
+        if (this.player) {
+            this.player.update(delta)
+
+            const width = this.levelManager?.width
+            const height = this.levelManager?.height
+            if (!boxesIntersect(this.player, { x: 0, y: 0, width, height })) {
+                this.player.requestRestart = true
+            }
+        }
+
     }
 
     getGhostColor(entityColor, mirroredColor, playerColor) {
@@ -166,6 +180,10 @@ export default class Level {
         }
     }
 
+    getEntities(EntityClass) {
+        return [...(this.#entitiesByType.get(EntityClass) ?? [])]
+    }
+
     add(entity) {
         if (entity instanceof Text) {
             this.texts.push(entity)
@@ -184,6 +202,11 @@ export default class Level {
         if (entity instanceof Item) {
             this.items.push(entity)
         }
+
+        if (!this.#entitiesByType.has(entity.constructor)) {
+            this.#entitiesByType.set(entity.constructor, [])
+        }
+        this.#entitiesByType.get(entity.constructor).push(entity)
     }
 
     addGhost(entity) {
@@ -220,6 +243,12 @@ export default class Level {
         if (entity instanceof Item) {
             const itemIndex = this.items.indexOf(entity)
             if (itemIndex !== -1) this.items.splice(itemIndex, 1)
+        }
+
+        if (this.#entitiesByType.has(entity.constructor)) {
+            const entityArr = this.#entitiesByType.get(entity.constructor)
+            const entityIndex = entityArr.indexOf(entity)
+            if (entityIndex !== -1) entityArr.splice(entityIndex, 1)
         }
 
         return true

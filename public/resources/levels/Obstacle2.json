@@ -41,23 +41,23 @@
          "type": "Goal",
          "x": 710,
          "y": 290,
-         "color": "blue"
+         "color": "cyan"
       },
       {
          "type": "Element",
-         "x": 220,
-         "y": 210,
-         "width": 110,
-         "height": 180,
-         "color": "green"
-      },
-      {
-         "type": "Element",
-         "x": 420,
+         "x": 90,
          "y": 210,
          "width": 110,
          "height": 180,
          "color": "red"
+      },
+      {
+         "type": "Element",
+         "x": 290,
+         "y": 210,
+         "width": 110,
+         "height": 180,
+         "color": "green"
       },
       {
          "type": "Goal",
@@ -67,15 +67,23 @@
       },
       {
          "type": "ColorChanger",
-         "x": 360,
+         "x": 430,
          "y": 285,
          "color": "green"
       },
       {
          "type": "ColorChanger",
-         "x": 560,
+         "x": 630,
          "y": 285,
-         "color": "red"
+         "color": "blue"
+      },
+      {
+         "type": "Element",
+         "x": 490,
+         "y": 210,
+         "width": 110,
+         "height": 180,
+         "color": "blue"
       }
    ]
 }

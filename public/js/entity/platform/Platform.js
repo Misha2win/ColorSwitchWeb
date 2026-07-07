@@ -65,10 +65,7 @@ export default class Platform extends Entity {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
-         { name: 'width', type: 'number', min: 10 },
-         { name: 'height', type: 'number', min: 10 },
+         ...this.getBoxProps(),
          { name: 'color', type: 'color' }
       ]
    }

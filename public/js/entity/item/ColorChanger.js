@@ -52,8 +52,7 @@ export default class ColorChanger extends Item {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
+         ...this.getPositionProps(),
          { name: 'color', type: 'color' }
       ]
    }

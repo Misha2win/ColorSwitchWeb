@@ -58,10 +58,7 @@ export default class Painter extends Item {
    }
 
    getProperties() {
-      return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' }
-      ]
+      return this.getPositionProps()
    }
 
 }

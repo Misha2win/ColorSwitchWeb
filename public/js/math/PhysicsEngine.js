@@ -1,11 +1,16 @@
+import Color from '../entity/Color.js'
+import ColorChanger from '../entity/item/ColorChanger.js'
+import { Direction } from '../entity/obstacle/Beam.js'
+import Element from '../entity/obstacle/Element.js'
+import Portal from '../entity/obstacle/Portal.js'
+import Prism from '../entity/obstacle/Prism.js'
+import PhotonicPlatform from '../entity/platform/PhotonicPlatform.js'
+import Platform from '../entity/platform/Platform.js'
 import Vector from './Vector.js'
 
-const physics = {
-    gravity: 2400,
-    maxFallSpeed: 1800,
-}
-
 export function calculatePhysics(delta, level) {
+    resolveOptics(delta, level)
+
     const entities = level.entities
     const blockers = [...level.blockers, ...level.ghostBlockers]
     const triggers = [...level.triggers, ...level.ghostTriggers]
@@ -53,6 +58,64 @@ export function calculatePhysics(delta, level) {
         if (!boxesIntersect(player, trigger)) continue
 
         trigger.onCollide(player)
+    }
+}
+
+function resolveOptics(delta, level) {
+    const partition = (array, predicate) => {
+        const matches = []
+        const nonMatches = []
+
+        for (const item of array) {
+            if (predicate(item)) {
+                matches.push(item)
+            } else {
+                nonMatches.push(item)
+            }
+        }
+
+        return [matches, nonMatches]
+    }
+
+    const directionalComparators = {
+            [Direction.UP]: (a, b) => (b.y + b.height) - (a.y + a.height),
+            [Direction.RIGHT]: (a, b) => a.x - b.x,
+            [Direction.DOWN]: (a, b) => a.y - b.y,
+            [Direction.LEFT]: (a, b) => (b.x + b.width) - (a.x + a.width)
+    }
+
+    const photonics = level.getEntities(PhotonicPlatform)
+    const prisms = level.getEntities(Prism)
+    const [rootPrisms, leafPrisms] = partition(prisms, (prism) => photonics.every((plat) => !pointIntersectsBox(prism.point, plat)))
+
+    // Resolve prisms that arent connected to photonic platforms
+    const collisionCandidates = [
+        ...prisms,
+        ...level.getEntities(Element),
+        ...level.getEntities(Platform),
+        ...level.getEntities(Portal),
+        ...level.getEntities(ColorChanger),
+    ]
+
+    // Walk through and resolve each prism disregarding beam on beam collisions to get proposed beam lengths
+    for (const prism of rootPrisms) {
+        if (!prism.beams?.length) break
+
+        prism.beams[0].color = prism.color
+        prism.beams[0].reset()
+        prism.beams[0].clearDownstreamBeams()
+
+        const sortedCandidates = collisionCandidates.sort(directionalComparators[prism.direction])
+
+        for (const beam of prism.beams) { // Assumes beam doesn't need to be reset
+            if (beam.color === Color.BLACK) break
+
+            for (const candidate of sortedCandidates) {
+                if (!beam.canCollideWith(candidate)) continue
+                if (!boxesIntersect(beam, candidate)) continue
+                beam.onCollide(candidate)
+            }
+        }
     }
 }
 

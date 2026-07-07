@@ -101,8 +101,7 @@ export default class Mirror extends Item {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
+         ...this.getPositionProps(),
          { name: 'color', type: 'color' },
          { name: 'persistOnce', type: 'boolean' }
       ]

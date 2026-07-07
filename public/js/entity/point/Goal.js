@@ -62,8 +62,7 @@ export default class Goal extends Entity {
 
    getProperties() {
       return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' },
+         ...this.getPositionProps(),
          { name: 'color', type: 'color' }
       ]
    }

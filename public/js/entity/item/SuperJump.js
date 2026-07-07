@@ -43,10 +43,7 @@ export default class SuperJump extends Item {
    }
 
    getProperties() {
-      return [
-         { name: 'x', type: 'number' },
-         { name: 'y', type: 'number' }
-      ]
+      return this.getPositionProps()
    }
 
 }
