@@ -1,15 +1,6 @@
 import Level from './Level.js'
-import * as EntityCreator from './EntityCreator.js'
 import Color from '../entity/Color.js'
-
-function createEntity(obj) {
-    const maker = EntityCreator.registry.get(obj.type)
-    if (!maker) {
-        console.log('Unknown type: ' + obj.type)
-        return null
-    }
-    return maker(obj)
-}
+import { create } from './EntityCreator.js'
 
 /**
  * Loads a level from a levelJson string
@@ -19,7 +10,7 @@ export async function loadLevelFromJSON(levelJSON, name = 'noname') {
     if (!levelJSON.color) throw new Error('Level missing starting color')
     if (!levelJSON.spawn) throw new Error('Level missing spawn location')
 
-    return new Level(name, levelJSON.spawn, Color.getColor(levelJSON.color), levelJSON.entities.map(createEntity).filter(Boolean))
+    return new Level(name, levelJSON.spawn, Color.getColor(levelJSON.color), levelJSON.entities.map(create).filter(Boolean))
 }
 
 const loadedLevels = new Map() // Maps level name to level

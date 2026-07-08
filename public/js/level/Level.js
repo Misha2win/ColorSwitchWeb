@@ -1,5 +1,4 @@
 import Platform from "../entity/platform/Platform.js"
-import MovingPlatform from "../entity/platform/MovingPlatform.js"
 import Item from "../entity/item/Item.js"
 import Color from "../entity/Color.js"
 import Ghost from "../entity/Ghost.js"

@@ -1,6 +1,6 @@
 import Color from '../entity/Color.js'
 import ColorChanger from '../entity/item/ColorChanger.js'
-import { Direction } from '../entity/obstacle/Beam.js'
+import Beam, { Direction } from '../entity/obstacle/Beam.js'
 import Element from '../entity/obstacle/Element.js'
 import Portal from '../entity/obstacle/Portal.js'
 import Prism from '../entity/obstacle/Prism.js'
@@ -51,8 +51,6 @@ export function calculatePhysics(delta, level) {
         }
     }
 
-    for (const entity of entities) entity.resolvePhysics()
-
     for (const trigger of triggers) {
         if (!trigger.canCollideWith(player)) continue
         if (!boxesIntersect(player, trigger)) continue
@@ -97,26 +95,50 @@ function resolveOptics(delta, level) {
         ...level.getEntities(ColorChanger),
     ]
 
-    // Walk through and resolve each prism disregarding beam on beam collisions to get proposed beam lengths
     for (const prism of rootPrisms) {
-        if (!prism.beams?.length) break
-
-        prism.beams[0].color = prism.color
-        prism.beams[0].reset()
-        prism.beams[0].clearDownstreamBeams()
-
-        const sortedCandidates = collisionCandidates.sort(directionalComparators[prism.direction])
-
-        for (const beam of prism.beams) { // Assumes beam doesn't need to be reset
-            if (beam.color === Color.BLACK) break
-
-            for (const candidate of sortedCandidates) {
+        prism.beams[0]?.reset()
+        prism.beams[0]?.clearDownstreamBeams()
+        for (const beam of prism.beams) {
+            for (const candidate of collisionCandidates.sort(directionalComparators[beam.direction])) {
                 if (!beam.canCollideWith(candidate)) continue
                 if (!boxesIntersect(beam, candidate)) continue
                 beam.onCollide(candidate)
+                break
             }
         }
     }
+
+    const beams = level.getEntities(Beam)
+
+    const beamCollisions = new Map()
+    const photonicCollisions = new Map()
+    for (const photonic of photonics) {
+        photonic.color = Color.GRAY
+
+        const beamColliders = []
+        const photonicColliders = []
+
+        for (const beam of beams) {
+            if (beam.color === Color.BLACK) continue
+            if (!boxesIntersect(beam, photonic)) continue
+            beamColliders.push(beam)
+        }
+
+        for (const other of photonics) {
+            if (photonic === other) continue
+            if (!boxesIntersect(photonic, other)) continue
+            photonicColliders.push(other)
+        }
+
+        beamCollisions.set(photonic, beamColliders)
+        photonicCollisions.set(photonic, photonicColliders)
+    }
+
+    beamCollisions.forEach((beams, photonic) => {
+        beams.forEach((beam) => {
+            photonic.color = photonic.color.add(beam.color)
+        })
+    })
 }
 
 function moveWithSweptCollision(entity, blockers, distance, axis) {

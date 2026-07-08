@@ -23,13 +23,18 @@ export default class Beam extends Entity {
    }
 
    clearDownstreamBeams() {
-      for (let i = this.index + 1; i < this.beams.length; i++) {
-         beam[i].color = Color.BLACK
-         beam[i].reset()
+      for (let i = this.index + 1; i < this.source.beams.length; i++) {
+         this.source.beams[i].positionOverride = null
+         this.source.beams[i].color = Color.BLACK
+         this.source.beams[i].reset()
       }
    }
 
    reset() {
+      if (this.index === 0) {
+         this.color = this.source.color
+      }
+
       if (this.color === Color.BLACK) {
          this.width = 0
          this.height = 0
@@ -145,9 +150,7 @@ export default class Beam extends Entity {
    }
 
    canCollideWith(other) {
-      if (other instanceof Beam) {
-            return this.prism !== other.prism && this.color != other.color
-      } else if (other instanceof Platform) {
+      if (other instanceof Platform) {
             return !other.color.collidesWith(this.color) || other.color === Color.BLACK
       } else if (other instanceof ColorChanger) {
             return this.color != other.color

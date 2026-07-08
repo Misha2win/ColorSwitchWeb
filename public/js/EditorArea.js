@@ -382,6 +382,13 @@ function offsetEntityJSON(entityJSON, dx, dy) {
     if (typeof copy.startY === 'number') copy.startY += dy
     if (typeof copy.endX === 'number' && entityJSON.type !== 'Teleporter') copy.endX += dx
     if (typeof copy.endY === 'number' && entityJSON.type !== 'Teleporter') copy.endY += dy
+    if (copy.movingEntity) {
+        copy.movingEntity = { ...copy.movingEntity }
+        if (typeof copy.movingEntity.startX === 'number') copy.movingEntity.startX += dx
+        if (typeof copy.movingEntity.startY === 'number') copy.movingEntity.startY += dy
+        if (typeof copy.movingEntity.endX === 'number') copy.movingEntity.endX += dx
+        if (typeof copy.movingEntity.endY === 'number') copy.movingEntity.endY += dy
+    }
 
     return copy
 }
@@ -391,7 +398,7 @@ function getUnsupportedTypes(levelJSON) {
 
     return [...new Set(
         levelJSON.entities
-            .filter(entityJSON => !EntityCreator.registry.has(entityJSON.type))
+            .filter(entityJSON => !EntityCreator.isValidType(entityJSON.type))
             .map(entityJSON => entityJSON.type ?? '(missing type)')
     )]
 }
@@ -722,8 +729,7 @@ export default class EditorArea {
             }
         }
 
-        const makeEntity = EntityCreator.registry.get(this.type)
-        const entity = makeEntity?.({ type: this.type, ...position, width: 0, height: 0 }) ?? null
+        const entity = EntityCreator.create({ type: this.type, ...position, width: 0, height: 0 })
         const entityIsResizable = entity
             && getEditableProperties(entity).some(property => property.name === 'width' || property.name === 'height')
         if (entity && !entityIsResizable) {
@@ -1138,8 +1144,7 @@ export default class EditorArea {
             return
         }
 
-        const makeEntity = EntityCreator.registry.get(this.type)
-        const entity = makeEntity?.({ type: this.type, ...normRect }) ?? null
+        const entity = EntityCreator.create({ type: this.type, ...normRect })
         if (!entity) return
 
         this.entities.push(entity)
@@ -1165,7 +1170,7 @@ export default class EditorArea {
         if (!toolbar) return
 
         toolbar.replaceChildren()
-        for (const type of ['Spawn', ...EntityCreator.registry.keys()]) {
+        for (const type of ['Spawn', ...EntityCreator.getTypes()]) {
             const button = document.createElement('button')
             button.classList.add('button-entity')
             button.dataset.type = type
@@ -1584,8 +1589,7 @@ export default class EditorArea {
         if (!entityJSON) return
 
         const offsetEntity = offsetEntityJSON(entityJSON, 10, 10)
-        const makeEntity = EntityCreator.registry.get(offsetEntity.type)
-        const entity = makeEntity?.(offsetEntity) ?? null
+        const entity = EntityCreator.create(offsetEntity)
         if (!entity) return
 
         this.entities.push(entity)
@@ -1762,8 +1766,7 @@ export default class EditorArea {
 
         const entities = levelJSON.entities
             .map((entityJSON) => {
-                const makeEntity = EntityCreator.registry.get(entityJSON.type)
-                return makeEntity?.(entityJSON) ?? null
+                return EntityCreator.create(entityJSON)
             })
             .filter(Boolean)
         const level = new Level('editor-preview', levelJSON.spawn, Color.getColor(levelJSON.color), entities)

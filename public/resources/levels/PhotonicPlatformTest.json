@@ -45,16 +45,18 @@
          "height": 10
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 100,
          "y": 210,
-         "startX": 100,
-         "startY": 210,
-         "endX": 590,
-         "endY": 210,
          "width": 200,
          "height": 20,
-         "color": "black"
+         "color": "black",
+         "movingEntity": {
+            "startX": 100,
+            "startY": 210,
+            "endX": 590,
+            "endY": 210
+         }
       },
       {
          "type": "Goal",

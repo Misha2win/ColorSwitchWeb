@@ -38,100 +38,116 @@
          "color": "black"
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 240,
          "y": 70,
-         "startX": 240,
-         "startY": 70,
-         "endX": 520,
-         "endY": 70,
          "width": 110,
          "height": 120,
-         "color": "red"
+         "color": "red",
+         "movingEntity": {
+            "startX": 240,
+            "startY": 70,
+            "endX": 520,
+            "endY": 70
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 250,
          "y": 220,
-         "startX": 250,
-         "startY": 220,
-         "endX": 680,
-         "endY": 220,
          "width": 70,
          "height": 120,
-         "color": "blue"
+         "color": "blue",
+         "movingEntity": {
+            "startX": 250,
+            "startY": 220,
+            "endX": 680,
+            "endY": 220
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 430,
          "y": 250,
-         "startX": 430,
-         "startY": 250,
-         "endX": 190,
-         "endY": 250,
          "width": 120,
          "height": 100,
-         "color": "green"
+         "color": "green",
+         "movingEntity": {
+            "startX": 430,
+            "startY": 250,
+            "endX": 190,
+            "endY": 250
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 80,
          "y": 360,
-         "startX": 80,
-         "startY": 360,
-         "endX": 80,
-         "endY": 220,
          "width": 50,
          "height": 120,
-         "color": "blue"
+         "color": "blue",
+         "movingEntity": {
+            "startX": 80,
+            "startY": 360,
+            "endX": 80,
+            "endY": 220
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 160,
          "y": 240,
-         "startX": 160,
-         "startY": 240,
-         "endX": 160,
-         "endY": 540,
          "width": 50,
          "height": 110,
-         "color": "red"
+         "color": "red",
+         "movingEntity": {
+            "startX": 160,
+            "startY": 240,
+            "endX": 160,
+            "endY": 540
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 560,
          "y": 320,
-         "startX": 560,
-         "startY": 320,
-         "endX": 560,
-         "endY": 450,
          "width": 60,
          "height": 70,
-         "color": "green"
+         "color": "green",
+         "movingEntity": {
+            "startX": 560,
+            "startY": 320,
+            "endX": 560,
+            "endY": 450
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 640,
          "y": 290,
-         "startX": 640,
-         "startY": 290,
-         "endX": 640,
-         "endY": 390,
          "width": 20,
          "height": 100,
-         "color": "red"
+         "color": "red",
+         "movingEntity": {
+            "startX": 640,
+            "startY": 290,
+            "endX": 640,
+            "endY": 390
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 410,
          "y": 420,
-         "startX": 410,
-         "startY": 420,
-         "endX": 410,
-         "endY": 130,
          "width": 30,
          "height": 110,
-         "color": "blue"
+         "color": "blue",
+         "movingEntity": {
+            "startX": 410,
+            "startY": 420,
+            "endX": 410,
+            "endY": 130
+         }
       },
       {
          "type": "Platform",

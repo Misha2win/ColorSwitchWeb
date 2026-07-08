@@ -54,52 +54,60 @@
          "color": "black"
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 20,
          "y": 90,
          "width": 60,
          "height": 10,
          "color": "red",
-         "startX": 20,
-         "startY": 90,
-         "endX": 20,
-         "endY": 400
+         "movingEntity": {
+            "startX": 20,
+            "startY": 90,
+            "endX": 20,
+            "endY": 400
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 140,
          "y": 90,
          "width": 60,
          "height": 10,
          "color": "blue",
-         "startX": 140,
-         "startY": 90,
-         "endX": 140,
-         "endY": 400
+         "movingEntity": {
+            "startX": 140,
+            "startY": 90,
+            "endX": 140,
+            "endY": 400
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 80,
          "y": 400,
          "width": 60,
          "height": 10,
          "color": "green",
-         "startX": 80,
-         "startY": 400,
-         "endX": 80,
-         "endY": 90
+         "movingEntity": {
+            "startX": 80,
+            "startY": 400,
+            "endX": 80,
+            "endY": 90
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 200,
          "y": 400,
          "width": 60,
          "height": 10,
          "color": "black",
-         "startX": 200,
-         "startY": 400,
-         "endX": 200,
-         "endY": 90
+         "movingEntity": {
+            "startX": 200,
+            "startY": 400,
+            "endX": 200,
+            "endY": 90
+         }
       },
       {
          "type": "Platform",
@@ -278,64 +286,74 @@
          "color": "green"
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 270,
          "y": 280,
          "width": 60,
          "height": 10,
          "color": "red",
-         "startX": 270,
-         "startY": 280,
-         "endX": 410,
-         "endY": 280
+         "movingEntity": {
+            "startX": 270,
+            "startY": 280,
+            "endX": 410,
+            "endY": 280
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 270,
          "y": 160,
          "width": 60,
          "height": 10,
          "color": "green",
-         "startX": 270,
-         "startY": 160,
-         "endX": 410,
-         "endY": 160
+         "movingEntity": {
+            "startX": 270,
+            "startY": 160,
+            "endX": 410,
+            "endY": 160
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 410,
          "y": 220,
          "width": 60,
          "height": 10,
          "color": "blue",
-         "startX": 410,
-         "startY": 220,
-         "endX": 270,
-         "endY": 220
+         "movingEntity": {
+            "startX": 410,
+            "startY": 220,
+            "endX": 270,
+            "endY": 220
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 410,
          "y": 340,
          "width": 60,
          "height": 10,
          "color": "black",
-         "startX": 410,
-         "startY": 340,
-         "endX": 270,
-         "endY": 340
+         "movingEntity": {
+            "startX": 410,
+            "startY": 340,
+            "endX": 270,
+            "endY": 340
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 20,
          "y": 400,
          "width": 60,
          "height": 10,
          "color": "black",
-         "startX": 20,
-         "startY": 400,
-         "endX": 200,
-         "endY": 90
+         "movingEntity": {
+            "startX": 20,
+            "startY": 400,
+            "endX": 200,
+            "endY": 90
+         }
       },
       {
          "type": "Platform",

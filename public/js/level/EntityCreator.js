@@ -5,7 +5,6 @@ import Goal from '../entity/point/Goal.js'
 import Element from '../entity/obstacle/Element.js'
 import SuperJump from '../entity/item/SuperJump.js'
 import Prism from '../entity/obstacle/Prism.js'
-import MovingPlatform from '../entity/platform/MovingPlatform.js'
 import Teleporter from '../entity/item/Teleporter.js'
 import Mirror from '../entity/item/Mirror.js'
 import ColorMixer from '../entity/item/ColorMixer.js'
@@ -14,12 +13,12 @@ import PhotonicPlatform from '../entity/platform/PhotonicPlatform.js'
 import Text from '../entity/Text.js'
 import Painter from '../entity/item/Painter.js'
 import Portal from '../entity/obstacle/Portal.js'
+import MovingEntity from '../entity/MovingEntity.js'
 
-export const registry = new Map()
+const registry = new Map()
 const getColor = (name, fallbackName) => Color.getColor(name ?? fallbackName)
 
 registry.set('Platform', (obj) => new Platform(obj.x, obj.y, obj.width, obj.height, getColor(obj.color, 'black')))
-registry.set('MovingPlatform', (obj) => new MovingPlatform(obj.x, obj.y, obj.width, obj.height, getColor(obj.color, 'black'), obj.startX, obj.startY, obj.endX, obj.endY))
 registry.set('PhotonicPlatform', (obj) => new PhotonicPlatform(obj.x, obj.y, obj.width, obj.height))
 registry.set('FragilePlatform', (obj) => new FragilePlatform(obj.x, obj.y, obj.width, obj.height, getColor(obj.color, 'black')))
 
@@ -37,3 +36,27 @@ registry.set('Portal', (obj) => new Portal(obj.x, obj.y, getColor(obj.color, 'gr
 registry.set('Goal', (obj) => new Goal(obj.x, obj.y, getColor(obj.color, 'green')))
 
 registry.set('Text', (obj) => new Text(obj.x, obj.y, obj.width, obj.height, obj.text, obj.fontSize, obj.color, obj.background))
+
+export function create(obj) {
+    const maker = registry.get(obj.type)
+    if (!maker) {
+        console.log('Unknown type: ' + obj.type)
+        return null
+    }
+
+    const entity = maker(obj)
+    if (obj.movingEntity) {
+        const moving = obj.movingEntity
+        return new MovingEntity(entity, moving.startX, moving.startY, moving.endX, moving.endY)
+    }
+
+    return entity
+}
+
+export function isValidType(type) {
+    return registry.has(type)
+}
+
+export function getTypes() {
+    return [...registry.keys()]
+}

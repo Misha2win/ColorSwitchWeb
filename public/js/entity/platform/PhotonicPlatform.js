@@ -54,31 +54,6 @@ export default class PhotonicPlatform extends Platform {
       }
    }
 
-   preparePhysics() {
-      this.color = Color.GRAY
-
-      const beams = this.level.getEntities(Beam)
-         .filter((beam) => beam.color !== Color.GRAY && boxesIntersect(beam, this))
-      const photonics = this.level.getEntities(PhotonicPlatform)
-         .filter((plat) => plat !== this && plat.color !== Color.GRAY && boxesIntersect(plat, this))
-
-      this.chargers = []
-      for (const beam of beams) {
-         this.chargers.push(beam)
-         this.color = this.color.add(beam.color)
-      }
-
-      for (const photonic of photonics) {
-         const primary = photonic.chargers.some(charger => {
-            return charger instanceof Beam || charger !== this
-         })
-         if (primary) {
-            this.chargers.push(photonic)
-            this.color = this.color.add(photonic.color)
-         }
-      }
-   }
-
    toJSON() {
       return {
          type: this.type,

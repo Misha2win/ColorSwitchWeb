@@ -36,17 +36,21 @@ function platformEntity(tokens) {
 
     if (type === 'MovingPlatform') {
         const [color, startX, startY, endX, endY, width, height] = args
-        return {
-            type,
-            x: numberValue(startX),
-            y: numberValue(startY),
+        const movingEntity = {
             startX: numberValue(startX),
             startY: numberValue(startY),
             endX: numberValue(endX),
-            endY: numberValue(endY),
+            endY: numberValue(endY)
+        }
+
+        return {
+            type: 'Element',
+            x: movingEntity.startX,
+            y: movingEntity.startY,
             width: numberValue(width),
             height: numberValue(height),
-            color
+            color,
+            movingEntity
         }
     }
 

@@ -46,28 +46,32 @@
          "color": "blue"
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 140,
          "y": 180,
-         "startX": 140,
-         "startY": 180,
-         "endX": 140,
-         "endY": 270,
          "width": 10,
          "height": 90,
-         "color": "black"
+         "color": "black",
+         "movingEntity": {
+            "startX": 140,
+            "startY": 180,
+            "endX": 140,
+            "endY": 270
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 280,
          "y": 100,
-         "startX": 280,
-         "startY": 100,
-         "endX": 360,
-         "endY": 100,
          "width": 40,
          "height": 10,
-         "color": "black"
+         "color": "black",
+         "movingEntity": {
+            "startX": 280,
+            "startY": 100,
+            "endX": 360,
+            "endY": 100
+         }
       },
       {
          "type": "Platform",

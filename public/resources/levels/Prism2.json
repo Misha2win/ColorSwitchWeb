@@ -38,28 +38,32 @@
          "color": "black"
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 20,
          "y": 290,
          "width": 220,
          "height": 10,
          "color": "blue",
-         "startX": 510,
-         "startY": 290,
-         "endX": 20,
-         "endY": 290
+         "movingEntity": {
+            "startX": 510,
+            "startY": 290,
+            "endX": 20,
+            "endY": 290
+         }
       },
       {
-         "type": "MovingPlatform",
+         "type": "Element",
          "x": 390,
          "y": 160,
          "width": 270,
          "height": 10,
          "color": "red",
-         "startX": 460,
-         "startY": 160,
-         "endX": 20,
-         "endY": 160
+         "movingEntity": {
+            "startX": 460,
+            "startY": 160,
+            "endX": 20,
+            "endY": 160
+         }
       },
       {
          "type": "Goal",

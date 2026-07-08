@@ -21,7 +21,6 @@ export default class Entity {
     // Main game methods
     draw(context) { abstractError('Entity.draw', this.#type) }
     preparePhysics(delta) {}
-    resolvePhysics() {}
     update(delta) { abstractError('Entity.update', this.#type) }
     canCollideWith(other) { abstractError('Entity.canCollideWith', this.#type) }
     onCollide(other) { abstractError('Entity.onCollide', this.#type) }
