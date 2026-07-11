@@ -390,6 +390,22 @@ export default class Player extends Entity {
         }
     }
 
+    hasUses(color) {
+        if (color.intersects(Color.RED) && this.redUses > 0) {
+            return true
+        }
+
+        if (color.intersects(Color.GREEN) && this.greenUses > 0) {
+            return true
+        }
+
+        if (color.intersects(Color.BLUE) && this.blueUses > 0) {
+            return true
+        }
+
+        return false
+    }
+
     addUses(color) {
         if (color.intersects(Color.RED)) {
             this.redUses++

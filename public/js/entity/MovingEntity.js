@@ -1,14 +1,15 @@
 export default class MovingEntity {
 
-   constructor(original, x1 = 0, y1 = 0, x2 = 0, y2 = 0) {
+   constructor(original, x1 = 0, y1 = 0, x2 = 0, y2 = 0, speed = 50, loop = true) {
       const state = {
          original,
          x1,
          y1,
          x2,
          y2,
+         speed,
+         loop,
          movingToPoint2: true,
-         speed: 50
       }
 
       return new Proxy(original, {
@@ -44,7 +45,7 @@ export default class MovingEntity {
       if (distance <= this.speed * delta) {
          this.x = targetX
          this.y = targetY
-         this.movingToPoint2 = !this.movingToPoint2
+         if (this.movingToPoint2 || this.loop) this.movingToPoint2 = !this.movingToPoint2
          this.original.preparePhysics.call(this, delta)
          return
       }
@@ -56,10 +57,42 @@ export default class MovingEntity {
       this.original.preparePhysics.call(this, delta)
    }
 
+   draw(context) {
+      if (globalThis.editor) {
+         const circleRadius = 3
+
+         context.save()
+         context.strokeStyle = 'red'
+         context.lineWidth = 1.5
+
+         context.beginPath()
+         context.moveTo(this.x, this.y)
+         context.lineTo(this.x1, this.y1)
+         context.lineTo(this.x2, this.y2)
+         context.stroke()
+
+         context.beginPath()
+         context.moveTo(this.x1 + circleRadius, this.y1)
+         context.arc(this.x1, this.y1, circleRadius, 0, Math.PI * 2)
+         context.moveTo(this.x2 + circleRadius, this.y2)
+         context.arc(this.x2, this.y2, circleRadius, 0, Math.PI * 2)
+         context.stroke()
+
+         context.fillStyle = `${this.color.drawColor}32`
+         context.fillRect(this.x1, this.y1, this.width, this.height)
+         context.fillRect(this.x2, this.y2, this.width, this.height)
+         context.restore()
+      }
+
+      this.original.draw.call(this, context)
+   }
+
    toJSON() {
       return {
          ...this.original.toJSON.call(this),
          movingEntity: {
+            speed: this.speed,
+            loop: this.loop,
             startX: this.x1,
             startY: this.y1,
             endX: this.x2,
@@ -71,6 +104,8 @@ export default class MovingEntity {
    getProperties() {
       return [
          ...this.original.getProperties.call(this),
+         { name: 'speed', type: 'number', get: entity => entity.speed, set: (entity, value) => { entity.speed = value }  },
+         { name: 'loop', type: 'boolean', get: entity => entity.loop, set: (entity, value) => { entity.loop = value }  },
          { name: 'startX', type: 'number', get: entity => entity.x1, set: (entity, value) => { entity.x1 = value } },
          { name: 'startY', type: 'number', get: entity => entity.y1, set: (entity, value) => { entity.y1 = value } },
          { name: 'endX', type: 'number', get: entity => entity.x2, set: (entity, value) => { entity.x2 = value } },

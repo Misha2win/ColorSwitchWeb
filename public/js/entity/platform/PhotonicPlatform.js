@@ -21,10 +21,11 @@ export default class PhotonicPlatform extends Platform {
    }
 
    draw(context) {
-      context.fillStyle = 'black'
-      context.fillRect(this.x, this.y, this.width, this.height)
+      context.strokeStyle = 'black'
+      const lineWidth = context.lineWidth
+      context.strokeRect(this.x + lineWidth / 2, this.y + lineWidth / 2, this.width - lineWidth, this.height - lineWidth)
 
-      const color = this.color === Color.GRAY ? Color.GRAY.drawColor : this.getDrawColor()
+      const color = this.getDrawColor()
 
       context.fillStyle = color
       context.fillRect(this.x + 1, this.y + 1, this.width - 2, this.height - 2)

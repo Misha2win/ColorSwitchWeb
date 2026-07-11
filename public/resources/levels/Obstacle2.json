@@ -60,12 +60,6 @@
          "color": "green"
       },
       {
-         "type": "Goal",
-         "x": 20,
-         "y": 290,
-         "color": "white"
-      },
-      {
          "type": "ColorChanger",
          "x": 430,
          "y": 285,

@@ -49,7 +49,7 @@ export default class Prism extends Obstacle {
 
     onCollide(other) {
         if (this.color == Color.BLACK || this.color === Color.GRAY) return
-        other.color = this.color
+        other.color = other.color.add(this.color)
     }
 
     onPlayerColorChange(old, current) {

@@ -74,7 +74,7 @@
          "y": 480,
          "width": 710,
          "height": 20,
-         "text": "Press SHIFT + 1 to remove red from yourself",
+         "text": "Press SHIFT + RED to remove red from yourself",
          "fontSize": 20,
          "color": "white",
          "background": ""

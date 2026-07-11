@@ -1,8 +1,8 @@
 {
-   "color": "red",
+   "color": "green",
    "spawn": {
-      "x": 710,
-      "y": 170
+      "x": 20,
+      "y": 410
    },
    "entities": [
       {
@@ -23,14 +23,6 @@
       },
       {
          "type": "Platform",
-         "x": 10,
-         "y": 10,
-         "width": 730,
-         "height": 100,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
          "x": 730,
          "y": 10,
          "width": 10,
@@ -45,9 +37,9 @@
       },
       {
          "type": "Platform",
-         "x": 390,
-         "y": 250,
-         "width": 340,
+         "x": 10,
+         "y": 10,
+         "width": 730,
          "height": 100,
          "color": "black"
       },
@@ -55,84 +47,71 @@
          "type": "Prism",
          "x": 365,
          "y": 110,
-         "color": "red",
+         "color": "green",
          "direction": "DOWN"
       },
       {
          "type": "Platform",
-         "x": 160,
+         "x": 380,
          "y": 250,
-         "width": 200,
+         "width": 350,
          "height": 100,
          "color": "black"
       },
       {
          "type": "Platform",
-         "x": 360,
-         "y": 250,
+         "x": 370,
+         "y": 270,
          "width": 10,
-         "height": 10,
+         "height": 80,
          "color": "black"
       },
       {
          "type": "Platform",
-         "x": 380,
-         "y": 250,
-         "width": 10,
-         "height": 10,
+         "x": 580,
+         "y": 110,
+         "width": 150,
+         "height": 140,
          "color": "black"
       },
       {
          "type": "Platform",
-         "x": 380,
-         "y": 340,
-         "width": 10,
-         "height": 10,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
-         "x": 360,
-         "y": 340,
-         "width": 10,
-         "height": 10,
-         "color": "black"
-      },
-      {
-         "type": "Platform",
-         "x": 360,
-         "y": 310,
-         "width": 30,
-         "height": 30,
-         "color": "green"
-      },
-      {
-         "type": "Element",
-         "x": 360,
-         "y": 260,
-         "width": 30,
-         "height": 30,
-         "color": "red"
-      },
-      {
-         "type": "ColorChanger",
-         "x": 410,
-         "y": 405,
-         "color": "blue"
-      },
-      {
-         "type": "ColorChanger",
-         "x": 410,
-         "y": 165,
-         "color": "blue"
-      },
-      {
-         "type": "Element",
          "x": 20,
-         "y": 290,
-         "width": 140,
-         "height": 20,
-         "color": "red"
+         "y": 250,
+         "width": 350,
+         "height": 100,
+         "color": "black"
+      },
+      {
+         "type": "Platform",
+         "x": 20,
+         "y": 110,
+         "width": 150,
+         "height": 140,
+         "color": "black"
+      },
+      {
+         "type": "PhotonicPlatform",
+         "x": 330,
+         "y": 260,
+         "width": 90,
+         "height": 230
+      },
+      {
+         "type": "Element",
+         "x": 350,
+         "y": 155,
+         "width": 50,
+         "height": 50,
+         "color": "green",
+         "movingEntity": {
+            "speed": 50,
+            "loop": true,
+            "startX": 170,
+            "startY": 155,
+            "endX": 530,
+            "endY": 155
+         }
       }
    ]
 }

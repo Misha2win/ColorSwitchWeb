@@ -1,4 +1,5 @@
 import Color from './entity/Color.js'
+import MovingEntity from './entity/MovingEntity.js'
 import Player from './entity/Player.js'
 import Level from './level/Level.js'
 import * as EntityCreator from './level/EntityCreator.js'
@@ -34,6 +35,10 @@ const spawnPositionProperties = [
     { name: 'x', type: 'number' },
     { name: 'y', type: 'number' }
 ]
+
+function isMovingEntity(entity) {
+    return !!entity?.original && entity.original !== entity
+}
 
 function setPropertyValue(entity, property, value) {
     if (property.set) {
@@ -232,9 +237,10 @@ function propertyDependencyMatches(entity, properties, property) {
     })
 }
 
-function appendPropertyEditorField(form, entity, property) {
+function appendPropertyEditorField(form, entity, property, editor = null) {
     const div = document.createElement('div')
     div.setAttribute('class', 'property-form-group')
+    if (property.type === 'boolean') div.classList.add('property-toggle-group')
     form.appendChild(div)
 
     const id = `property-${property.name}`
@@ -272,7 +278,7 @@ function appendPropertyEditorField(form, entity, property) {
             const propertyListChanged = previousPropertyNames.length !== nextPropertyNames.length
                 || previousPropertyNames.some((name, index) => name !== nextPropertyNames[index])
             if (propertyListChanged) {
-                populatePropertyEditor(entity)
+                populatePropertyEditor(entity, editor)
             }
         }
     })
@@ -289,9 +295,38 @@ function appendPropertyEditorField(form, entity, property) {
     }
 }
 
-function populatePropertyEditor(entity) {
+function populatePropertySidebarControls(editor = null, entity = null) {
+    const controls = document.getElementById('property-sidebar-controls')
+    if (!controls) return
+
+    controls.innerHTML = ''
+    if (!editor || !entity) return
+
+    const div = document.createElement('div')
+    div.setAttribute('class', 'property-sidebar-control property-toggle-group')
+    controls.appendChild(div)
+
+    const id = 'property-sidebar-move-entity'
+    const label = document.createElement('label')
+    label.setAttribute('for', id)
+    label.textContent = 'Move Entity'
+    div.appendChild(label)
+
+    const input = document.createElement('input')
+    input.setAttribute('id', id)
+    input.setAttribute('name', id)
+    input.setAttribute('type', 'checkbox')
+    input.checked = isMovingEntity(entity)
+    input.addEventListener('change', event => {
+        editor.setSelectedEntityMoving(entity, event.target.checked)
+    })
+    div.appendChild(input)
+}
+
+function populatePropertyEditor(entity, editor = null) {
     const form = document.getElementById('property-editor-form')
     form.innerHTML = ''
+    populatePropertySidebarControls(editor, entity)
 
     if (!entity) {
         form.textContent = 'Selected entity properties will go here.'
@@ -299,19 +334,20 @@ function populatePropertyEditor(entity) {
     }
 
     const editableProperties = getEditableProperties(entity)
-    if (!editableProperties.length) {
+    if (!editableProperties.length && !editor) {
         form.textContent = 'This entity does not have editable properties.'
         return
     }
 
     for (const property of editableProperties) {
-        appendPropertyEditorField(form, entity, property)
+        appendPropertyEditorField(form, entity, property, editor)
     }
 }
 
 function populateSpawnPropertyEditor(editor) {
     const form = document.getElementById('property-editor-form')
     form.innerHTML = ''
+    populatePropertySidebarControls()
 
     for (const property of spawnPositionProperties) {
         appendPropertyEditorField(form, editor.spawn, property)
@@ -918,7 +954,7 @@ export default class EditorArea {
 
         if (this.selectedEntity) {
             Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
-            populatePropertyEditor(this.selectedEntity)
+            populatePropertyEditor(this.selectedEntity, this)
         } else {
             Object.assign(this.spawn, this.getVisiblePosition(getSpawnBox(this.spawn)))
             this.syncPropertyEditor()
@@ -965,7 +1001,7 @@ export default class EditorArea {
         }
 
         Object.assign(target, this.getVisiblePosition(target))
-        populatePropertyEditor(target)
+        populatePropertyEditor(target, this)
         this.rect = false
         this.dragInfo = null
         this.selectedEntityMoved = false
@@ -1006,7 +1042,7 @@ export default class EditorArea {
         if (entity?.type) this.setActiveEntityType(entity.type)
         if (spawn) this.setActiveEntityType('Spawn')
         if (entity) {
-            populatePropertyEditor(entity)
+            populatePropertyEditor(entity, this)
         } else {
             this.syncPropertyEditor()
         }
@@ -1073,7 +1109,7 @@ export default class EditorArea {
                     y: Math.round(this.selectedEntity.y / editorGridSize) * editorGridSize
                 })
                 Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
-                populatePropertyEditor(this.selectedEntity)
+                populatePropertyEditor(this.selectedEntity, this)
             }
         } else if (this.selectedSpawn) {
             if (this.selectedEntityMoved) {
@@ -1112,7 +1148,7 @@ export default class EditorArea {
                 y: Math.round(this.selectedEntity.y / editorGridSize) * editorGridSize
             })
             Object.assign(this.selectedEntity, this.getVisiblePosition(this.selectedEntity))
-            populatePropertyEditor(this.selectedEntity)
+            populatePropertyEditor(this.selectedEntity, this)
         }
         if (this.selectedSpawn && this.selectedEntityMoved) {
             Object.assign(this.spawn, {
@@ -1150,7 +1186,7 @@ export default class EditorArea {
         this.entities.push(entity)
         this.selectedEntity = entity
         this.selectedSpawn = false
-        populatePropertyEditor(entity)
+        populatePropertyEditor(entity, this)
         this.syncSelectionControls()
     }
 
@@ -1193,7 +1229,7 @@ export default class EditorArea {
 
     syncPropertyEditor() {
         if (this.selectedEntity) {
-            populatePropertyEditor(this.selectedEntity)
+            populatePropertyEditor(this.selectedEntity, this)
             return
         }
 
@@ -1384,14 +1420,6 @@ export default class EditorArea {
     async handleEditLevelOrderClick() {
         if (this.playingLevel) return
 
-        if (!this.canOverwriteLevelFiles) {
-            dialog(
-                'Cannot edit level order:',
-                'Edit Order is only available when running the local editor server.'
-            )
-            return
-        }
-
         try {
             window.location.href = 'order-editor.html'
         } catch (err) {
@@ -1568,6 +1596,30 @@ export default class EditorArea {
         this.commitPendingMove()
     }
 
+    setSelectedEntityMoving(entity, enabled) {
+        if (this.playingLevel || !entity || this.selectedEntity !== entity) return
+
+        const currentlyMoving = isMovingEntity(entity)
+        if (enabled === currentlyMoving) return
+
+        const index = this.entities.indexOf(entity)
+        if (index === -1) return
+
+        const nextEntity = enabled
+            ? new MovingEntity(entity, entity.x, entity.y, entity.x, entity.y)
+            : entity.original
+
+        this.entities[index] = nextEntity
+        this.clearMoveHistory()
+        this.selectedEntity = nextEntity
+        this.selectedSpawn = false
+        this.selectedEntityMoved = false
+        this.rect = false
+        this.dragInfo = null
+        populatePropertyEditor(nextEntity, this)
+        this.syncSelectionControls()
+    }
+
     deleteSelectedEntity() {
         if (this.playingLevel) return
 
@@ -1596,7 +1648,7 @@ export default class EditorArea {
         this.clearMoveHistory()
         this.selectedEntity = entity
         this.selectedSpawn = false
-        populatePropertyEditor(entity)
+        populatePropertyEditor(entity, this)
         this.syncSelectionControls()
     }
 
@@ -1699,14 +1751,12 @@ export default class EditorArea {
         }
 
         if (editLevelOrderButton) {
-            editLevelOrderButton.hidden = !this.canOverwriteLevelFiles
-            editLevelOrderButton.disabled = this.playingLevel || !this.canOverwriteLevelFiles
-            if (!this.canOverwriteLevelFiles) {
-                editLevelOrderButton.title = 'Reorder Levels is only available when running the local editor server.'
-            } else if (this.playingLevel) {
+            editLevelOrderButton.hidden = false
+            editLevelOrderButton.disabled = this.playingLevel
+            if (this.playingLevel) {
                 editLevelOrderButton.title = 'Stop playing before editing the level order.'
             } else {
-                editLevelOrderButton.title = 'Change the level order.'
+                editLevelOrderButton.title = 'Open the level order editor.'
             }
         }
     }

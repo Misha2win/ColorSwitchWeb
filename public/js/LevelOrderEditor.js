@@ -1,7 +1,6 @@
 import Color from './entity/Color.js'
 import * as LevelCreator from './level/LevelCreator.js'
 import {
-    fetchCanOverwriteLevelFiles,
     fetchLevelOrderJSON,
     overwriteLevelOrderFile,
     validateLevelOrderJSON
@@ -47,7 +46,6 @@ let savedNotUsed = []
 let savedMobileLevels = {}
 let activeListType = 'ordered'
 let selectedCard = null
-let canOverwriteLevelFiles = false
 let dragState = null
 
 viewButtons.forEach(button => {
@@ -69,7 +67,6 @@ async function start() {
     syncActionButtons()
 
     try {
-        canOverwriteLevelFiles = await fetchCanOverwriteLevelFiles()
         loadedLevelOrderJSON = await fetchLevelOrderJSON()
         validateLevelOrderJSON(loadedLevelOrderJSON)
         savedLevelOrder = [...loadedLevelOrderJSON.levelOrder]
@@ -174,7 +171,7 @@ function syncActionButtons() {
     addButton.hidden = !showingAddLevelAction
     addButton.disabled = !showingAddLevelAction || !loaded || unusedCount === 0 || (addingMobileAssociation && availableMobileSourceCount === 0)
     editSelectedButton.disabled = !loaded || !selectedCard
-    saveButton.disabled = !loaded || !changed || !canOverwriteLevelFiles
+    saveButton.disabled = !loaded || !changed
 
     if (!showingAddLevelAction) {
         addButton.title = ''
@@ -191,8 +188,8 @@ function syncActionButtons() {
     }
     editSelectedButton.title = selectedCard ? `Edit ${selectedCard.dataset.levelName}.` : 'Select a level to edit.'
 
-    if (!canOverwriteLevelFiles) {
-        saveButton.title = 'Save is only available when running the local editor server.'
+    if (!loaded) {
+        saveButton.title = 'Load level order before saving.'
     } else if (!changed) {
         saveButton.title = 'Change the order before saving.'
     } else {

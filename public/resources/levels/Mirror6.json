@@ -70,7 +70,7 @@
          "y": 660,
          "width": 300,
          "height": 20,
-         "text": "← Your item inventory (E to USE)",
+         "text": "← Your item inventory (E to use)",
          "fontSize": 20,
          "color": "black",
          "background": ""

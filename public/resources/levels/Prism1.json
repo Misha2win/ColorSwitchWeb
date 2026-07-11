@@ -46,16 +46,9 @@
       {
          "type": "Prism",
          "x": 180,
-         "y": 370,
+         "y": 350,
          "color": "green",
          "direction": "DOWN"
-      },
-      {
-         "type": "Prism",
-         "x": 590,
-         "y": 290,
-         "color": "blue",
-         "direction": "RIGHT"
       },
       {
          "type": "Platform",
@@ -99,13 +92,6 @@
          "y": 290,
          "color": "blue",
          "direction": "LEFT"
-      },
-      {
-         "type": "Prism",
-         "x": 180,
-         "y": 450,
-         "color": "green",
-         "direction": "UP"
       }
    ]
 }

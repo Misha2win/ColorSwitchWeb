@@ -150,5 +150,5 @@ function setupEditorPlayControls() {
 setupEditorInteractionGuards()
 setupEditorPlayControls()
 
-globalThis.editor = editor
+globalThis.editor = true
 setDebugEnabled(true)

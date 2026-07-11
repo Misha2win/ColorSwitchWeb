@@ -1,5 +1,5 @@
 {
-   "color": "gray",
+   "color": "magenta",
    "spawn": {
       "x": 20,
       "y": 290
@@ -41,90 +41,87 @@
          "type": "Goal",
          "x": 710,
          "y": 290,
-         "color": "green"
+         "color": "red"
       },
       {
          "type": "ColorChanger",
-         "x": 360,
+         "x": 280,
          "y": 285,
-         "color": "green"
+         "color": "blue"
+      },
+      {
+         "type": "Platform",
+         "x": 340,
+         "y": 210,
+         "width": 70,
+         "height": 180,
+         "color": "cyan"
       },
       {
          "type": "Text",
-         "x": 30,
+         "x": 20,
          "y": 90,
-         "width": 690,
+         "width": 710,
          "height": 20,
-         "text": "Use WASD to move",
+         "text": "Cyan = blue + green",
          "fontSize": 20,
          "color": "white",
          "background": ""
       },
       {
          "type": "Text",
-         "x": 30,
-         "y": 110,
-         "width": 690,
-         "height": 20,
-         "text": "Use R to restart the level",
-         "fontSize": 20,
-         "color": "white",
-         "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 30,
+         "x": 20,
          "y": 470,
-         "width": 690,
+         "width": 710,
          "height": 20,
-         "text": "Your objective is to get to the goal and match its color",
+         "text": "The diagram at the bottom right shows how colors mix",
          "fontSize": 20,
          "color": "white",
          "background": ""
       },
       {
          "type": "Text",
-         "x": 30,
+         "x": 20,
+         "y": 65,
+         "width": 710,
+         "height": 20,
+         "text": "You can't go through walls that share any color channels with you",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 20,
+         "y": 110,
+         "width": 710,
+         "height": 20,
+         "text": "Magenta = blue + red",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 20,
+         "y": 135,
+         "width": 710,
+         "height": 20,
+         "text": "Remove blue from yourself to pass",
+         "fontSize": 20,
+         "color": "white",
+         "background": ""
+      },
+      {
+         "type": "Text",
+         "x": 20,
          "y": 490,
-         "width": 690,
+         "width": 710,
          "height": 20,
-         "text": "The goal is the morphing square on the right. Good luck!",
+         "text": "Click it to enlarge it",
          "fontSize": 20,
          "color": "white",
          "background": ""
-      },
-      {
-         "type": "Text",
-         "x": 140,
-         "y": 615,
-         "width": 360,
-         "height": 20,
-         "text": "← Your color inventory (1, 2 or 3 to use)",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 50,
-         "y": 660,
-         "width": 300,
-         "height": 20,
-         "text": "← Your item inventory (E to use)",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
-      },
-      {
-         "type": "Text",
-         "x": 440,
-         "y": 660,
-         "width": 220,
-         "height": 20,
-         "text": "Color mixing diagram →",
-         "fontSize": 20,
-         "color": "black",
-         "background": null
       }
    ]
 }

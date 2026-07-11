@@ -39,7 +39,9 @@ export default class Element extends Obstacle {
         context.fillStyle = this.color.drawColor
 
         if (this.level?.player) {
-            context.fillStyle = this.drawColor
+            const player = this.level.player
+            context.fillStyle = player.color.intersects(this.color) || player.hasUses(this.color) ? this.drawColor : `${this.drawColor}32`
+
         }
 
         context.fillRect(this.x, this.y, this.width, this.height)

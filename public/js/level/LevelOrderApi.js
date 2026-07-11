@@ -42,12 +42,14 @@ export function validateLevelOrderJSON(levelOrderJSON) {
 
 export async function fetchLevelOrderJSON() {
     const response = await fetch('api/level-order', { cache: 'no-store' })
-    if (!response.ok) {
-        const message = await response.text()
-        throw new Error(message || 'Failed to load resources/levelOrder.json.')
-    }
+    if (response.ok) return response.json()
 
-    return response.json()
+    const message = await response.text()
+    const fallbackResponse = await fetch('resources/levelOrder.json', { cache: 'no-store' })
+    if (fallbackResponse.ok) return fallbackResponse.json()
+
+    const fallbackMessage = await fallbackResponse.text()
+    throw new Error(message || fallbackMessage || 'Failed to load resources/levelOrder.json.')
 }
 
 export async function overwriteLevelOrderFile(levelOrderJSON) {

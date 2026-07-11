@@ -47,7 +47,7 @@ export function create(obj) {
     const entity = maker(obj)
     if (obj.movingEntity) {
         const moving = obj.movingEntity
-        return new MovingEntity(entity, moving.startX, moving.startY, moving.endX, moving.endY)
+        return new MovingEntity(entity, moving.startX, moving.startY, moving.endX, moving.endY, moving.speed, moving.loop)
     }
 
     return entity

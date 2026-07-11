@@ -2,20 +2,24 @@
    "levelOrder": [
       "Level0",
       "ColorChanger1",
+      "Intro3",
       "Prism1",
       "Prism4",
       "Prism12",
       "Obstacle2",
+      "PhotonicPlatform0",
       "PhotonicPlatform1",
       "Prism11",
       "Mirror6",
       "Mirror2",
       "Mirror9",
       "PrismMirrorTest",
+      "Maze2",
       "TestLevel"
    ],
    "mobileLevels": {
-      "Level0": "Level0Mobile"
+      "Level0": "Level0Mobile",
+      "ColorChanger1": "ColorChanger1Mobile"
    },
    "NotUsed": [
       "SuperJump1",

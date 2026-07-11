@@ -611,6 +611,8 @@ nav a:hover {
 
 #entity-properties {
     grid-column: 3;
+    display: flex;
+    flex-direction: column;
     justify-self: start;
     border-radius: 0px var(--radius) var(--radius) 0px;
     border-left: 0px;
@@ -628,7 +630,21 @@ nav a:hover {
     padding: 8px;
 }
 
-.property-form-group {
+#property-sidebar-controls {
+    background-color: var(--surface);
+    border-radius: 6px;
+    border: 1px solid #d5dce5;
+    margin: 6px;
+    margin-top: auto;
+    padding: 4px 8px;
+}
+
+#property-sidebar-controls:empty {
+    display: none;
+}
+
+.property-form-group,
+.property-sidebar-control {
     margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
@@ -636,12 +652,17 @@ nav a:hover {
     gap: 10px;
 }
 
-.property-form-group label {
+.property-toggle-group {
+    white-space: nowrap;
+}
+
+.property-form-group label,
+.property-sidebar-control label {
     color: var(--muted-text-color);
     font-weight: 600;
 }
 
-.property-form-group input,
+.property-form-group input:not([type="checkbox"]),
 .property-form-group select,
 .property-form-group textarea {
     max-width: 80%;
@@ -653,11 +674,20 @@ nav a:hover {
     background-color: #fbfcfe;
 }
 
-.property-form-group input:focus,
+.property-form-group input:not([type="checkbox"]):focus,
 .property-form-group select:focus,
 .property-form-group textarea:focus {
     outline: 2px solid rgba(37, 99, 235, 0.22);
     border-color: var(--accent-color);
+}
+
+.property-toggle-group input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    max-width: none;
+    min-height: 0px;
+    margin: 0px;
 }
 
 .property-form-group input[type="number"] {
@@ -1250,19 +1280,27 @@ nav a:hover {
         grid-row: 5;
     }
 
-    .property-form-group {
+    .property-form-group:not(.property-toggle-group) {
         align-items: stretch;
         flex-direction: column;
         gap: 4px;
     }
 
-    .property-form-group input,
+    .property-form-group:not(.property-toggle-group) input,
     .property-form-group select,
     .property-form-group textarea,
-    .property-form-group input[type="number"] {
+    .property-form-group:not(.property-toggle-group) input[type="number"] {
         width: 100%;
         max-width: 100%;
         min-height: 36px;
+    }
+
+    .property-toggle-group {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 6px;
+        white-space: normal;
     }
 
     .dialog {
